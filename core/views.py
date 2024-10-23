@@ -22,7 +22,7 @@ def spotify_login(request):
     scope = 'user-read-recently-played'
     auth_query = {
         'response_type': 'code',
-        'client_id': settings.SPOTIFY_CLIENT_ID,
+        'client_id': settings.CLIENT_ID,
         'scope': scope,
         'redirect_uri': settings.SPOTIFY_REDIRECT_URI,
     }
@@ -38,8 +38,8 @@ def spotify_callback(request):
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': settings.SPOTIFY_REDIRECT_URI,
-        'client_id': settings.SPOTIFY_CLIENT_ID,
-        'client_secret': settings.SPOTIFY_CLIENT_SECRET,
+        'client_id': settings.CLIENT_ID,
+        'client_secret': settings.CLIENT_SECRET,
     }
 
     response = requests.post(token_url, data=payload)
