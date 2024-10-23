@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login">
+  <div class="div">
+    <img class="group" src="{% static 'img/group.png' %}" />
+    <div class="overlap">
+      <div class="overlap-group">
+        <img class="img" src="{% static 'img/group-1.png' %}" />
+        <div class="form-log-in">
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="input-field">
+              <input class="label" placeholder="Email" type="email" name="email" required />
+              <input class="input" placeholder="musicLover@gmail.com" type="email" name="email_confirm" />
+            </div>
+            <div class="input-field">
+              <div class="text-wrapper">Password</div>
+              <div class="value-wrapper">
+                <input type="password" class="value" placeholder="veryH@rdPassword123" name="password" required />
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="button">
+                <span class="button-2">Sign In</span>
+              </button>
+            </div>
+          </form>
+          <div class="text-link">
+            <a href="{% url 'password_reset' %}" class="text-link-2">Forgot password?</a>
+          </div>
+        </div>
+        <div class="text-wrapper-2">
+          Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+        </div>
+      </div>
+    </div>
+    <img class="group-2" src="{% static 'img/group-2.png' %}" />
+    <img class="dark-mode" src="{% static 'img/dark-mode.png' %}" />
+    <img class="dark-mode-2" src="{% static 'img/dark-mode.svg' %}" />
+  </div>
+</div>
+{% endblock %}

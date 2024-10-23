@@ -1,10 +1,48 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}SpotiFye - Un-Wrap your Music Taste{% endblock %}
 
 {% block content %}
-    <h1 style="margin-bottom: 28vh; margin-top: 27vh">SpotiFye</h1>
+<div class="landing-page">
+    <img class="group" src="{% static 'images/group.png' %}" alt="Group Image" />
+    <div class="overlap">
+        <div class="overlap-group">
+            <img class="img" src="{% static 'images/group-1.png' %}" alt="Group 1" />
+            <img class="group-2" src="{% static 'images/group-2.png' %}" alt="Group 2" />
+        </div>
 
-    <a href="{% url 'spotify_login' %}">Log in with Spotify</a>
+        <a href="{% url 'login' %}" class="button">
+            <span class="text-wrapper">Get Started!</span>
+        </a>
+
+        <a href="{% url 'login' %}" class="button-wrapper">
+            <span class="text-wrapper">Explore Wraps</span>
+        </a>
+
+        <footer class="footer">
+            <p class="brought-to-you-by">
+                <span class="span">Brought to you by </span>
+                <a
+                    href="https://heathered-heat-b5c.notion.site/CS-2340-Team-8-ATL-Food-Finder-112d9a17296f8002bfd2c4bd4f2a4b40"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span class="span">TeamAwesomeSauce</span>
+                </a>
+                <span class="span">&nbsp;</span>
+            </p>
+        </footer>
+        <img class="dark-mode" src="{% static 'images/dark-mode.svg' %}" alt="Dark Mode Icon" />
+        <div class="div">SpotiFye</div>
+        <div class="text-wrapper-2">Un-Wrap your Music Taste</div>
+    </div>
+    <img class="dark-mode-2" src="{% static 'images/dark-mode.png' %}" alt="Dark Mode Icon 2" />
+</div>
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/globals.css' %}">
+<link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
