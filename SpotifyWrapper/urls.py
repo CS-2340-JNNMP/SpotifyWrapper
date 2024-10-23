@@ -19,15 +19,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django import views
-from core.views import index, map, login, sign_up, contact
+from core.views import index
 
 urlpatterns = [
     path('', index, name='index'),
 
 
     #path('login/', name='login'),
-    path('registration/', registration, name='sign_up'),
-    path('contact/', contact, name='contact'),
+    # path('registration/', registration, name='sign_up'),
+    # path('contact/', contact, name='contact'),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
      #Front end for users

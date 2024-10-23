@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom: 28vh; margin-top: 27vh">Find Food Near You</h1>
+
+    <a href="{% url 'spotify_login' %}">Log in with Spotify</a>
+{% endblock %}
+
