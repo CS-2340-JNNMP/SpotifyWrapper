@@ -19,6 +19,7 @@ def index(request):
 
 
 def spotify_login(request):
+    print(settings.SPOTIFY_REDIRECT_URI)
     scope = 'user-read-recently-played'
     auth_query = {
         'response_type': 'code',
