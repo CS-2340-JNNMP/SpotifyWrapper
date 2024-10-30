@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import os
 
-# load env variables
+# load .env variables
 from dotenv import load_dotenv
 load_dotenv()
 CLIENT_ID = str(os.getenv('CLIENT_ID'))
