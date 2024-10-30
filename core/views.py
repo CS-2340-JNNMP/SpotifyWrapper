@@ -19,6 +19,7 @@ def index(request):
 
 
 def spotify_login(request):
+    print(settings.SPOTIFY_REDIRECT_URI)
     scope = 'user-read-recently-played'
     auth_query = {
         'response_type': 'code',
@@ -55,3 +56,6 @@ def get_user_data(request):
     }
     response = requests.get('https://api.spotify.com/v1/me/player/recently-played', headers=headers)
     return JsonResponse(response.json())
+
+def contact(request):
+    return render(request, "core/contact.html")
