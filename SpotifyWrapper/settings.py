@@ -20,6 +20,7 @@ load_dotenv()
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 SPOTIFY_REDIRECT_URI = os.getenv('SPOTIFY_REDIRECT_URI')
+CHATGPT_KEY = "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"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
