@@ -15,10 +15,22 @@
         </div>
     </form>
 
-    {% if result %}
-        <h2>Your Results:</h2>
-        <p>{{ result }}</p>
-    {% endif %}
+       {% if result %}
+    <h2>Your Results:</h2>
+    <div>
+        <strong>Feel:</strong>
+        <span>{{ result.feel }}</span>
+        <br>
+        <strong>Think:</strong>
+        <span>{{ result.think }}</span>
+        <br>
+        <strong>Dress:</strong>
+        <span>{{ result.dress }}</span>
+    </div>
+{% endif %}
+
+
+
 
 {% endblock %}
 
