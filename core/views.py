@@ -11,7 +11,16 @@ from django.conf import settings
 from urllib.parse import urlencode
 # Create your views here.
 from django.contrib.auth.models import User
+from django.utils.translation import activate
 
+from django.shortcuts import redirect
+from django.utils import translation
+
+def change_language(request):
+    lang = request.GET.get('lang', 'en')
+    translation.activate(lang)
+    request.session[translation.LANGUAGE_SESSION_KEY] = lang
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def index(request):
     return render(request, "core/index.html")
