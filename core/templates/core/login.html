@@ -1,0 +1,122 @@
+{#{% extends 'core/base.html' %}#}
+{##}
+{#{% block title %}Login{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <h1 style="margin-bottom: 25px">Login</h1>#}
+{#{% endblock %}#}
+
+{#https://www.youtube.com/watch?v=CTrVDi3tt8o#}
+
+
+{% load static %}
+
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+     <a href="{% url 'login' %}">Log in</a>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #loginBackground {
+            background-image: url("{% static 'core/login7.jpeg' %}");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            width: 100vw;
+            padding: 0;
+            display: flex; /* Enable flexbox */
+            justify-content: center; /* Center horizontally */
+            outline-color: red;
+            outline-width: thick;
+            /* Center vertically */
+
+        }
+        #loginBackground::before {
+    content: '';
+    position: absolute;
+    top: 30;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    {#background-color: rgba(0, 0, 0, 0.5); /* Adjust this for transparency level */#}
+    z-index: 1; /* Keep the overlay behind the content */
+}
+
+        .header {
+            flex-direction: row;
+            display: flex;
+            width: 100%;
+            background-color: #3e3d3b;
+            align-items: center;
+            border-bottom: thin solid black;
+            outline-color: purple;
+            outline-width: thick;
+            margin-bottom: 0; /* Ensure no extra space */
+        }
+
+        h1 {
+            color: #606c38;
+        }
+
+        #whiteForm {
+            flex: .25;
+            height: 40vh;
+            margin-top: 26vh;
+
+            display: flex;
+            flex-direction: column; /* Stack elements vertically inside the form */
+            padding-top: 20px;
+            padding-bottom: 20px;/* Optional: Add padding inside the form */
+            border-radius: 25px;
+            padding-left: 8px;
+            padding-right: 8px;
+            z-index: 2;
+            align-content: center;
+            background-color: lightgray;
+            justify-content: center;
+            margin-right: 1vh;
+        }
+        a {
+            padding-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+
+
+    <div id="loginBackground">
+    <div id="whiteForm" style="">
+<h1 style="margin-top: 0px; margin-bottom: 3vh; color: #3e3d3b; font-size: xx-large">Welcome Back!</h1>
+    <div style="outline-color: purple; outline-width: thick" class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        </div>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="mb-3" style="justify-content: center; flex-direction: column; margin-bottom: 2vh">
+        <label style="color: #3e3d3b; font-size: x-large" for="exampleInputEmail1" class="form-label">Username:</label>
+        <div style="margin-bottom: 1vh"></div>
+        <input style="padding: 1vh; border-radius: 10px" type="text" class="form-control" name="username" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3" style="color: #3e3d3b; justify-content: center; flex-direction: column; margin-bottom: 3vh">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <div style="margin-bottom: 1vh"></div>
+        <input style="padding: 1vh; border-radius: 10px" type="password" class="form-control" name="password">
+    </div>
+    <input style="font-size:medium; padding: .9vh; border-radius: 18px" type="submit" value="Submit" class="btn btn-secondary">
+
+    <a style="font-size: medium; color: #3e3d3b; margin-bottom: 5vh" href="/register_user">New here? Click to register!</a>
+</form>
+    </div>
+    </div>
+
+
+{% endblock %}

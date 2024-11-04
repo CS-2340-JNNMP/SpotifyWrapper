@@ -19,12 +19,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django import views
-from core.views import index
+from core.views import index, contact
 
 urlpatterns = [
     path('', index, name='index'),
-
-
+    path('contact/', contact, name='contact'),
     #path('login/', name='login'),
     # path('registration/', registration, name='sign_up'),
     # path('contact/', contact, name='contact'),
