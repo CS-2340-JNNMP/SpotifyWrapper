@@ -20,6 +20,9 @@ def index(request):
 
 def spotify_login(request):
     scope = 'user-read-recently-played'
+    # print(settings.CLIENT_ID)
+    # print(settings.CLIENT_SECRET)
+    # print(settings.SPOTIFY_REDIRECT_URI)
     auth_query = {
         'response_type': 'code',
         'client_id': settings.CLIENT_ID,
