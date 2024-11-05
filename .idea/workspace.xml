@@ -120,23 +120,22 @@
       <option name="project" value="LOCAL" />
       <updated>1730317888720</updated>
     </task>
-    <task id="LOCAL-00002" summary="Created beginnings of page for creating spotify wraps">
+    <task id="LOCAL-00001" summary="Can load api">
       <option name="closed" value="true" />
-      <created>1730761605510</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
+      <created>1729717084491</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1730761605510</updated>
+      <updated>1729717084491</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Created contact us page" />
-    <MESSAGE value="Created beginnings of page for creating spotify wraps" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created beginnings of page for creating spotify wraps" />
+    <MESSAGE value="Can load api" />
+    <option name="LAST_COMMIT_MESSAGE" value="Can load api" />
   </component>
 </project>
