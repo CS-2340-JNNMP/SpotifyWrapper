@@ -15,11 +15,12 @@ from django.utils.translation import activate
 
 from django.shortcuts import redirect
 from django.utils import translation
+from django.utils.translation import activate
 
-def change_language(request):
-    lang = request.GET.get('lang', 'en')
-    translation.activate(lang)
-    request.session[translation.LANGUAGE_SESSION_KEY] = lang
+def set_language(request):
+    language = request.GET.get('language', 'en')
+    activate(language)
+    request.session['django_language'] = language
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def index(request):

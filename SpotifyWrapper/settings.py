@@ -89,10 +89,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = [
     ('en', 'English'),
-    ('fr', 'French'),
+    ('fr', 'Français'),
+]
+
+import os
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'SpotifyWrapper', 'locale'),
 ]
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
