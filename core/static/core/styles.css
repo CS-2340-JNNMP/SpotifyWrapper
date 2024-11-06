@@ -44,11 +44,16 @@ h1, h2, h3, h4 {
 }
 
 .home-main button {
-    height: 2rem;
+    height: 3rem;
     width: 100%;
-    background: white;
     text-align: center;
-    border-radius: 5px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-width: 200px;
+    /*padding: 0.5rem 0;*/
+    z-index: 1000;
+    border: none;
 }
 
 footer {
@@ -71,18 +76,12 @@ a:hover {
 }
 
 /*Navbar*/
-[data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #ffffff;
-}
-
-[data-theme="light"] {
-    --bg-color: #ffffff;
-    --text-color: #121212;
-}
 
 .navbar {
     padding: 1rem 2rem;
+    color: #503658;
+    /*font-weight: bold;*/
+    /*background: #e5ab8a;*/
 }
 
 .nav-buttons {
@@ -93,16 +92,17 @@ a:hover {
 }
 
 .profile-button {
+    font-size: 2rem;
     background: none;
     border: none;
-    color: red !important;
+    color: black;
     cursor: pointer;
-    padding: 0.5rem;
-    font-size: 3rem !important;
+    padding: 1rem;
+    padding-right: 0.5rem;
     transition: opacity 0.3s ease;
 }
 
-.theme-toggle:hover, .profile-button:hover {
+.profile-button:hover {
     opacity: 0.8;
 }
 
@@ -110,7 +110,7 @@ a:hover {
 .dropdown-menu {
     display: none;
     position: absolute;
-    right: 0;
+    left: -280%;
     top: 100%;
     background-color: white;
     border-radius: 8px;
@@ -172,6 +172,24 @@ a:hover {
 
 .auth-form a {
     color: #503658;
+}
+
+/*Generate Form*/
+#generate-form {
+    width: 50%;
+    margin: auto;
+    padding-top: 10rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#generate-form h2 {
+    text-align: center;
+}
+
+#generate-form button {
+    background: #503658 !important;
 }
 
 /*Styles for Wraps*/

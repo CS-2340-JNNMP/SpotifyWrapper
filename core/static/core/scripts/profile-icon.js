@@ -2,7 +2,6 @@
 const isLoggedIn = true
 
 function handleProfileClick() {
-    alert("clicked");
     if (!isLoggedIn) {
         window.location.href = '/login';
         return;
