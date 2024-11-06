@@ -22,9 +22,6 @@ from django import views
 from core.views import index
 
 urlpatterns = [
-    path('', index, name='index'),
-
-
     #path('login/', name='login'),
     # path('registration/', registration, name='sign_up'),
     # path('contact/', contact, name='contact'),

@@ -1,46 +1,43 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Login{% endblock %}
+{% extends 'core/base.html' %}
 
 {% block content %}
-<div class="login">
-  <div class="div">
-    <img class="group" src="{% static 'img/group.png' %}" />
-    <div class="overlap">
-      <div class="overlap-group">
-        <img class="img" src="{% static 'img/group-1.png' %}" />
-        <div class="form-log-in">
-          <form method="post" action="{% url 'login' %}">
-            {% csrf_token %}
-            <div class="input-field">
-              <input class="label" placeholder="Email" type="email" name="email" required />
-              <input class="input" placeholder="musicLover@gmail.com" type="email" name="email_confirm" />
-            </div>
-            <div class="input-field">
-              <div class="text-wrapper">Password</div>
-              <div class="value-wrapper">
-                <input type="password" class="value" placeholder="veryH@rdPassword123" name="password" required />
-              </div>
-            </div>
-            <div class="button-group">
-              <button type="submit" class="button">
-                <span class="button-2">Sign In</span>
-              </button>
-            </div>
-          </form>
-          <div class="text-link">
-            <a href="{% url 'password_reset' %}" class="text-link-2">Forgot password?</a>
+    <form class ="auth-form">
+            <h1>Sign in</h1>
+            <br>
+      <!-- Email input -->
+      <div data-mdb-input-init class="form-outline mb-4">
+        <input type="email" id="form2Example1" class="form-control" />
+        <label class="form-label" for="form2Example1">Email address</label>
+      </div>
+
+      <!-- Password input -->
+      <div data-mdb-input-init class="form-outline mb-4">
+        <input type="password" id="form2Example2" class="form-control" />
+        <label class="form-label" for="form2Example2">Password</label>
+      </div>
+
+      <!-- 2 column grid layout for inline styling -->
+      <div class="row mb-4">
+        <div class="col d-flex justify-content-center">
+          <!-- Checkbox -->
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+            <label class="form-check-label" for="form2Example31"> Remember me </label>
           </div>
         </div>
-        <div class="text-wrapper-2">
-          Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+
+        <div class="col">
+          <!-- Simple link -->
+          <a href="#!">Forgot password?</a>
         </div>
       </div>
-    </div>
-    <img class="group-2" src="{% static 'img/group-2.png' %}" />
-    <img class="dark-mode" src="{% static 'img/dark-mode.png' %}" />
-    <img class="dark-mode-2" src="{% static 'img/dark-mode.svg' %}" />
-  </div>
-</div>
+
+      <!-- Submit button -->
+        <a href="{% url 'my_wraps' %}"><button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign In</button></a>
+
+      <!-- Register buttons -->
+      <div class="text-center">
+        <p>Not a member? <a href="{% url 'register' %}">Register</a></p>
+      </div>
+    </form>
 {% endblock %}

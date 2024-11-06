@@ -4,13 +4,21 @@ from django.urls import path
 from .views import spotify_login, spotify_callback
 
 urlpatterns = [
-    path('login/', views.login, name='login'),  # Reference your login_user function here
+    # path('login/', views.login, name='login'),  # Reference your login_user function here
     # path('register_user/', views.register_user, name='register_user'),
     # path('profile/', views.profile, name='profile'),
     # path('logout/', views.logout_user, name='logout'),
+    path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('password-reset/', views.password_reset_view, name='password_reset'),
+    path('my-wraps/', views.my_wraps_view, name='my_wraps'),
+    path('generate/', views.generate_view, name='generate'),
+    path('wrapped-page/', views.wrapped_page_view, name='wrapped_page'),
     path('spotify/login/', spotify_login, name='spotify_login'),
     path('spotify/callback/', spotify_callback, name='spotify_callback'),
-    path('spotify/user-data/', views.get_user_data, name='spotify_user_data')
+    path('spotify/user-data/', views.get_user_data, name='spotify_user_data'),
+
 
 ]
 
