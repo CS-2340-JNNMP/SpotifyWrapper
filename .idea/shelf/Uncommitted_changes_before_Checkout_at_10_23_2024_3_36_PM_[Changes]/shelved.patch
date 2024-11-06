@@ -1,0 +1,76 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"8d39566e-a85c-4843-af48-ff3d2e06cb6a\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/CS-2340-JNNMP/SpotifyWrapper.git\",\r\n    \"accountId\": \"a276badf-abee-4700-9b78-74941627c6b8\"\r\n  }\r\n}]]></component>\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"associatedIndex\": 8\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"2nlr3jPtE9Hm34TA9ugqsxcW34d\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"SpotifyWrapper\" type=\"Python.DjangoServer\" factoryName=\"Django server\">\r\n      <module name=\"SpotifyWrapper\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n        <env name=\"DJANGO_SETTINGS_MODULE\" value=\"SpotifyWrapper.settings\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\r\n      <option name=\"port\" value=\"8000\" />\r\n      <option name=\"host\" value=\"localhost\" />\r\n      <option name=\"additionalOptions\" value=\"\" />\r\n      <option name=\"browserUrl\" value=\"\" />\r\n      <option name=\"runTestServer\" value=\"false\" />\r\n      <option name=\"runNoReload\" value=\"false\" />\r\n      <option name=\"useCustomRunCommand\" value=\"false\" />\r\n      <option name=\"customRunCommand\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-PY-242.20224.428\" />\r\n        <option value=\"bundled-python-sdk-80e8e15d2b92-39cff9de6eef-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.20224.428\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"8d39566e-a85c-4843-af48-ff3d2e06cb6a\" name=\"Changes\" comment=\"\" />\r\n      <created>1729558307521</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1729558307521</updated>\r\n      <workItem from=\"1729558320541\" duration=\"4000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision e196c67ec133026954a98a714ba53fe724d9b8e7)
++++ b/.idea/workspace.xml	(date 1729712081217)
+@@ -1,5 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+     <list default="true" id="8d39566e-a85c-4843-af48-ff3d2e06cb6a" name="Changes" comment="" />
+     <option name="SHOW_DIALOG" value="false" />
+@@ -8,17 +11,22 @@
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="Nash" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GithubPullRequestsUISettings"><![CDATA[{
+-  "selectedUrlAndAccountId": {
+-    "url": "https://github.com/CS-2340-JNNMP/SpotifyWrapper.git",
+-    "accountId": "a276badf-abee-4700-9b78-74941627c6b8"
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/CS-2340-JNNMP/SpotifyWrapper.git&quot;,
++    &quot;accountId&quot;: &quot;a276badf-abee-4700-9b78-74941627c6b8&quot;
+   }
+-}]]></component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 8
+-}]]></component>
++}</component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 8
++}</component>
+   <component name="ProjectId" id="2nlr3jPtE9Hm34TA9ugqsxcW34d" />
+   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+@@ -29,6 +37,8 @@
+   "keyToString": {
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "git-widget-placeholder": "main",
++    "last_opened_file_path": "C:/Users/nmoor/PycharmProjects/SpotifyWrapper",
++    "node.js.selected.package.tslint": "(autodetect)",
+     "nodejs_package_manager_path": "npm",
+     "vue.rearranger.settings.migration": "true"
+   }
+@@ -80,4 +90,15 @@
+     </task>
+     <servers />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
+ </project>
+\ No newline at end of file

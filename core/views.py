@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
@@ -23,7 +24,11 @@ def index(request):
 
 
 def spotify_login(request):
+    print(settings.SPOTIFY_REDIRECT_URI)
     scope = 'user-read-recently-played'
+    # print(settings.CLIENT_ID)
+    # print(settings.CLIENT_SECRET)
+    # print(settings.SPOTIFY_REDIRECT_URI)
     auth_query = {
         'response_type': 'code',
         'client_id': settings.CLIENT_ID,
@@ -119,7 +124,6 @@ def contact(request):
     return render(request, "core/contact.html")
 
 
-
 # Define your form
 class GenreForm(forms.Form):
     genre = forms.CharField(label='Favorite Music Genre', max_length=100)
@@ -194,3 +198,6 @@ class GenreAnalysisView(View):
         # else:
         #     print(response.status_code, response.text)  # Log the error response
         # return "Error: Could not retrieve data."
+
+def home(request):
+    return render(request, "core/home.html")
