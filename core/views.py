@@ -16,12 +16,44 @@ from django.utils.translation import activate
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.translation import activate
+from django.shortcuts import render
+from django.utils import translation
+from django.shortcuts import redirect
+from django.urls import translate_url
+from django.utils.translation import gettext as _
 
-def set_language(request):
-    language = request.GET.get('language', 'en')
-    activate(language)
-    request.session['django_language'] = language
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+from django.shortcuts import render, redirect
+
+from googletrans import Translator
+
+def home(request):
+    translator = Translator()
+
+    # Get the current language from the session or default to 'en'
+    current_language = request.session.get('current_language', 'en')
+
+    # Translate the content
+    welcome_message = translator.translate('Welcome to my website', dest=current_language).text
+    language_toggle = translator.translate('Switch to %(language)s', dest=current_language, src='en').text % {'language': 'French' if current_language == 'en' else 'English'}
+
+    context = {
+        'welcome_message': welcome_message,
+        'language_toggle': language_toggle,
+    }
+
+    return render(request, 'home.html', context)
+
+def change_language(request):
+    # Get the current language from the session or default to 'en'
+    current_language = request.session.get('current_language', 'en')
+
+    # Toggle the language
+    new_language = 'fr' if current_language == 'en' else 'en'
+    request.session['current_language'] = new_language
+
+    return redirect('home')
+
 
 def index(request):
     return render(request, "core/index.html")

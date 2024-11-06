@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <h1>{{ welcome_message }}</h1>
+    <p>
+        <a href="{% url 'change-language' %}">{{ language_toggle }}</a>
+    </p>
+    <p>
+        {% trans "This is a paragraph that should be translated." %}
+    </p>
+</body>
+</html>

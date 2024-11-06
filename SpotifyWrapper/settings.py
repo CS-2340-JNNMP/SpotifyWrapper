@@ -99,7 +99,7 @@ LANGUAGES = [
 import os
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'SpotifyWrapper', 'locale'),
+    os.path.join(BASE_DIR, 'core', 'locale'),
 ]
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

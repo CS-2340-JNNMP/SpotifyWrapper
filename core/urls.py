@@ -1,7 +1,11 @@
+from xml.etree.ElementInclude import include
+
 from . import views
 from django.urls import path
-from .views import set_language, spotify_login, spotify_callback
-
+from .views import spotify_login, spotify_callback
+from django.conf.urls.i18n import i18n_patterns
+from django.urls import path
+from . import views
 urlpatterns = [
     # path('login/', views.login_user, name='login'),  # Reference your login_user function here
     # path('register_user/', views.register_user, name='register_user'),
@@ -12,8 +16,8 @@ urlpatterns = [
     path('spotify/login/', spotify_login, name='spotify_login'),
     path('spotify/callback/', spotify_callback, name='spotify_callback'),
     path('spotify/user-data/', views.get_user_data, name='spotify_user_data'),
-    path('set-language/', views.set_language, name='change_language'),
-
+path('', views.home, name='home'),
+    path('change-language/', views.change_language, name='change-language'),
 
 ]
 
