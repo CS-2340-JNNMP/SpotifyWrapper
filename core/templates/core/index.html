@@ -1,9 +1,12 @@
 {% extends 'core/base.html' %}
+{% load i18n %}
+
 
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
     <h1 style="margin-bottom: 28vh; margin-top: 27vh">SpotiFye</h1>
+<p>{% trans "Welcome to ATLFoodFinder" %}</p>
 
 {#    <a href="{% url 'spotify_login' %}">Log in with Spotify</a>#}
     <a href="{% url 'accounts:login' %}">Log in with Spotify</a>
@@ -13,5 +16,7 @@
         {{ response.display_name }}
         {% endif %}
     </div>
+    <a href="{% url 'change_language' %}?language=en">English</a>
+<a href="{% url 'change_language' %}?language=fr">Français</a>
 {% endblock %}
 

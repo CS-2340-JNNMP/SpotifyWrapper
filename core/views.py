@@ -13,6 +13,14 @@ from urllib.parse import urlencode
 # Create your views here.
 from django.contrib.auth.models import User
 
+from django.utils.translation import activate
+from django.shortcuts import redirect
+
+def set_language(request):
+    language = request.GET.get('language', 'en')
+    activate(language)
+    request.session['django_language'] = language
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def index(request):
     return render(request, "core/index.html")
