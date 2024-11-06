@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom: 28vh; margin-top: 27vh">SpotiFye</h1>
+
+{#    <a href="{% url 'spotify_login' %}">Log in with Spotify</a>#}
+    <a href="{% url 'accounts:login' %}">Log in with Spotify</a>
+    <a href="{% url 'login' %}">Log in</a>
+    <div>
+        {% if response %}
+        {{ response.display_name }}
+        {% endif %}
+    </div>
+{% endblock %}
+
