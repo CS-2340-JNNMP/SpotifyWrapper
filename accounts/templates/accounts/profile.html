@@ -12,7 +12,8 @@
 
         <ul>
           {% for track in tracks %}
-          <li>{{ track.name }} – {{ track.artist }}</li>
+              <img style="width: 10%" src="{{ track.image }}">
+            <li>{{ track.name }} – {{ track.artist }}</li>
           {% endfor %}
         </ul>
 
