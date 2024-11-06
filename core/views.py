@@ -19,10 +19,51 @@ from django.views import View
 from django import forms
 
 def index(request):
+    return render(request, 'core/index.html')
+
+def login_view(request):
+    # if request.method == 'POST':
+    #     email = request.POST.get('email')
+    #     password = request.POST.get('password')
+    #     user = authenticate(request, username=email, password=password)
+    #     if user is not None:
+    #         login(request, user)
+    #         return redirect('home')
+    return render(request, 'core/login.html')
+
+def register_view(request):
+    return render(request, "core/register.html")
+
+def password_reset_view(request):
     return render(request, "core/index.html")
 
+def my_wraps_view(request):
+    return render(request, "core/my_wraps.html")
 
+def generate_view(request):
+    return render(request, "core/generate.html")
 
+def wrapped_page_view(request):
+    # This is where you'd get data from your library
+    # Example data structure:
+    data = {
+        'songs': [
+            'Dancing in the Moonlight - Stellar Dreams',
+            'Midnight Symphony - The Echo Chamber',
+            'Neon Nights - Crystal Cascade'
+        ],
+        'artists': [
+            'The Echo Chamber',
+            'Stellar Dreams',
+            'Crystal Cascade'
+        ],
+        'genres': [
+            'Electronic',
+            'Indie Rock',
+            'Synthwave'
+        ]
+    }
+    return render(request, "core/wrapped-page.html", {'data': data})
 def spotify_login(request):
     print(settings.SPOTIFY_REDIRECT_URI)
     scope = 'user-read-recently-played'

@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="wrap-grid">
+    {% for i in "123" %}
+
+       <div class="wrap-item">
+           <a href="{% url 'wrapped_page' %}" class="wrap-link">
+               <div class="wrap-thumbnail">
+                   <img src="{% static 'core/images/wrap-placeholder.png' %}" alt="Wrap {{ wrap.id }}">
+                   <div class="wrap-info">
+                       Wrap {{ i }}
+                       <div class="wrap-actions">
+                            <button class="share-btn">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Share</span>
+                            </button>
+                            <button class="delete-btn">
+                                <i class="fas fa-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                   </div>
+               </div>
+           </a>
+       </div>
+    {% endfor %}
+    <a href="{% url 'generate' %}" class="add-wrap">
+        <div class="add-button">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+    </a>
+    </div>
+
+
+{#<div class="wrap-grid">#}
+{#    {% for wrap in wraps %}#}
+{#    <div class="wrap-item">#}
+{#        <a href="{% url 'view_wrap' wrap.id %}" class="wrap-link">#}
+{#            <div class="wrap-thumbnail">#}
+{#                <img src="{% static 'core/images/wrap-placeholder.png' %}" alt="Wrap {{ wrap.id }}">#}
+{#                <div class="wrap-info">#}
+{#                    <span>Wrap {{ wrap.id }}</span>#}
+{#                    <div class="wrap-actions">#}
+{#                        <button class="share-btn">Share</button>#}
+{#                        <button class="delete-btn">Delete</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </a>#}
+{#    </div>#}
+{#    {% endfor %}#}
+{##}
+{#    <a href="{% url 'index' %}" class="add-wrap">#}
+{#        <div class="add-button">#}
+{#            <svg width="24" height="24" viewBox="0 0 24 24">#}
+{#                <path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2"/>#}
+{#            </svg>#}
+{#        </div>#}
+{#    </a>#}
+{#</div>#}
+
+{% endblock %}
