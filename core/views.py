@@ -10,9 +10,13 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 from urllib.parse import urlencode
+from huggingface_hub import InferenceClient
+import json
 # Create your views here.
 from django.contrib.auth.models import User
-
+import requests
+from django.views import View
+from django import forms
 
 def index(request):
     return render(request, "core/index.html")
@@ -118,6 +122,82 @@ def profile(request):
 
 def contact(request):
     return render(request, "core/contact.html")
+
+
+# Define your form
+class GenreForm(forms.Form):
+    genre = forms.CharField(label='Favorite Music Genre', max_length=100)
+
+class GenreAnalysisView(View):
+    def get(self, request):
+        form = GenreForm()
+        return render(request, 'core/music_analysis.html', {'form': form})
+
+    def post(self, request):
+        form = GenreForm(request.POST)
+        if form.is_valid():
+            genre = form.cleaned_data['genre']
+            result = self.call_hugging_face(genre)
+            return render(request, 'core/music_analysis.html', {'form': form, 'result': result})
+        return render(request, 'core/music_analysis.html', {'form': form})
+
+    def call_hugging_face(self, genre):
+        llm_client = InferenceClient(
+            model="microsoft/Phi-3-mini-4k-instruct",
+            timeout=120,
+        )
+        response = llm_client.post(
+            json={
+                "inputs": f"Describe how people feel, think, and dress when they listen to {genre} music. Be creative and provide detailed insights.",
+                "parameters": {"max_new_tokens": 300, "temperature": 0.9},
+                "task": "text-generation",
+            },
+        )
+        response_text = json.loads(response.decode())[0]["generated_text"]
+
+        # Initialize response dictionary
+        response_dict = {"feel": "", "think": "", "dress": ""}
+
+        # Define keywords to identify sections
+        feel_keywords = ["feel", "emotion", "emotionally"]
+        think_keywords = ["think", "thoughts"]
+        dress_keywords = ["dress", "fashion", "wear"]
+
+        # Split the response into sentences
+        sentences = response_text.split('. ')
+
+        for sentence in sentences:
+            sentence_lower = sentence.lower()
+            if any(keyword in sentence_lower for keyword in feel_keywords):
+                response_dict["feel"] += sentence + ' '
+            elif any(keyword in sentence_lower for keyword in think_keywords):
+                response_dict["think"] += sentence + ' '
+            elif any(keyword in sentence_lower for keyword in dress_keywords):
+                response_dict["dress"] += sentence + ' '
+
+        # Clean up any trailing spaces
+        for key in response_dict:
+            response_dict[key] = response_dict[key].strip()
+
+        return response_dict
+
+        # headers = {
+        #     'Authorization': f'Bearer {"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"}',
+        #     'Content-Type': 'application/json'
+        # }
+        # model = "gpt2"  # or any other model from Hugging Face
+        # url = f"https://api.huggingface.co/gpt2"
+        #
+        # data = {
+        #     "inputs": f"What do people usually feel, think, and dress like if they listen to {genre} music?"
+        # }
+        #
+        # response = requests.post(url, headers=headers, json=data)
+        # if response.status_code == 200:
+        #     return response.json()[0]['generated_text']  # Adjust based on the response structure
+        # else:
+        #     print(response.status_code, response.text)  # Log the error response
+        # return "Error: Could not retrieve data."
 
 def home(request):
     return render(request, "core/home.html")
