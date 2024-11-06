@@ -7,8 +7,8 @@
     {% for i in "123" %}
 
        <div class="wrap-item">
+           <a href="{% url 'wrapped_page' %}" class="wrap-link">
                <div class="wrap-thumbnail">
-                   <a href="{% url 'wrapped_page' %}" class="wrap-link">
                    <img src="{% static 'core/images/wrap-placeholder.png' %}" alt="Wrap {{ wrap.id }}">
                    <div class="wrap-info">
                        Wrap {{ i }}
