@@ -74,6 +74,7 @@ def get_top_tracks(request):
         tracks = []
         for track in top_tracks:
             track_info = {
+                "image": track["album"]["images"][0]["url"],
                 "name": track["name"],
                 "artist": track["artists"][0]["name"],
                 "album": track["album"]["name"],

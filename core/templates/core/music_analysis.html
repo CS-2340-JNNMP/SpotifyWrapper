@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block title %}What your Music Says About You{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom: 28vh; margin-top: 27vh">What your Music Says About You</h1>
+    <form method="post">
+    {% csrf_token %}
+        <div>
+            <label for="genre">Enter your favorite music genre: </label>
+            {{ form.genre }}
+        </div>
+        <div>
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
+       {% if result %}
+    <h2>Your Results:</h2>
+    <div>
+        <strong>Feel:</strong>
+        <span>{{ result.feel }}</span>
+        <br>
+        <strong>Think:</strong>
+        <span>{{ result.think }}</span>
+        <br>
+        <strong>Dress:</strong>
+        <span>{{ result.dress }}</span>
+    </div>
+{% endif %}
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form id="generate-form">
+{#        <h2>Let's Un-Wrap your Music Taste </h2>#}
+        <h4>Choose Wrapped Duration:</h4>
+        <div class="form-radio duration">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="longTerm" value="longTerm">
+                <label class="form-check-label" for="longTerm">Long Term</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="midTerm" value="midTerm">
+                <label class="form-check-label" for="midTerm">Mid Term</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="shortTerm" value="shortTerm">
+                <label class="form-check-label" for="shortTerm">Short Term</label>
+            </div>
+        </div>
+
+        <h4>Holiday Special:</h4>
+        <div class="form-radio holiday">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="christmas" value="christmas">
+                <label class="form-check-label" for="christmas">Christmas</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="diwali" value="diwali">
+                <label class="form-check-label" for="diwali">Diwali</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Generate</button>
+    </form>
+{#    <a href="{% url 'spotify_login' %}"><button>Connect your Account</button></a>#}
+{#    <a href="{% url 'index' %}"><button>Generate</button></a>#}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('generate-form');
+            const durationRadios = document.querySelectorAll('.duration-radio');
+            const holidayRadios = document.querySelectorAll('.holiday-radio');
+
+            // Function to handle radio button clicks
+            function handleRadioClick(clickedType) {
+                if (clickedType === 'duration') {
+                    // If duration radio is clicked, uncheck holiday radios
+                    holidayRadios.forEach(radio => radio.checked = false);
+                } else {
+                    // If holiday radio is clicked, uncheck duration radios
+                    durationRadios.forEach(radio => radio.checked = false);
+                }
+            }
+
+            // Add click listeners to duration radios
+            durationRadios.forEach(radio => {
+                radio.addEventListener('click', () => handleRadioClick('duration'));
+            });
+
+            // Add click listeners to holiday radios
+            holidayRadios.forEach(radio => {
+                radio.addEventListener('click', () => handleRadioClick('holiday'));
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Check if at least one option is selected
+                const selectedDuration = document.querySelector('.duration-radio:checked');
+                const selectedHoliday = document.querySelector('.holiday-radio:checked');
+
+                if (!selectedDuration && !selectedHoliday) {
+                    alert('Please select either a duration or holiday option');
+                    return;
+                }
+
+                // Get the selected value
+
+                selectedValue = selectedDuration ? selectedDuration.value : selectedHoliday.value;
+
+                alert(selectedValue)
+
+                selectedValue = "mid-term"
+
+                alert(selectedValue)
+
+                // Add the selected value as a query parameter
+                {#const wrappedURL = `/wrapped-page?type=${selectedValue}`;#}
+                // Redirect to the wrapped page
+                window.location.href = `/wrapped-page`;
+            });
+        });
+    </script>
+{% endblock %}
