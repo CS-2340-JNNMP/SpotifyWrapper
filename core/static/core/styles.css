@@ -5,8 +5,20 @@
 body {
     margin: 0;
     padding-bottom: 5rem; /* slightly larger than footer's margin-bottom */
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     position: relative;
+    max-width: 100%;
+    max-height: 100vh;
+}
+
+/* Default background */
+body {
+    background-image: url('SpotifyWrapper/core/static/core/images/background.png');
+}
+
+/* Custom background for my-wraps page */
+.my-wraps-page {
+    background-image: url('SpotifyWrapper/core/static/core/images/my-wraps-background.png');
 }
 
 /* You might also need this to ensure full height works properly */
@@ -17,7 +29,7 @@ html {
 
 /*Styles for main*/
 .main {
-    width: 75%;
+    width: 90%;
     margin: 20px auto;   /* Centers the div horizontally */
     min-height: 100vh; /* Ensures minimum height is full viewport height */
     padding: 5rem;    /* Adds some inner spacing */
@@ -83,9 +95,13 @@ a:hover {
 
 .navbar {
     padding: 1rem 2rem;
-    color: #503658;
+    color: #503658 !important;
     /*font-weight: bold;*/
     /*background: #e5ab8a;*/
+}
+
+.navbar-brand {
+    font-weight: bold;
 }
 
 .nav-buttons {
@@ -95,11 +111,16 @@ a:hover {
     position: relative;
 }
 
+#lang-dropdown button {
+    background: #503658;
+
+}
+
 .profile-button {
     font-size: 2rem;
     background: none;
     border: none;
-    color: black;
+    color: #503658;
     cursor: pointer;
     padding: 1rem;
     padding-right: 0.5rem;
@@ -167,6 +188,8 @@ a:hover {
     text-align: center;
     padding: 4rem;
     padding-top: 8.5rem;
+    width: 75%;
+    margin: auto;
 }
 
 .auth-form button {
@@ -207,14 +230,18 @@ a:hover {
 .wrap-thumbnail {
     aspect-ratio: 1;
     position: relative;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*gap: 2rem;*/
 }
 
 .wrap-info {
-    margin-top: 1rem !important;
+    /*margin-top: 1.5rem !important;*/
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 10px;
+    padding-left: 0px;
 }
 
 .wrap-actions {

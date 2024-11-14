@@ -5,13 +5,12 @@
 
     <div class="wrap-grid">
     {% for i in "123" %}
-
-       <div class="wrap-item">
+       <div class="wrap-itewm">
            <a href="{% url 'wrapped_page' %}" class="wrap-link">
                <div class="wrap-thumbnail">
                    <img src="{% static 'core/images/wrap-placeholder.png' %}" alt="Wrap {{ wrap.id }}">
                    <div class="wrap-info">
-                       Wrap {{ i }}
+                       <div>Wrap {{ i }}</div>
                        <div class="wrap-actions">
                             <button class="share-btn">
                                 <i class="fas fa-share-alt"></i>
