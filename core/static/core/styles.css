@@ -241,7 +241,7 @@ a:hover {
     bottom: 0;
     width: 100%;
     padding: 10px;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .wrap-actions {
