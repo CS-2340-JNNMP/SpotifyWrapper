@@ -201,3 +201,40 @@ class GenreAnalysisView(View):
 
 def home(request):
     return render(request, "core/home.html")
+@login_required
+def game(request):
+    """Homepage to display the top track and preview button."""
+    access_token = request.session.get('access_token')
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
+
+    # Get the user's top track (limit to 1 track)
+    response = requests.get(f"{SPOTIFY_API_URL}/me/top/tracks?limit=1", headers=headers)
+
+    if response.status_code != 200:
+        return JsonResponse({'error': 'Failed to fetch top tracks'}, status=400)
+
+    top_track = response.json()['items'][0]
+    track_name = top_track['name']
+    track_artists = ', '.join([artist['name'] for artist in top_track['artists']])
+    preview_url = top_track.get('preview_url', None)
+
+    if not preview_url:
+        return JsonResponse({'error': 'No preview available for the top track'}, status=400)
+
+    return render(request, 'core/home.html', {
+        'track_name': track_name,
+        'track_artists': track_artists,
+        'preview_url': preview_url
+    })
+@login_required
+def play_snippet(request):
+    """Handle playing the 2-second snippet (frontend will handle actual playback)."""
+    preview_url = request.GET.get('preview_url', None)
+
+    if not preview_url:
+        return JsonResponse({'error': 'No preview URL provided'}, status=400)
+
+    # Return the preview URL to the frontend for playback
+    return JsonResponse({'preview_url': preview_url})
