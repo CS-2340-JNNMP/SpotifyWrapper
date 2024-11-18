@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="carousel-container">
+        <h2 class="carousel-title">Your Wrapped</h2>
+        <div class="carousel">
+            <!-- Songs Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>Top 3 Songs</h2>
+                    <ol>
+                        {% for song in data.songs %}
+                            <li>{{ song }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Artists Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>Top 3 Artists</h2>
+                    <ol>
+                        {% for artist in data.artists %}
+                            <li>{{ artist }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Genres Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>Top 3 Genres</h2>
+                    <ol>
+                        {% for genre in data.genres %}
+                            <li>{{ genre }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>
+        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>
+
+        <div class="carousel-dots">
+            <div class="dot" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
+        </div>
+    </div>
+{% endblock %}
