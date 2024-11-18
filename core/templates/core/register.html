@@ -5,50 +5,89 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-    <form class ="auth-form">
+{#    <form method="POST" class ="auth-form">#}
+{#        {% csrf_token %}#}
+{#        <h1>Register</h1>#}
+{#            <br>#}
+{#      <!-- Email input -->#}
+{#      <div data-mdb-input-init class="form-outline mb-4">#}
+{#        <input type="email" id="form2Example1" class="form-control" />#}
+{#        <label class="form-label" for="form2Example1">Email address</label>#}
+{#      </div>#}
+{##}
+{#      <!-- Password input -->#}
+{#      <div data-mdb-input-init class="form-outline mb-4">#}
+{#        <input type="password" id="form2Example2" class="form-control" />#}
+{#        <label class="form-label" for="form2Example2">Password</label>#}
+{#      </div>#}
+{##}
+{#      <!-- Password confirm -->#}
+{#      <div data-mdb-input-init class="form-outline mb-4">#}
+{#        <input type="password" id="form2Example2" class="form-control" />#}
+{#        <label class="form-label" for="form2Example2">Confirm Password</label>#}
+{#      </div>#}
+{##}
+{#      <!-- 2 column grid layout for inline styling -->#}
+{#      <div class="row mb-4">#}
+{#        <div class="col d-flex justify-content-center">#}
+{#          <!-- Checkbox -->#}
+{#          <div class="form-check">#}
+{#            <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />#}
+{#            <label class="form-check-label" for="form2Example31"> Remember me </label>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col">#}
+{#          <!-- Simple link -->#}
+{#          <a href="#!">Forgot password?</a>#}
+{#        </div>#}
+{#      </div>#}
+{##}
+{#      <!-- Submit button -->#}
+{#        <a href="{% url 'login' %}"><button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Register</button></a>#}
+{##}
+{#      <!-- Register buttons -->#}
+{#      <div class="text-center">#}
+{#        <p>Already registered? <a href="{% url 'login' %}">Sign in</a></p>#}
+{#      </div>#}
+{#    </form>#}
+
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
         <h1>Register</h1>
-            <br>
-      <!-- Email input -->
-      <div data-mdb-input-init class="form-outline mb-4">
-        <input type="email" id="form2Example1" class="form-control" />
-        <label class="form-label" for="form2Example1">Email address</label>
-      </div>
-
-      <!-- Password input -->
-      <div data-mdb-input-init class="form-outline mb-4">
-        <input type="password" id="form2Example2" class="form-control" />
-        <label class="form-label" for="form2Example2">Password</label>
-      </div>
-
-      <!-- Password confirm -->
-      <div data-mdb-input-init class="form-outline mb-4">
-        <input type="password" id="form2Example2" class="form-control" />
-        <label class="form-label" for="form2Example2">Confirm Password</label>
-      </div>
-
-      <!-- 2 column grid layout for inline styling -->
-      <div class="row mb-4">
-        <div class="col d-flex justify-content-center">
-          <!-- Checkbox -->
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-            <label class="form-check-label" for="form2Example31"> Remember me </label>
-          </div>
+        <br>
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="email" name="email" class="form-control" required />
+            <label class="form-label" for="email">Email address</label>
         </div>
 
-        <div class="col">
-          <!-- Simple link -->
-          <a href="#!">Forgot password?</a>
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="password" name="password" class="form-control" required />
+            <label class="form-label" for="password">Password</label>
         </div>
-      </div>
 
-      <!-- Submit button -->
-        <a href="{% url 'login' %}"><button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Register</button></a>
+        <!-- Password confirm -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="confirm_password" name="confirm_password" class="form-control" required />
+            <label class="form-label" for="confirm_password">Confirm Password</label>
+        </div>
 
-      <!-- Register buttons -->
-      <div class="text-center">
-        <p>Already registered? <a href="{% url 'login' %}">Sign in</a></p>
-      </div>
+        <!-- Error message -->
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Already registered? <a href="{% url 'login' %}">Sign in</a></p>
+        </div>
     </form>
 
 {% endblock %}
