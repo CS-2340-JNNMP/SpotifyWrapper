@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Create a Wrap{% endblock %}
+
+{% block content %}
+    <html>
+    <head>
+      <title>Top Tracks for the User</title>
+    </head>
+    <body>
+        <h1>Your Top Tracks</h1>
+
+        <ul>
+          {% for track in tracks %}
+              <img style="width: 10%" src="{{ track.image }}">
+            <li>{{ track.name }} – {{ track.artist }}</li>
+          {% endfor %}
+        </ul>
+
+    </body>
+</html>
+{% endblock %}

@@ -1,0 +1,299 @@
+.login {
+  background-color: #e5ab8a;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.login .div {
+  background-color: var(--salmon-orange);
+  overflow: hidden;
+  width: 1512px;
+  height: 982px;
+  position: relative;
+}
+
+.login .group {
+  position: absolute;
+  width: 300px;
+  height: 679px;
+  top: 303px;
+  left: 0;
+}
+
+.login .overlap {
+  top: 233px;
+  left: 541px;
+  position: absolute;
+  width: 971px;
+  height: 749px;
+}
+
+.login .overlap-group {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 971px;
+  height: 749px;
+}
+
+.login .img {
+  position: absolute;
+  width: 487px;
+  height: 749px;
+  top: 0;
+  left: 484px;
+}
+
+.login .form-log-in {
+  display: flex;
+  flex-direction: column;
+  width: 532px;
+  height: 454px;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  border-radius: 8px;
+}
+
+.login .input-field {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.login .label {
+  position: relative;
+  align-self: stretch;
+  margin-top: -1.00px;
+  font-family: var(--body-base-font-family);
+  font-weight: var(--body-base-font-weight);
+  color: #1e1e1e;
+  font-size: var(--body-base-font-size);
+  letter-spacing: var(--body-base-letter-spacing);
+  line-height: var(--body-base-line-height);
+  font-style: var(--body-base-font-style);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.login .input {
+  min-width: 240px;
+  padding: 12px 16px;
+  margin-bottom: -1.00px;
+  margin-left: -1.00px;
+  margin-right: -1.00px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #d9d9d9;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 1;
+  margin-top: -0.50px;
+  font-family: var(--single-line-body-base-font-family);
+  font-weight: var(--single-line-body-base-font-weight);
+  color: #b3b3b3;
+  font-size: var(--single-line-body-base-font-size);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  font-style: var(--single-line-body-base-font-style);
+}
+
+.login .text-wrapper {
+  position: relative;
+  align-self: stretch;
+  margin-top: -1.00px;
+  font-family: var(--body-base-font-family);
+  font-weight: var(--body-base-font-weight);
+  color: #1e1e1e;
+  font-size: var(--body-base-font-size);
+  letter-spacing: var(--body-base-letter-spacing);
+  line-height: var(--body-base-line-height);
+  font-style: var(--body-base-font-style);
+}
+
+.login .value-wrapper {
+  min-width: 240px;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: -1.00px;
+  margin-left: -1.00px;
+  margin-right: -1.00px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #d9d9d9;
+  display: flex;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.login .value {
+  position: relative;
+  flex: 1;
+  margin-top: -0.50px;
+  font-family: var(--single-line-body-base-font-family);
+  font-weight: var(--single-line-body-base-font-weight);
+  color: #b3b3b3;
+  font-size: var(--single-line-body-base-font-size);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  font-style: var(--single-line-body-base-font-style);
+}
+
+.login .button-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.login .button {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  background-color: var(--midnight-purple);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #2c2c2c;
+}
+
+.login .button-2 {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: var(--single-line-body-base-font-family);
+  font-weight: var(--single-line-body-base-font-weight);
+  color: #f5f5f5;
+  font-size: var(--single-line-body-base-font-size);
+  letter-spacing: var(--single-line-body-base-letter-spacing);
+  line-height: var(--single-line-body-base-line-height);
+  white-space: nowrap;
+  font-style: var(--single-line-body-base-font-style);
+}
+
+.login .text-link {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.login .text-link-2 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: var(--body-link-font-family);
+  font-weight: var(--body-link-font-weight);
+  color: #1e1e1e;
+  font-size: var(--body-link-font-size);
+  letter-spacing: var(--body-link-letter-spacing);
+  line-height: var(--body-link-line-height);
+  text-decoration: underline;
+  white-space: nowrap;
+  font-style: var(--body-link-font-style);
+}
+
+.login .text-wrapper-2 {
+  position: absolute;
+  top: 340px;
+  left: 331px;
+  font-family: var(--body-link-font-family);
+  font-weight: var(--body-link-font-weight);
+  color: #1e1e1e;
+  font-size: var(--body-link-font-size);
+  letter-spacing: var(--body-link-letter-spacing);
+  line-height: var(--body-link-line-height);
+  text-decoration: underline;
+  white-space: nowrap;
+  font-style: var(--body-link-font-style);
+}
+
+.login .footer {
+  position: absolute;
+  width: 357px;
+  height: 19px;
+  top: 618px;
+  left: 64px;
+  background-color: transparent;
+}
+
+.login .brought-to-you-by {
+  position: absolute;
+  height: 19px;
+  top: -1px;
+  left: 0;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: var(--midnight-purple);
+  font-size: 19px;
+  letter-spacing: 0;
+  line-height: 19px;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.login .span {
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: #503658;
+  font-size: 19px;
+  letter-spacing: 0;
+  line-height: 19px;
+  text-decoration: underline;
+}
+
+.login .group-2 {
+  position: absolute;
+  width: 876px;
+  height: 175px;
+  top: 0;
+  left: 395px;
+}
+
+.login .dark-mode {
+  top: -727px;
+  left: 4178px;
+  position: absolute;
+  width: 45px;
+  height: 45px;
+}
+
+.login .dark-mode-2 {
+  top: 37px;
+  left: 1425px;
+  position: absolute;
+  width: 45px;
+  height: 45px;
+}

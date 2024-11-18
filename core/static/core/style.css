@@ -1,0 +1,105 @@
+:root {
+        --primary-color: #503658;
+        --background-color: #E5AB8A;
+        --dark-color: #1D1B20;
+        --white: #FFFFFF;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: var(--background-color);
+    }
+
+    .decorative-section {
+        position: absolute;
+    }
+
+    .decorative-block {
+        position: absolute;
+    }
+
+    .primary-bg {
+        background: var(--primary-color);
+    }
+
+    .secondary-bg {
+        background: var(--background-color);
+    }
+
+    .dark-bg {
+        background: var(--dark-color);
+    }
+
+    .button {
+        width: 267px;
+        height: 67px;
+        padding: 16px 18px;
+        position: absolute;
+        background: var(--white);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        display: inline-flex;
+        border: none;
+        cursor: pointer;
+    }
+
+    .button-text {
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 20px;
+        font-family: Inter;
+        font-weight: 700;
+        line-height: 20px;
+    }
+
+    .title {
+        position: absolute;
+        color: var(--primary-color);
+        font-family: Inter;
+        font-weight: 700;
+    }
+
+    .main-title {
+        font-size: 100px;
+        left: 585px;
+        top: 276px;
+    }
+
+    .subtitle {
+        font-size: 30px;
+        left: 605px;
+        top: 417px;
+    }
+
+    .footer-text {
+        color: var(--primary-color);
+        font-size: 19px;
+        font-family: Inter;
+        font-weight: 400;
+        text-decoration: underline;
+        line-height: 19px;
+    }
+
+    .menu-icon {
+        width: 45px;
+        height: 45px;
+        position: absolute;
+    }
+
+    .menu-icon-inner {
+      width: 33.75px;
+      height: 33.75px;
+      left: 5.62px;
+      top: 5.62px;
+      position: absolute;
+      background: var(--dark-color);
+    }
+
+* {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
