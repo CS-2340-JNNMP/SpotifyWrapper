@@ -18,6 +18,14 @@ import requests
 from django.views import View
 from django import forms
 
+
+import firebase_admin
+from firebase_admin import auth
+from pycparser.ply.yacc import LRTable
+
+from firebase import firestore_db
+
+
 def index(request):
     return render(request, 'core/index.html')
 
@@ -32,6 +40,7 @@ def login_view(request):
     return render(request, 'core/login.html')
 
 def register_view(request):
+    print("register_view")
     return render(request, "core/register.html")
 
 def password_reset_view(request):
@@ -139,6 +148,7 @@ class UserCreationFormWrapper(UserCreationForm):
 
 
 def register_user(request):
+    print("register_user")
     if request.method == 'POST':
         form = UserCreationFormWrapper(request.POST)
         if form.is_valid():
@@ -153,6 +163,19 @@ def register_user(request):
     else:
         form = UserCreationFormWrapper()
     return render(request, 'core/register_user.html', {'form' : form})
+
+def sign_up(request):
+    if request.method == "POST":
+        fm = UserCreationForm(request.POST)
+        if fm.is_valid():
+            fm.save()
+    else:
+        fm = UserCreationForm()
+    return render(request, 'enroll/signup.html', {'form':fm})
+
+
+
+
 def sign_up(request):
     return render(request, "core/sign_up.html")
 from django.contrib.auth.decorators import login_required
@@ -242,3 +265,94 @@ class GenreAnalysisView(View):
 
 def home(request):
     return render(request, "core/home.html")
+
+
+
+
+
+
+
+
+
+
+
+# from django.shortcuts import render, redirect
+# from .forms import RegisterForm
+# from django.contrib.auth.models import User
+#
+# def register_member(request):
+#     if request.method == "POST":
+#         form = RegisterForm(request.POST)
+#         if form.is_valid():
+#             # Save the member object
+#             member = form.save()
+#             # Redirect to a new page to display member details
+#             return redirect('member_detail', pk=member.pk)
+#     else:
+#         form = RegisterForm()
+#     return render(request, 'core/register.html', {'form': form})
+#
+#
+# from django.shortcuts import get_object_or_404
+#
+# def member_detail(request, pk):
+#     member = get_object_or_404(User, pk=pk)
+#     return render(request, 'core/my_wraps.html', {'member': member})
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import RegisterForm
+
+
+def register_function(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password != confirm_password:
+            return render(request, 'core/register.html', {'error': 'Passwords do not match'})
+
+        try:
+            user = auth.create_user(
+                email=email,
+                password=password,
+            )
+            return redirect('login')
+        except Exception as e:
+            return render(request, 'core/register.html', {'error': str(e)})
+
+    return render(request, 'core/register.html')
+
+
+def login_function(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = auth.get_user_by_email(email)
+            request.session["logged_in"] = True
+            return redirect('my_wraps')
+        except Exception as e:
+            return render(request, 'core/login.html', {'error': 'Invalid credentials'})
+
+    return render(request, 'core/login.html')
+
+def verify_token(request):
+    if request.method == 'POST':
+        token = request.POST.get('token')
+
+        try:
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token['uid']
+
+            request.session['uid'] = uid
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False})

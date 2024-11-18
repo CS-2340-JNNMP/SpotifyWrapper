@@ -1,94 +1,82 @@
-import spotipy
+import requests
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from spotipy import SpotifyOAuth
-
 from django.conf import settings
+from urllib.parse import urlencode
 
 
 def login(request):
-    # Create a SpotifyOAuth object
-    sp_oauth = SpotifyOAuth(client_id=settings.CLIENT_ID, client_secret=settings.CLIENT_SECRET, redirect_uri=settings.SPOTIFY_REDIRECT_URI, scope = settings.SCOPE)
+    # Construct the Spotify authorization URL
+    params = {
+        "client_id": settings.CLIENT_ID,
+        "response_type": "code",
+        "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
+        "scope": settings.SCOPE,
+    }
+    auth_url = f"https://accounts.spotify.com/authorize?{urlencode(params)}"
+    print(f"Authorization URL: {auth_url}")
+    return HttpResponseRedirect(auth_url)
 
-    # Print the sp_oauth object to the console
-    print("\n\nSP_OAuth Object:" ,sp_oauth, "\n\n")
-
-    # Redirect the user to the Spotify login page
-    # Get the authorization URL
-    url = sp_oauth.get_authorize_url()
-    # Print the authorization url to the console
-    print(url)
-
-    # Redirect the user to the Spotify login page
-    return HttpResponseRedirect(url)
 
 def callback(request):
-    # Create a SpotifyOAuth object
-    sp_oauth = SpotifyOAuth(client_id=settings.CLIENT_ID, client_secret=settings.CLIENT_SECRET, redirect_uri=settings.SPOTIFY_REDIRECT_URI, scope=settings.SCOPE)
-
-    # Get the authorization code from the query parameters
+    # Get the authorization code from the callback
     code = request.GET.get("code")
 
-    # Request an access token using the authorization code
-    token_info = sp_oauth.get_access_token(code)
+    if not code:
+        return JsonResponse({"error": "Authorization code not provided."}, status=400)
 
-    # Extract the access token
-    access_token = token_info["access_token"]
+    # Exchange the authorization code for an access token
+    token_url = "https://accounts.spotify.com/api/token"
+    payload = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
+        "client_id": settings.CLIENT_ID,
+        "client_secret": settings.CLIENT_SECRET,
+    }
+    response = requests.post(token_url, data=payload)
 
-    # Store the access token in a secure way (e.g. in a session or database)
+    if response.status_code != 200:
+        return JsonResponse({"error": "Failed to retrieve access token."}, status=response.status_code)
+
+    token_info = response.json()
+    access_token = token_info.get("access_token")
+
+    # Store the access token securely (e.g., in a session)
     request.session["access_token"] = access_token
-
-    # Redirect the user to the top tracks page
     return HttpResponseRedirect("/accounts/profile")
+
 
 def get_top_tracks(request):
     if request.method == 'GET':
         # Get the access token from the session
         access_token = request.session.get("access_token")
-        print('\n\n ACCESS TOKEN: ', access_token, '\n\n')
+        if not access_token:
+            return JsonResponse({"error": "Access token not found."}, status=401)
 
-        # Create a Spotipy client using the access token
-        sp = spotipy.Spotify(auth=access_token)
+        # Make the request to the Spotify API
+        headers = {"Authorization": f"Bearer {access_token}"}
+        top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
+        params = {"limit": 5, "offset": 0, "time_range": "long_term"}
+        response = requests.get(top_tracks_url, headers=headers, params=params)
 
-        print('\n\n ACCESS TOKEN: ', access_token, '\n\n')
+        if response.status_code != 200:
+            return JsonResponse({"error": "Failed to retrieve top tracks."}, status=response.status_code)
 
-        # retrieve the user's profile information
-        try:
-            response = sp.me()
-        except spotipy.exceptions.SpotifyException as e:
-            return JsonResponse({"error": str(e)})
-
-        if response is not None:
-            # The access token is valid
-            print("The access token is valid.\n\n")
-        else:
-            # The access token is invalid or has expired
-            print("The access token is invalid or has expired.\n\n")
-
-        # Make the HTTP GET request
-        response = sp.current_user_top_tracks(limit=5, offset=0, time_range="long_term")
-
-        # Extract the top tracks from the response
-        top_tracks = response["items"]
-
-        tracks = []
-        for track in top_tracks:
-            track_info = {
-                "image": track["album"]["images"][0]["url"],
+        # Parse the response and extract top tracks
+        top_tracks = response.json().get("items", [])
+        tracks = [
+            {
+                "image": track["album"]["images"][0]["url"] if track["album"]["images"] else None,
                 "name": track["name"],
-                "artist": track["artists"][0]["name"],
+                "artist": track["artists"][0]["name"] if track["artists"] else "Unknown Artist",
                 "album": track["album"]["name"],
             }
-            tracks.append(track_info)
+            for track in top_tracks
+        ]
 
-        # print tracks list to console
-        print("\n\n\nLIST OF TRACKS:",tracks)
-
+        print(f"Top Tracks: {tracks}")
         return render(request, 'accounts/profile.html', {'tracks': tracks})
 
-        # Return a JSON response containing the top tracks
-        # return JsonResponse(tracks, safe=False)
-
     else:
-        error = "An error has occurred"
-        return error
+        return JsonResponse({"error": "Invalid request method."}, status=405)
