@@ -22,7 +22,7 @@ from django import views
 
 import accounts
 from core.views import index, contact, home
-from accounts.views import callback
+from accounts.views import callback, wrapped_page
 
 urlpatterns = [
     path('index/', index, name='index'),
@@ -38,4 +38,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')), #back end auth
     path('accounts/', include('accounts.urls')),
     path('spotify/', include('accounts.urls')),
+
+    path('spotify/callback/wrapped-page', wrapped_page, name='wrapped_page'),
 ]

@@ -3,8 +3,7 @@ from django.urls import path
 
 from .views import spotify_login, spotify_callback
 from .views import GenreAnalysisView
-from accounts.views import callback
-
+from accounts.views import callback, wrapped_page
 urlpatterns = [
     # path('login/', views.login, name='login'),  # Reference your login_user function here
     path('register_user/', views.register_user, name='register_user'),

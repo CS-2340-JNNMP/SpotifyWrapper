@@ -6,6 +6,6 @@ app_name = 'accounts'
 urlpatterns = [
     path('login/', views.login, name='login'),
     path('callback/', views.callback, name='callback'),
-    path('profile/', views.get_top_tracks, name='profile'),
+    path('spotify/wrapped-page/', views.wrapped_page, name='wrapped_page'),
     # path('/spotify/callback/', views.callback, name='spotify_callback'),
 ]
