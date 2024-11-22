@@ -14,6 +14,11 @@
         <link rel="stylesheet" type="text/css" href="{% static 'core/styleguide.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
+        <nav class="header">
+{#            <a href="/" class="header-button" id="main-button">ATLFoodFinder</a>#}
+{#            <a href="/contact" id="contact-us">Contact Us</a>#}
+{#            <a href="/home" id="home">Home</a>#}
+            <div id="side-buttons">
 
     <style>
 
@@ -26,7 +31,9 @@
     </style>
 
     </head>
+          
     <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
+      
     <div class="main">
         {% block content %}{% endblock %}
     </div>

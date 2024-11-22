@@ -1,5 +1,13 @@
 // Check if user is logged in (you'll need to modify this based on your authentication system)
-const isLoggedIn = true
+var isLoggedIn = false
+
+function handleLogin() {
+    isLoggedIn = true;
+}
+
+function handleLogout() {
+    isLoggedIn = false;
+}
 
 function handleProfileClick() {
     if (!isLoggedIn) {

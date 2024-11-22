@@ -99,3 +99,7 @@
       position: absolute;
       background: var(--dark-color);
     }
+
+* {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}

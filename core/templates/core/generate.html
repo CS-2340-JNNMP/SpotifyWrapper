@@ -7,16 +7,16 @@
         <h4>Choose Wrapped Duration:</h4>
         <div class="form-radio duration">
             <div class="form-check form-check-inline">
-                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="longTerm" value="longTerm">
-                <label class="form-check-label" for="longTerm">Long Term</label>
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="long_term" value="long_term">
+                <label class="form-check-label" for="long_term">Long Term</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="midTerm" value="midTerm">
-                <label class="form-check-label" for="midTerm">Mid Term</label>
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="mid_term" value="mid_term">
+                <label class="form-check-label" for="mid_term">Mid Term</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="shortTerm" value="shortTerm">
-                <label class="form-check-label" for="shortTerm">Short Term</label>
+                <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="short_term" value="short_term">
+                <label class="form-check-label" for="short_term">Short Term</label>
             </div>
         </div>
 
@@ -77,6 +77,8 @@
                     return;
                 }
 
+
+
                 // Get the selected value
 
                 selectedValue = selectedDuration ? selectedDuration.value : selectedHoliday.value;
@@ -87,10 +89,13 @@
 
                 {#alert(selectedValue)#}
 
+
                 // Add the selected value as a query parameter
+
                 {#const wrappedURL = `/wrapped-page?type=${selectedValue}`;#}
                 // Redirect to the wrapped page
-                window.location.href = `/wrapped-page`;
+                window.location.href = `/accounts/login/?duration=${selectedValue}`;
+                {#window.location.href = `/wrapped-page`;#}
             });
         });
     </script>
