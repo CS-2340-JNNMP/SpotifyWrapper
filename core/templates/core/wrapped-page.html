@@ -40,6 +40,19 @@
                     </ol>
                 </div>
             </div>
+
+            <!-- Number of Hours Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>You listened to songs for a solid { % data.numHours[0] % } hours</h2>
+{#                    <ol>#}
+{#                        {% for genre in data.genres %}#}
+{#                            <li>{{ genre }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+                </div>
+            </div>
+
         </div>
 
         <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>
@@ -49,6 +62,51 @@
             <div class="dot" onclick="goToSlide(0)"></div>
             <div class="dot" onclick="goToSlide(1)"></div>
             <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
         </div>
     </div>
+    <!-- New section for music taste analysis -->
+    <div class="music-analysis-container">
+        <button
+            id="analyzeMusicTaste"
+            class="analyze-button"
+            onclick="analyzeMusicTaste()">
+            What Does Your Music Taste Say About You?
+        </button>
+
+        <div id="analysisResult" class="analysis-result hidden">
+            <p>
+                Based on your music preferences, you appear to be a passionate and energetic soul with an eclectic taste! Your mix of genres suggests you're open-minded and emotionally aware. The variety in your top artists shows you're not afraid to explore different musical landscapes, and your listening hours indicate you find great solace and joy in music.
+            </p>
+        </div>
+    </div>
+    <script>
+        function analyzeMusicTaste() {
+            const button = document.getElementById('analyzeMusicTaste');
+            const resultDiv = document.getElementById('analysisResult');
+
+            button.disabled = true;
+            button.innerHTML = 'Analyzing...';
+
+            setTimeout(() => {
+                resultDiv.classList.remove('hidden');
+                button.disabled = false;
+                button.innerHTML = 'What Does Your Music Taste Say About You?';
+
+                // Later, replace with actual API call:
+                // fetch('/analyze-music-taste', {
+                //     method: 'POST',
+                //     body: JSON.stringify({
+                //         songs: {{ data.songs|safe }},
+                //         artists: {{ data.artists|safe }},
+                //         genres: {{ data.genres|safe }}
+                //     })
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     resultDiv.querySelector('p').textContent = data.analysis;
+                // });
+            }, 1000);
+        }
+    </script>
 {% endblock %}
