@@ -47,7 +47,19 @@ def password_reset_view(request):
     return render(request, "core/index.html")
 
 def my_wraps_view(request):
-    return render(request, "core/my_wraps.html")
+    wraps_ref = firestore_db.collection('wraps')
+    docs = wraps_ref.get()
+
+    images_to_push = []
+    wrap_ids = []
+
+    combined = []
+    for doc in docs:
+        images_to_push.append(doc.get("top_song_image"))
+        wrap_ids.append(doc.get("id"))
+        combined.append((doc.get("top_song_image"), doc.get("id")))
+
+    return render(request, "core/my_wraps.html", {"combined": combined})
 
 def generate_view(request):
     return render(request, "core/generate.html")
@@ -329,12 +341,18 @@ def register_function(request):
 
 
 def login_function(request):
+    userid = request.session.get('userID', None)
+    print(userid)
+    if userid is not None:
+        return redirect('my_wraps')
+
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
             user = auth.get_user_by_email(email)
+            request.session['userID'] = user.uid
             request.session["logged_in"] = True
             return redirect('my_wraps')
         except Exception as e:
@@ -356,3 +374,38 @@ def verify_token(request):
             return JsonResponse({'success': False, 'error': str(e)})
 
     return JsonResponse({'success': False})
+
+
+def wrapped_page_with_id(request, wrap_id):
+    # Replace 'collection_name' with your collection and 'userId' with the desired user ID.
+    collection_ref = firestore_db.collection('wraps')
+    query = collection_ref.where('id', '==', str(wrap_id))
+
+    results = query.stream()
+
+    items = []
+    for doc in results:
+        items.append(doc)
+
+    final = items[0].to_dict()
+
+    return render(request, "accounts/wrapped-page.html", {"data": final})
+
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        print("WHYYYYY ME")
+        message = request.POST.get('message')
+        print(message)
+
+        if message is None or message.strip() == "":
+            return render(request, 'core/contact.html', {'error': 'Please enter your message'})
+        # Add the message to Firestore
+        print("WHYYYY")
+        firestore_db.collection('feedback').add({'content': message})
+
+        # Redirect or render a success message
+        return redirect('index')  # Redirect to a success page or show the form again
+
+        # return render(request, 'core/contact.html', {'form': form})
