@@ -14,6 +14,8 @@ body {
 /* Default background */
 body {
     background-image: url('SpotifyWrapper/core/static/core/images/background.png');
+    background-size: cover;
+    background-position: center;
 }
 
 /* Custom background for my-wraps page */

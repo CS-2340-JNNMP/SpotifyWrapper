@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.conf import settings
 from urllib.parse import urlencode, parse_qs
 
+from firebase import firestore_db
+import uuid
 
 def login(request):
     # Construct the Spotify authorization URL
@@ -88,9 +90,13 @@ def wrapped_page(request):
 
     # Extract required fields
     top_songs = [track["name"] for track in tracks_data[:3]]
+    top_song_image = tracks_data[0]["album"]["images"][0]["url"] if tracks_data[0]["album"]["images"] else None
     top_artists = [artist["name"] for artist in artists_data[:3]]
+    top_artist_image = artists_data[0]["images"][0]["url"] if artists_data[0]["images"] else None
     genres = []
 
+    print(top_song_image)
+    print(top_artist_image)
     # Aggregate genres from the top artists
     for artist in artists_data:
         genres.extend(artist.get("genres", []))
@@ -98,13 +104,18 @@ def wrapped_page(request):
 
     # Structure data for the template
     data = {
+        "id": str(uuid.uuid4()),
         "songs": top_songs,
+        "top_song_image": top_song_image,
         "artists": top_artists,
+        "top_artist_image": top_artist_image,
         "genres": top_genres,
     }
 
-    return render(request, "core/wrapped-page.html", {"data": data})
+    wraps_ref = firestore_db.collection('wraps')
+    wraps_ref.add(data)
 
+    return render(request, "core/wrapped-page.html", {"data": data})
 
 def get_top_tracks(request):
     if request.method == 'GET':
