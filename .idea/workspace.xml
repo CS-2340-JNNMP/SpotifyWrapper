@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d39566e-a85c-4843-af48-ff3d2e06cb6a" name="Changes" comment="Created beginnings of page for creating spotify wraps" />
+    <list default="true" id="edeaafaf-1202-4eb4-b582-f4019f0e1549" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/wrapped-page.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/static/core/images/my-wraps-background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpotifyWrapper/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/SpotifyWrapper/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/static/core/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/core/static/core/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/generate.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/generate.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/my_wraps.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/my_wraps.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/core/wrapped-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/core/wrapped-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase.py" beforeDir="false" afterPath="$PROJECT_DIR$/firebase.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,7 +54,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/CS-2340-JNNMP/SpotifyWrapper.git&quot;,
-    &quot;accountId&quot;: &quot;a276badf-abee-4700-9b78-74941627c6b8&quot;
+    &quot;accountId&quot;: &quot;f50a41c2-cdb4-45b9-ad9c-54a2899d038a&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -52,15 +72,24 @@
     &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Reverting in nitya&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Jevon&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.18.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.17.7&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nmoor/PycharmProjects/SpotifyWrapper/accounts/templates/accounts&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; main
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nmoor\PycharmProjects\SpotifyWrapper\accounts\templates\accounts" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="SpotifyWrapper" type="Python.DjangoServer" factoryName="Django server">
       <module name="SpotifyWrapper" />
@@ -89,14 +118,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
-        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -109,7 +130,8 @@
       <workItem from="1729565895818" duration="3088000" />
       <workItem from="1729708080393" duration="17267000" />
       <workItem from="1730598000679" duration="18238000" />
-      <workItem from="1731963398255" duration="1285000" />
+      <workItem from="1731825061206" duration="20706000" />
+      <workItem from="1732165685077" duration="11591000" />
     </task>
     <task id="LOCAL-00001" summary="Can load api">
       <option name="closed" value="true" />

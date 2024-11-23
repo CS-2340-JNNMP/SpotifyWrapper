@@ -5,8 +5,22 @@
 body {
     margin: 0;
     padding-bottom: 5rem; /* slightly larger than footer's margin-bottom */
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     position: relative;
+    max-width: 100%;
+    max-height: 100vh;
+}
+
+/* Default background */
+body {
+    background-image: url('SpotifyWrapper/core/static/core/images/background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Custom background for my-wraps page */
+.my-wraps-page {
+    background-image: url('SpotifyWrapper/core/static/core/images/my-wraps-background.png');
 }
 
 /* You might also need this to ensure full height works properly */
@@ -17,7 +31,7 @@ html {
 
 /*Styles for main*/
 .main {
-    width: 75%;
+    width: 90%;
     margin: 20px auto;   /* Centers the div horizontally */
     min-height: 100vh; /* Ensures minimum height is full viewport height */
     padding: 5rem;    /* Adds some inner spacing */
@@ -66,8 +80,8 @@ footer {
     color: #503658;
     /* Optional but recommended styles for positioning */
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    /*position: absolute;*/
+    /*bottom: 0;*/
 }
 
 a {
@@ -83,9 +97,13 @@ a:hover {
 
 .navbar {
     padding: 1rem 2rem;
-    color: #503658;
+    color: #503658 !important;
     /*font-weight: bold;*/
     /*background: #e5ab8a;*/
+}
+
+.navbar-brand {
+    font-weight: bold;
 }
 
 .nav-buttons {
@@ -95,11 +113,16 @@ a:hover {
     position: relative;
 }
 
+#lang-dropdown button {
+    background: #503658;
+
+}
+
 .profile-button {
     font-size: 2rem;
     background: none;
     border: none;
-    color: black;
+    color: #503658;
     cursor: pointer;
     padding: 1rem;
     padding-right: 0.5rem;
@@ -114,7 +137,7 @@ a:hover {
 .dropdown-menu {
     display: none;
     position: absolute;
-    left: -280%;
+    left: -100%;
     top: 100%;
     background-color: white;
     border-radius: 8px;
@@ -167,6 +190,8 @@ a:hover {
     text-align: center;
     padding: 4rem;
     padding-top: 8.5rem;
+    width: 75%;
+    margin: auto;
 }
 
 .auth-form button {
@@ -207,14 +232,18 @@ a:hover {
 .wrap-thumbnail {
     aspect-ratio: 1;
     position: relative;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*gap: 2rem;*/
 }
 
 .wrap-info {
-    margin-top: 1rem !important;
+    /*margin-top: 1.5rem !important;*/
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 10px;
+    padding-left: 0;
 }
 
 .wrap-actions {
@@ -242,10 +271,10 @@ a:hover {
 .carousel-title {
     text-align: center;
     font-size: 2.5rem;
-    color: #5D4AFF;
+    color: #503658;
     margin: 2rem 0;
     padding: 1rem;
-    background-color: #F4A460;
+    background-color: blanchedalmond;
     border-radius: 8px;
 }
 
@@ -260,7 +289,9 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(93, 74, 255, 0.1);
+    background-color:  rgba(93, 74, 255, 0.1);
+    background-color:  blanchedalmond;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     border-radius: 12px;
 }
 
@@ -270,11 +301,25 @@ a:hover {
     object-fit: contain;
 }
 
+.carousel-slide h2 {
+    text-align: center;
+}
+
+.content-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.content-block li {
+    margin-bottom: 1rem;
+}
+
 .carousel-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(93, 74, 255, 0.8);
+    background-color: #503658;
     color: white;
     border: none;
     width: 40px;
@@ -289,15 +334,15 @@ a:hover {
 }
 
 .carousel-button:hover {
-    background-color: rgba(93, 74, 255, 1);
+    background-color: rgba(80, 54, 88, 0.9);
 }
 
 .carousel-button.prev {
-    left: 10px;
+    left: 40px;
 }
 
 .carousel-button.next {
-    right: 10px;
+    right: 40px;
 }
 
 .carousel-dots {
@@ -318,4 +363,71 @@ a:hover {
 
 .dot.active {
     background-color: #5D4AFF;
+}
+
+/* Music Analysis Section */
+.music-analysis-container {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.analyze-button {
+    background-color: #503658;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.analyze-button:hover {
+    background-color: #553c9a;
+}
+
+.analyze-button:disabled {
+    background-color: #a794dd;
+    cursor: not-allowed;
+}
+
+.analysis-result {
+    max-width: 800px;
+    margin: 24px auto;
+    padding: 20px;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333;
+}
+
+.hidden {
+    display: none;
+}
+
+/* List Styles */
+ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+li {
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-container {
+        padding: 10px;
+    }
+
+    .analysis-result {
+        padding: 15px;
+        margin: 20px 10px;
+    }
+
+    .analyze-button {
+        padding: 10px 20px;
+    }
 }

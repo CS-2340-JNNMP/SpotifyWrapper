@@ -20,15 +20,39 @@
 {#            <a href="/home" id="home">Home</a>#}
             <div id="side-buttons">
 
+    <style>
+
+        body {
+            background-image: url("{% static 'core/images/background.png' %}");
+        }
+        .my-wraps-page {
+            background-image: url("{% static 'core/images/my-wraps-background.png' %}");
+        }
+    </style>
+
     </head>
-    <body style="background-image: url('{% static 'core/images/background.png' %}'); background-size: cover;">
+          
+    <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
+      
     <div class="main">
         {% block content %}{% endblock %}
     </div>
     <nav class="navbar fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="/">SpotiFye</a>
+            <a class="navbar-brand" href="/">SpotiFye</a>
             <div class="nav-buttons">
+                <!-- Language Dropdown -->
+                <div class="dropdown mr-3" id="lang-dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        English
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a class="dropdown-item" href="#">Espagnol</a>
+                        <a class="dropdown-item" href="#">Française</a>
+                    </div>
+                </div>
+
+                <!-- Profile Icon -->
                 <i class="profile-button fa-regular fa-circle-user" onclick="handleProfileClick()"></i>
                     <div class="dropdown-menu" id="profileDropdown">
                         <a href="/my-wraps">View My Wraps</a>
@@ -39,7 +63,9 @@
         </div>
     </nav>
 
+    <!-- Footer -->
     <footer>
+        Brought to you by
         <a href="/contact" id="contact-us">Brought to you by TeamAwesomeSauce</a>
     </footer>
     <!-- Optional JavaScript -->
