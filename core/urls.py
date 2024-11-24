@@ -12,7 +12,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     # path('login/', views.login_view, name='login'),
     path('login/', views.login_function, name='login'),
-    path('verify_token/', views.verify_token, name='verify_token'),
     # path('register/', views.register_view, name='register'),
     path('password-reset/', views.password_reset_view, name='password_reset'),
     path('my-wraps/', views.my_wraps_view, name='my_wraps'),
@@ -36,6 +35,6 @@ urlpatterns = [
     # path('member/<int:pk>/', views.member_detail, name='member_detail'),
     # path('contact/', views.contact_us, name='contact'),
     path('contact/', views.contact_us, name='contact'),
-
+    path('logout/', views.logout_function, name='logout'),
 ]
 

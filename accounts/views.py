@@ -64,6 +64,8 @@ def wrapped_page(request):
     duration = request.session.get("duration", "long_term")
     print(duration)
 
+    print(access_token)
+
     if not access_token:
         return JsonResponse({"error": "Access token not found."}, status=401)
 
@@ -80,6 +82,9 @@ def wrapped_page(request):
     artists_response = requests.get(
         top_artists_url, headers=headers, params={"limit": 5, "time_range": duration}
     )
+
+    print(artists_response)
+    print(tracks_response)
 
     if tracks_response.status_code != 200 or artists_response.status_code != 200:
         return JsonResponse({"error": "Failed to retrieve Spotify data."}, status=500)

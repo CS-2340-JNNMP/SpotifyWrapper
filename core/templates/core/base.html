@@ -53,7 +53,26 @@
                 </div>
 
                 <!-- Profile Icon -->
-                <i class="profile-button fa-regular fa-circle-user" onclick="handleProfileClick()"></i>
+                {% if logged_in %}
+                <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedIn() {
+                    const dropdown = document.getElementById('profileDropdown');
+                    dropdown.classList.toggle('show');
+
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function closeDropdown(e) {
+                        if (!e.target.closest('.nav-buttons')) {
+                            dropdown.classList.remove('show');
+                            document.removeEventListener('click', closeDropdown);
+                        }
+                    });
+                }
+                handleProfileClickLoggedIn()"></i>
+                {% else %}
+                <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedOut() {
+                    window.location.href = '/login';
+                }
+                handleProfileClickLoggedOut()"></i>
+                {% endif %}
                     <div class="dropdown-menu" id="profileDropdown">
                         <a href="/my-wraps">View My Wraps</a>
                         <a href="/logout">Logout</a>
