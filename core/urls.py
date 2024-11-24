@@ -25,6 +25,7 @@ urlpatterns = [
     path('spotify/callback/', callback, name='spotify_callback'),
     path('spotify/user-data/', views.get_user_data, name='spotify_user_data'),
     path('index/', views.index, name='index'),
+    path('game/', views.game, name='game'),
 
     path('wrapped-page/<uuid:wrap_id>/', views.wrapped_page_with_id, name='wrapped_page'),
 

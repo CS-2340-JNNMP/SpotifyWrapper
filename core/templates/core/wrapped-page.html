@@ -1,3 +1,79 @@
+{#{% extends 'core/base.html' %}#}
+{#{% load static %}#}
+{##}
+{#{% block content %}#}
+{#    <div class="carousel-container">#}
+{#        <h2 class="carousel-title">Your Wrapped</h2>#}
+{#        <div class="carousel">#}
+{#            <!-- Songs Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Songs</h2>#}
+{#                    <ol>#}
+{#                        {% for song in data.songs %}#}
+{#                            <li>#}
+{#                                <span class="song-name" onclick="playSong('{{ song.preview_url }}')">{{ song.name }}</span>#}
+{#                                <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Artists Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Artists</h2>#}
+{#                    <ol>#}
+{#                        {% for artist in data.artists %}#}
+{#                            <li>{{ artist }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Genres Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Genres</h2>#}
+{#                    <ol>#}
+{#                        {% for genre in data.genres %}#}
+{#                            <li>{{ genre }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Number of Hours Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>You listened to songs for a solid {{ data.numHours }} hours</h2>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>#}
+{#        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>#}
+{##}
+{#        <div class="carousel-dots">#}
+{#            <div class="dot" onclick="goToSlide(0)"></div>#}
+{#            <div class="dot" onclick="goToSlide(1)"></div>#}
+{#            <div class="dot" onclick="goToSlide(2)"></div>#}
+{#            <div class="dot" onclick="goToSlide(3)"></div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <script>#}
+{#        function playSong(previewUrl) {#}
+{#            if (!previewUrl) return;  // If no preview URL is available, do nothing#}
+{#            const audioPlayer = new Audio(previewUrl);#}
+{#            audioPlayer.play();#}
+{#        }#}
+{#    </script>#}
+{#{% endblock %}#}
+
+
 {% extends 'core/base.html' %}
 {% load static %}
 
@@ -11,7 +87,9 @@
                     <h2>Top 3 Songs</h2>
                     <ol>
                         {% for song in data.songs %}
-                            <li>{{ song }}</li>
+
+                           <li class="song-name" onclick="playSong('{{ song.preview_url }}')">🔊{{ song.name }} </li>
+                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
                         {% endfor %}
                     </ol>
                 </div>
@@ -92,21 +170,14 @@
                 resultDiv.classList.remove('hidden');
                 button.disabled = false;
                 button.innerHTML = 'What Does Your Music Taste Say About You?';
-
-                // Later, replace with actual API call:
-                // fetch('/analyze-music-taste', {
-                //     method: 'POST',
-                //     body: JSON.stringify({
-                //         songs: {{ data.songs|safe }},
-                //         artists: {{ data.artists|safe }},
-                //         genres: {{ data.genres|safe }}
-                //     })
-                // })
-                // .then(response => response.json())
-                // .then(data => {
-                //     resultDiv.querySelector('p').textContent = data.analysis;
-                // });
             }, 1000);
         }
+
+       function playSong(previewUrl) {
+            if (!previewUrl) return;
+            const audioPlayer = new Audio(previewUrl);
+            audioPlayer.play();
+       }
+
     </script>
 {% endblock %}
