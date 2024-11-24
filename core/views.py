@@ -87,7 +87,7 @@ def wrapped_page_view(request):
     return render(request, "core/wrapped-page.html", {'data': data})
 def spotify_login(request):
     print(settings.SPOTIFY_REDIRECT_URI)
-    scope = 'user-read-recently-played'
+    scope = settings.SCOPE
     # print(settings.CLIENT_ID)
     # print(settings.CLIENT_SECRET)
     # print(settings.SPOTIFY_REDIRECT_URI)
@@ -115,7 +115,8 @@ def spotify_callback(request):
 
     response = requests.post(token_url, data=payload)
     token_data = response.json()
-
+    request.session['access_token'] = token_data.get('access_token')
+    request.session['refresh_token'] = token_data.get('refresh_token')
     # Store token_data['access_token'] for future API calls
     return JsonResponse(token_data)
 
@@ -278,6 +279,55 @@ class GenreAnalysisView(View):
 def home(request):
     return render(request, "core/home.html")
 
+@login_required
+def game(request):
+    """Homepage to display the top track and preview button."""
+    access_token = request.session.get('access_token')
+    if not access_token:
+        return JsonResponse({'error': 'Access token is missing or invalid'}, status=400)
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
+
+    # Get the user's top track (limit to 1 track)
+    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=1', headers=headers)
+
+
+
+    if response.status_code != 200:
+        error_message = response.json() if response.text else "No response content"
+        return JsonResponse({'error': 'Failed to fetch top tracks'}, status=400)
+
+    try:
+        top_track = response.json()['items'][0]
+        track_name = top_track['name']
+        track_artists = ', '.join([artist['name'] for artist in top_track['artists']])
+        preview_url = top_track.get('preview_url', None)
+
+        if not preview_url:
+            return JsonResponse({'error': 'No preview available for the top track'}, status=400)
+
+        return render(request, 'core/home.html', {
+            'track_name': track_name,
+            'track_artists': track_artists,
+            'preview_url': preview_url
+        })
+
+    except KeyError:
+        return JsonResponse({'error': 'Unexpected response structure from Spotify API'}, status=500)
+
+@login_required
+def play_snippet(request):
+    """Handle playing the 2-second snippet (frontend will handle actual playback)."""
+    preview_url = request.GET.get('preview_url', None)
+
+    if not preview_url:
+        return JsonResponse({'error': 'No preview URL provided'}, status=400)
+
+    # Return the preview URL to the frontend for playback
+    return JsonResponse({'preview_url': preview_url})
+
+
 
 
 
@@ -409,3 +459,4 @@ def contact_us(request):
         return redirect('index')  # Redirect to a success page or show the form again
 
         # return render(request, 'core/contact.html', {'form': form})
+
