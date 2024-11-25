@@ -286,58 +286,72 @@ class GenreAnalysisView(View):
 def home(request):
     return render(request, "core/home.html")
 
-@login_required
+
+import random
+import requests
+from django.shortcuts import render
+from django.http import JsonResponse
+
 def game(request):
-    """Homepage to display the top track and preview button."""
+    """Homepage to display 5 random songs from the top 100 tracks."""
     access_token = request.session.get('access_token')
     if not access_token:
         return JsonResponse({'error': 'Access token is missing or invalid'}, status=400)
+
     headers = {
         'Authorization': f'Bearer {access_token}',
     }
 
-    # Get the user's top track (limit to 1 track)
-    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=1', headers=headers)
-
-
+    # Get the user's top 100 tracks (limit to 15 for simplicity)
+    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=15', headers=headers)
 
     if response.status_code != 200:
         error_message = response.json() if response.text else "No response content"
-        return JsonResponse({'error': 'Failed to fetch top tracks'}, status=400)
+        return JsonResponse({'error': 'Failed to fetch top tracks', 'details': error_message}, status=400)
 
     try:
-        top_track = response.json()['items'][0]
-        track_name = top_track['name']
-        track_artists = ', '.join([artist['name'] for artist in top_track['artists']])
-        preview_url = top_track.get('preview_url', None)
+        top_tracks = response.json().get('items', [])
 
-        if not preview_url:
-            return JsonResponse({'error': 'No preview available for the top track'}, status=400)
+        if not top_tracks:
+            return JsonResponse({'error': 'No top tracks found for the user'}, status=400)
 
-        return render(request, 'core/home.html', {
-            'track_name': track_name,
-            'track_artists': track_artists,
-            'preview_url': preview_url
-        })
+        # Randomly select 5 tracks from the top tracks
+        selected_tracks = random.sample(top_tracks, 5)
 
-    except KeyError:
-        return JsonResponse({'error': 'Unexpected response structure from Spotify API'}, status=500)
+        # Prepare track data for rendering
+        track_data = []
+        for track in selected_tracks:
+            track_name = track['name']
+            track_artists = ', '.join([artist['name'] for artist in track['artists']])
+            preview_url = track.get('preview_url', None)
 
-@login_required
-def play_snippet(request):
-    """Handle playing the 2-second snippet (frontend will handle actual playback)."""
-    preview_url = request.GET.get('preview_url', None)
+            # Only include tracks with a preview URL
+            if preview_url:
+                track_data.append({
+                    'name': track_name,
+                    'artists': track_artists,
+                    'preview_url': preview_url,
+                    'id': track['id']  # Pass the track ID for checking guesses
+                })
 
-    if not preview_url:
-        return JsonResponse({'error': 'No preview URL provided'}, status=400)
+        if request.method == 'POST':
+            correct_guesses = 0
+            for track in selected_tracks:
+                guess = request.POST.get(f'guess_{track["id"]}')
+                correct_answer = track['name']
 
-    # Return the preview URL to the frontend for playback
-    return JsonResponse({'preview_url': preview_url})
+                if guess and guess.strip().lower() == correct_answer.lower():
+                    correct_guesses += 1
 
+            if correct_guesses == 5:
+                messages.success(request, 'Congratulations! You guessed all songs correctly and earned extra points!')
+            else:
+                messages.info(request, f'You guessed {correct_guesses} tracks correctly!')
 
+        return render(request, 'core/game.html', {'top_tracks': track_data})
 
-
-
+    except KeyError as e:
+        return JsonResponse({'error': 'Unexpected response structure from Spotify API', 'details': str(e)}, status=500)
 
 
 
