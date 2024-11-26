@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.conf import settings
 from urllib.parse import urlencode, parse_qs
 
+from firebase import firestore_db
+import uuid
 
 def login(request):
     # Construct the Spotify authorization URL
@@ -60,7 +62,8 @@ def callback(request):
 def wrapped_page(request):
     access_token = request.session.get("access_token")
     duration = request.session.get("duration", "long_term")
-    print(duration)
+
+    print(access_token)
 
     if not access_token:
         return JsonResponse({"error": "Access token not found."}, status=401)
@@ -79,6 +82,9 @@ def wrapped_page(request):
         top_artists_url, headers=headers, params={"limit": 5, "time_range": duration}
     )
 
+    print(artists_response)
+    print(tracks_response)
+
     if tracks_response.status_code != 200 or artists_response.status_code != 200:
         return JsonResponse({"error": "Failed to retrieve Spotify data."}, status=500)
 
@@ -87,10 +93,20 @@ def wrapped_page(request):
     artists_data = artists_response.json().get("items", [])
 
     # Extract required fields
-    top_songs = [track["name"] for track in tracks_data[:3]]
+    top_songs = [
+        {
+            "name": track["name"],
+            "preview_url": track.get("preview_url", "")  # Get preview URL
+        }
+        for track in tracks_data[:3]
+    ]
+    top_song_image = tracks_data[0]["album"]["images"][0]["url"] if tracks_data[0]["album"]["images"] else None
     top_artists = [artist["name"] for artist in artists_data[:3]]
+    top_artist_image = artists_data[0]["images"][0]["url"] if artists_data[0]["images"] else None
     genres = []
 
+    print(top_song_image)
+    print(top_artist_image)
     # Aggregate genres from the top artists
     for artist in artists_data:
         genres.extend(artist.get("genres", []))
@@ -98,13 +114,72 @@ def wrapped_page(request):
 
     # Structure data for the template
     data = {
+        "id": str(uuid.uuid4()),
         "songs": top_songs,
+        "top_song_image": top_song_image,
         "artists": top_artists,
+        "top_artist_image": top_artist_image,
         "genres": top_genres,
     }
 
-    return render(request, "core/wrapped-page.html", {"data": data})
+    wraps_ref = firestore_db.collection('wraps')
+    wraps_ref.add(data)
 
+    return render(request, "core/wrapped-page.html", {"data": data})
+# def wrapped_page(request):
+#     access_token = request.session.get("access_token")
+#     duration = request.session.get("duration", "long_term")
+#
+#     if not access_token:
+#         return JsonResponse({"error": "Access token not found."}, status=401)
+#
+#     headers = {"Authorization": f"Bearer {access_token}"}
+#     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
+#     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
+#
+#     # Fetch top tracks
+#     tracks_response = requests.get(
+#         top_tracks_url, headers=headers, params={"limit": 5, "time_range": duration}
+#     )
+#
+#     # Fetch top artists
+#     artists_response = requests.get(
+#         top_artists_url, headers=headers, params={"limit": 5, "time_range": duration}
+#     )
+#
+#     if tracks_response.status_code != 200 or artists_response.status_code != 200:
+#         return JsonResponse({"error": "Failed to retrieve Spotify data."}, status=500)
+#
+#     # Parse the responses
+#     tracks_data = tracks_response.json().get("items", [])
+#     artists_data = artists_response.json().get("items", [])
+#
+#     # Extract the relevant data
+#     top_songs = [
+#         {
+#             "name": track["name"],
+#             "preview_url": track.get("preview_url", "")  # Get preview URL
+#         }
+#         for track in tracks_data[:3]
+#     ]
+#
+#     top_artists = [artist["name"] for artist in artists_data[:3]]
+#     top_genres = []
+#
+#     # Aggregate genres from the top artists
+#     for artist in artists_data:
+#         top_genres.extend(artist.get("genres", []))
+#     top_genres = list(dict.fromkeys(top_genres))[:3]  # Get top 3 unique genres
+#
+#     # Structure data for the template
+#     data = {
+#         "id": str(uuid.uuid4()),
+#         "songs": top_songs,
+#         "artists": top_artists,
+#         "genres": top_genres,
+#     }
+#
+#     return render(request, "core/wrapped-page.html", {"data": data})
 
 def get_top_tracks(request):
     if request.method == 'GET':

@@ -60,3 +60,4 @@ class RegisterForm(forms.Form):
             raise ValidationError("Passwords do not match!")
 
         return cleaned_data
+

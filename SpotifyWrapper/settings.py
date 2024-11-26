@@ -23,6 +23,8 @@ SPOTIFY_REDIRECT_URI = os.getenv('SPOTIFY_REDIRECT_URI')
 
 HUGGING_FACE = os.getenv('HUGGING_FACE')
 
+FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+
 SCOPE = os.getenv('SCOPE')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,6 +81,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Custom Context Processors
+                'context.context_processors.project_context',
             ],
         },
     },

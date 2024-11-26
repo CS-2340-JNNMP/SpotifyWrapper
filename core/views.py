@@ -10,6 +10,8 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 from urllib.parse import urlencode
+
+from firebase_admin.auth import InvalidIdTokenError
 from huggingface_hub import InferenceClient
 import json
 # Create your views here.
@@ -47,9 +49,26 @@ def password_reset_view(request):
     return render(request, "core/index.html")
 
 def my_wraps_view(request):
-    return render(request, "core/my_wraps.html")
+    wraps_ref = firestore_db.collection('wraps')
+    docs = wraps_ref.get()
+
+    images_to_push = []
+    wrap_ids = []
+
+    combined = []
+    for doc in docs:
+        images_to_push.append(doc.get("top_song_image"))
+        wrap_ids.append(doc.get("id"))
+        combined.append((doc.get("top_song_image"), doc.get("id")))
+
+    return render(request, "core/my_wraps.html", {"combined": combined})
 
 def generate_view(request):
+    logged_in = request.session.get("logged_in", None)
+    print(logged_in)
+    if logged_in is None or False:
+        return render(request, 'core/login.html')
+
     return render(request, "core/generate.html")
 
 def wrapped_page_view(request):
@@ -75,7 +94,7 @@ def wrapped_page_view(request):
     return render(request, "core/wrapped-page.html", {'data': data})
 def spotify_login(request):
     print(settings.SPOTIFY_REDIRECT_URI)
-    scope = 'user-read-recently-played'
+    scope = settings.SCOPE
     # print(settings.CLIENT_ID)
     # print(settings.CLIENT_SECRET)
     # print(settings.SPOTIFY_REDIRECT_URI)
@@ -103,7 +122,8 @@ def spotify_callback(request):
 
     response = requests.post(token_url, data=payload)
     token_data = response.json()
-
+    request.session['access_token'] = token_data.get('access_token')
+    request.session['refresh_token'] = token_data.get('refresh_token')
     # Store token_data['access_token'] for future API calls
     return JsonResponse(token_data)
 
@@ -266,6 +286,55 @@ class GenreAnalysisView(View):
 def home(request):
     return render(request, "core/home.html")
 
+@login_required
+def game(request):
+    """Homepage to display the top track and preview button."""
+    access_token = request.session.get('access_token')
+    if not access_token:
+        return JsonResponse({'error': 'Access token is missing or invalid'}, status=400)
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
+
+    # Get the user's top track (limit to 1 track)
+    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=1', headers=headers)
+
+
+
+    if response.status_code != 200:
+        error_message = response.json() if response.text else "No response content"
+        return JsonResponse({'error': 'Failed to fetch top tracks'}, status=400)
+
+    try:
+        top_track = response.json()['items'][0]
+        track_name = top_track['name']
+        track_artists = ', '.join([artist['name'] for artist in top_track['artists']])
+        preview_url = top_track.get('preview_url', None)
+
+        if not preview_url:
+            return JsonResponse({'error': 'No preview available for the top track'}, status=400)
+
+        return render(request, 'core/home.html', {
+            'track_name': track_name,
+            'track_artists': track_artists,
+            'preview_url': preview_url
+        })
+
+    except KeyError:
+        return JsonResponse({'error': 'Unexpected response structure from Spotify API'}, status=500)
+
+@login_required
+def play_snippet(request):
+    """Handle playing the 2-second snippet (frontend will handle actual playback)."""
+    preview_url = request.GET.get('preview_url', None)
+
+    if not preview_url:
+        return JsonResponse({'error': 'No preview URL provided'}, status=400)
+
+    # Return the preview URL to the frontend for playback
+    return JsonResponse({'preview_url': preview_url})
+
+
 
 
 
@@ -328,13 +397,40 @@ def register_function(request):
     return render(request, 'core/register.html')
 
 
+# def login_function(request):
+#     userid = request.session.get('userID', None)
+#     if userid is not None:
+#         return redirect('my_wraps')
+#
+#     if request.method == "POST":
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#
+#         try:
+#             print("WHY IS THIS NOT WORKING")
+#             user = auth.get_user_by_email(email)
+#             request.session['userID'] = user.uid
+#             request.session["logged_in"] = True
+#             return redirect('my_wraps')
+#         except Exception as e:
+#             return render(request, 'core/login.html', {'error': 'Invalid credentials'})
+#
+#     return render(request, 'core/login.html')
+
 def login_function(request):
+    userid = request.session.get('userID', None)
+    if userid is not None:
+        return redirect('my_wraps')
+
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
-            user = auth.get_user_by_email(email)
+            user = verify_password(email, password)
+            verified_user = auth.verify_id_token(user["idToken"])
+            id = (verified_user["user_id"])
+            request.session['userID'] = id
             request.session["logged_in"] = True
             return redirect('my_wraps')
         except Exception as e:
@@ -342,17 +438,57 @@ def login_function(request):
 
     return render(request, 'core/login.html')
 
-def verify_token(request):
+def verify_password(email, password):
+    url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={settings.FIREBASE_WEB_API_KEY}"
+
+    payload = {
+        'email': email,
+        'password': password,
+        'returnSecureToken': True
+    }
+
+    response = requests.post(url, json=payload)
+    if response.status_code == 200:
+        return response.json()  # Successfully authenticated
+    else:
+        raise Exception("Invalid credentials")
+
+def wrapped_page_with_id(request, wrap_id):
+    # Replace 'collection_name' with your collection and 'userId' with the desired user ID.
+    collection_ref = firestore_db.collection('wraps')
+    query = collection_ref.where('id', '==', str(wrap_id))
+
+    results = query.stream()
+
+    items = []
+    for doc in results:
+        items.append(doc)
+
+    final = items[0].to_dict()
+
+    return render(request, "accounts/wrapped-page.html", {"data": final})
+
+
+
+def contact_us(request):
     if request.method == 'POST':
-        token = request.POST.get('token')
+        print("WHYYYYY ME")
+        message = request.POST.get('message')
+        print(message)
 
-        try:
-            decoded_token = auth.verify_id_token(token)
-            uid = decoded_token['uid']
+        if message is None or message.strip() == "":
+            return render(request, 'core/contact.html', {'error': 'Please enter your message'})
+        # Add the message to Firestore
+        print("WHYYYY")
+        firestore_db.collection('feedback').add({'content': message})
 
-            request.session['uid'] = uid
-            return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
+        # Redirect or render a success message
+        return redirect('index')  # Redirect to a success page or show the form again
 
-    return JsonResponse({'success': False})
+        # return render(request, 'core/contact.html', {'form': form})
+
+def logout_function(request):
+    request.session['logged_in'] = False
+    request.session['userID'] = None
+    return redirect('index')
+

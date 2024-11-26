@@ -1,3 +1,79 @@
+{#{% extends 'core/base.html' %}#}
+{#{% load static %}#}
+{##}
+{#{% block content %}#}
+{#    <div class="carousel-container">#}
+{#        <h2 class="carousel-title">Your Wrapped</h2>#}
+{#        <div class="carousel">#}
+{#            <!-- Songs Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Songs</h2>#}
+{#                    <ol>#}
+{#                        {% for song in data.songs %}#}
+{#                            <li>#}
+{#                                <span class="song-name" onclick="playSong('{{ song.preview_url }}')">{{ song.name }}</span>#}
+{#                                <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Artists Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Artists</h2>#}
+{#                    <ol>#}
+{#                        {% for artist in data.artists %}#}
+{#                            <li>{{ artist }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Genres Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>Top 3 Genres</h2>#}
+{#                    <ol>#}
+{#                        {% for genre in data.genres %}#}
+{#                            <li>{{ genre }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Number of Hours Slide -->#}
+{#            <div class="carousel-slide">#}
+{#                <div class="content-block">#}
+{#                    <h2>You listened to songs for a solid {{ data.numHours }} hours</h2>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>#}
+{#        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>#}
+{##}
+{#        <div class="carousel-dots">#}
+{#            <div class="dot" onclick="goToSlide(0)"></div>#}
+{#            <div class="dot" onclick="goToSlide(1)"></div>#}
+{#            <div class="dot" onclick="goToSlide(2)"></div>#}
+{#            <div class="dot" onclick="goToSlide(3)"></div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <script>#}
+{#        function playSong(previewUrl) {#}
+{#            if (!previewUrl) return;  // If no preview URL is available, do nothing#}
+{#            const audioPlayer = new Audio(previewUrl);#}
+{#            audioPlayer.play();#}
+{#        }#}
+{#    </script>#}
+{#{% endblock %}#}
+
+
 {% extends 'core/base.html' %}
 {% load static %}
 
@@ -11,7 +87,9 @@
                     <h2>Top 3 Songs</h2>
                     <ol>
                         {% for song in data.songs %}
-                            <li>{{ song }}</li>
+
+                           <li class="song-name" onclick="playSong('{{ song.preview_url }}')">🔊{{ song.name }} </li>
+                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
                         {% endfor %}
                     </ol>
                 </div>
@@ -40,6 +118,19 @@
                     </ol>
                 </div>
             </div>
+
+            <!-- Number of Hours Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>You listened to songs for a solid { % data.numHours[0] % } hours</h2>
+{#                    <ol>#}
+{#                        {% for genre in data.genres %}#}
+{#                            <li>{{ genre }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+                </div>
+            </div>
+
         </div>
 
         <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>
@@ -49,6 +140,44 @@
             <div class="dot" onclick="goToSlide(0)"></div>
             <div class="dot" onclick="goToSlide(1)"></div>
             <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
         </div>
     </div>
+    <!-- New section for music taste analysis -->
+    <div class="music-analysis-container">
+        <button
+            id="analyzeMusicTaste"
+            class="analyze-button"
+            onclick="analyzeMusicTaste()">
+            What Does Your Music Taste Say About You?
+        </button>
+
+        <div id="analysisResult" class="analysis-result hidden">
+            <p>
+                Based on your music preferences, you appear to be a passionate and energetic soul with an eclectic taste! Your mix of genres suggests you're open-minded and emotionally aware. The variety in your top artists shows you're not afraid to explore different musical landscapes, and your listening hours indicate you find great solace and joy in music.
+            </p>
+        </div>
+    </div>
+    <script>
+        function analyzeMusicTaste() {
+            const button = document.getElementById('analyzeMusicTaste');
+            const resultDiv = document.getElementById('analysisResult');
+
+            button.disabled = true;
+            button.innerHTML = 'Analyzing...';
+
+            setTimeout(() => {
+                resultDiv.classList.remove('hidden');
+                button.disabled = false;
+                button.innerHTML = 'What Does Your Music Taste Say About You?';
+            }, 1000);
+        }
+
+       function playSong(previewUrl) {
+            if (!previewUrl) return;
+            const audioPlayer = new Audio(previewUrl);
+            audioPlayer.play();
+       }
+
+    </script>
 {% endblock %}

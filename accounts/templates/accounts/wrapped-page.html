@@ -11,7 +11,8 @@
                     <h2>Top 3 Songs</h2>
                     <ol>
                         {% for song in data.songs %}
-                            <li>{{ song }}</li>
+                            <li class="song-name" onclick="playSong('{{ song.preview_url }}')">🔊{{ song.name }} </li>
+                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
                         {% endfor %}
                     </ol>
                 </div>
@@ -51,4 +52,11 @@
             <div class="dot" onclick="goToSlide(2)"></div>
         </div>
     </div>
+    <script>
+        function playSong(previewUrl) {
+            if (!previewUrl) return;
+            const audioPlayer = new Audio(previewUrl);
+            audioPlayer.play();
+       }
+    </script>
 {% endblock %}

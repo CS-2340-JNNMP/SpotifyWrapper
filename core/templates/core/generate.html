@@ -20,17 +20,17 @@
             </div>
         </div>
 
-        <h4>Holiday Special:</h4>
-        <div class="form-radio holiday">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="christmas" value="christmas">
-                <label class="form-check-label" for="christmas">Christmas</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="diwali" value="diwali">
-                <label class="form-check-label" for="diwali">Diwali</label>
-            </div>
-        </div>
+{#        <h4>Holiday Special:</h4>#}
+{#        <div class="form-radio holiday">#}
+{#            <div class="form-check form-check-inline">#}
+{#                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="christmas" value="christmas">#}
+{#                <label class="form-check-label" for="christmas">Christmas</label>#}
+{#            </div>#}
+{#            <div class="form-check form-check-inline">#}
+{#                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="diwali" value="diwali">#}
+{#                <label class="form-check-label" for="diwali">Diwali</label>#}
+{#            </div>#}
+{#        </div>#}
 
         <button type="submit" class="btn btn-primary mt-3">Generate</button>
     </form>
@@ -84,6 +84,10 @@
                 selectedValue = selectedDuration ? selectedDuration.value : selectedHoliday.value;
 
                 alert(selectedValue)
+
+                {#selectedValue = "mid-term"#}
+
+                {#alert(selectedValue)#}
 
 
                 // Add the selected value as a query parameter
