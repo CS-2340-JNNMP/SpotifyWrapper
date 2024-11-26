@@ -10,8 +10,6 @@
     <ul>
         {% for track in top_tracks %}
             <li>
-
-
                 {% if track.preview_url %}
                     <button type="button" class="play-snippet" data-preview-url="{{ track.preview_url }}">Play 1-second snippet</button>
                     <audio class="audio-player" style="display:none;">
@@ -33,8 +31,8 @@
     <button type="submit" id="submit-guess">Submit Guess</button>
 </form>
 
-{% if correct_guess %}
-    <p>You guessed correctly! You earned an extra point.</p>
+{% if correct_guesses is not none %}
+    <p>You guessed {{ correct_guesses }} tracks correctly!</p>
 {% endif %}
 
 <script>

@@ -334,8 +334,8 @@ def game(request):
                     'id': track['id']  # Pass the track ID for checking guesses
                 })
 
+        correct_guesses = 0
         if request.method == 'POST':
-            correct_guesses = 0
             for track in selected_tracks:
                 guess = request.POST.get(f'guess_{track["id"]}')
                 correct_answer = track['name']
@@ -348,11 +348,11 @@ def game(request):
             else:
                 messages.info(request, f'You guessed {correct_guesses} tracks correctly!')
 
-        return render(request, 'core/game.html', {'top_tracks': track_data})
+        # Render the page with correct_guesses and track_data in context
+        return render(request, 'core/game.html', {'top_tracks': track_data, 'correct_guesses': correct_guesses})
 
     except KeyError as e:
         return JsonResponse({'error': 'Unexpected response structure from Spotify API', 'details': str(e)}, status=500)
-
 
 
 
@@ -438,11 +438,14 @@ def login_function(request):
 
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
-
+        print(password)
         try:
             user = verify_password(email, password)
+            print(user)
             verified_user = auth.verify_id_token(user["idToken"])
+            print(verified_user)
             id = (verified_user["user_id"])
             request.session['userID'] = id
             request.session["logged_in"] = True
@@ -453,6 +456,7 @@ def login_function(request):
     return render(request, 'core/login.html')
 
 def verify_password(email, password):
+    print(settings.FIREBASE_WEB_API_KEY)
     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={settings.FIREBASE_WEB_API_KEY}"
 
     payload = {
