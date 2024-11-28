@@ -10,6 +10,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 from urllib.parse import urlencode
+from firebase_admin.auth import InvalidIdTokenError
 
 from firebase_admin.auth import InvalidIdTokenError
 from huggingface_hub import InferenceClient
