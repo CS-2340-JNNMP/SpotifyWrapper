@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Guess the Song Game{% endblock %}
+{% block title %}Guess the Song from It's Blurred Album Cover!{% endblock %}
 
 {% block content %}
 <h1>Guess the Song!</h1>
@@ -10,16 +10,16 @@
     <ul>
         {% for track in top_tracks %}
             <li>
-                {% if track.preview_url %}
-                    <button type="button" class="play-snippet" data-preview-url="{{ track.preview_url }}">Play 1-second snippet</button>
-                    <audio class="audio-player" style="display:none;">
-                        <source src="{{ track.preview_url }}" type="audio/mp3">
-                        Your browser does not support the audio element.
-                    </audio>
-                {% else %}
-                    <p>No preview available for this track.</p>
-                {% endif %}
-
+                <img src="{{ track.top_song_image }}" alt="Album cover for {{ track.name }}" class="album-cover" style="width: 100px; height: 100px; object-fit: cover;">
+{#                {% if track.preview_url %}#}
+{#                    <button type="button" class="play-snippet" data-preview-url="{{ track.preview_url }}">Play 1-second snippet</button>#}
+{#                    <audio class="audio-player" style="display:none;">#}
+{#                        <source src="{{ track.preview_url }}" type="audio/mp3">#}
+{#                        Your browser does not support the audio element.#}
+{#                    </audio>#}
+{#                {% else %}#}
+{#                    <p>No preview available for this track.</p>#}
+{#                {% endif %}#}
                 <input type="text" name="guess_{{ track.id }}" placeholder="Guess the song..." class="guess-input" />
                 <input type="hidden" name="track_id_{{ track.id }}" value="{{ track.id }}">
             </li>
@@ -35,24 +35,24 @@
     <p>You guessed {{ correct_guesses }} tracks correctly!</p>
 {% endif %}
 
-<script>
-    // Prevent the form from submitting when the play button is clicked
-    document.querySelectorAll('.play-snippet').forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();  // Prevent form submission
-
-            var previewUrl = button.getAttribute('data-preview-url');
-            var audioPlayer = button.nextElementSibling;  // Get the audio element following the button
-
-            // Set the source of the audio player and play the snippet
-            audioPlayer.play();
-
-            // Stop the audio after 1 second
-            setTimeout(function() {
-                audioPlayer.pause();  // Pause the audio
-                audioPlayer.currentTime = 0;  // Reset to the beginning
-            }, 1000);  // 1 second
-        });
-    });
-</script>
+{#<script>#}
+{#    // Prevent the form from submitting when the play button is clicked#}
+{#    document.querySelectorAll('.play-snippet').forEach(function(button) {#}
+{#        button.addEventListener('click', function(event) {#}
+{#            event.preventDefault();  // Prevent form submission#}
+{##}
+{#            var previewUrl = button.getAttribute('data-preview-url');#}
+{#            var audioPlayer = button.nextElementSibling;  // Get the audio element following the button#}
+{##}
+{#            // Set the source of the audio player and play the snippet#}
+{#            audioPlayer.play();#}
+{##}
+{#            // Stop the audio after 1 second#}
+{#            setTimeout(function() {#}
+{#                audioPlayer.pause();  // Pause the audio#}
+{#                audioPlayer.currentTime = 0;  // Reset to the beginning#}
+{#            }, 1000);  // 1 second#}
+{#        });#}
+{#    });#}
+{#</script>#}
 {% endblock %}

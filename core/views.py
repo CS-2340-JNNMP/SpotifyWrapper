@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.views import View
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
@@ -16,7 +17,6 @@ from huggingface_hub import InferenceClient
 import json
 # Create your views here.
 from django.contrib.auth.models import User
-import requests
 from django.views import View
 from django import forms
 
@@ -26,6 +26,13 @@ from firebase_admin import auth
 from pycparser.ply.yacc import LRTable
 
 from firebase import firestore_db
+#game view
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+import os
+from PIL import Image, ImageFilter
+from io import BytesIO
+import random
 
 
 def index(request):
@@ -287,10 +294,7 @@ def home(request):
     return render(request, "core/home.html")
 
 
-import random
-import requests
-from django.shortcuts import render
-from django.http import JsonResponse
+
 
 def game(request):
     """Homepage to display 5 random songs from the top 100 tracks."""
@@ -323,16 +327,46 @@ def game(request):
         for track in selected_tracks:
             track_name = track['name']
             track_artists = ', '.join([artist['name'] for artist in track['artists']])
-            preview_url = track.get('preview_url', None)
+            #preview_url = track.get('preview_url', None)
+            top_song_image = track["album"]["images"][0]["url"] if track["album"]["images"] else None
+            if not top_song_image:
+                top_song_image = 'https://via.placeholder.com/100x100.png?text=No+Cover'
+            # top_song_image = Image.open(top_song_image)
+            # top_song_image.filter(ImageFilter.GaussianBlur(20))
+            response = requests.get(top_song_image)
+            if response.status_code == 200:
+                # Open the image content
+                img = Image.open(BytesIO(response.content))
+               #blur
+                img = img.filter(ImageFilter.GaussianBlur(40))
+                fs = FileSystemStorage(location=settings.MEDIA_ROOT)
+                image_name = f"blurred_image_{track['id']}.jpg"
 
-            # Only include tracks with a preview URL
-            if preview_url:
+                # Convert to file-like object because Django doesn't expect a pillow image
+                img_bytes = BytesIO()
+                img.save(img_bytes, format='JPEG')
+                img_bytes.seek(0)
+
+                img_path = fs.save(image_name, img_bytes)
+
+                # Generate the URL for the image
+                img_url = fs.url(img_path)
+
                 track_data.append({
                     'name': track_name,
                     'artists': track_artists,
-                    'preview_url': preview_url,
-                    'id': track['id']  # Pass the track ID for checking guesses
+                    'id': track['id'],
+                    'top_song_image': img_url,  # Use the URL for rendering
                 })
+            # Only include tracks with a preview URL
+            # if preview_url:
+            #     track_data.append({
+            #         'name': track_name,
+            #         'artists': track_artists,
+            #         #'preview_url': preview_url,
+            #         'id': track['id'],  # Pass the track ID for checking guesses
+            #         'top_song_image': top_song_image,
+            #     })
 
         correct_guesses = 0
         if request.method == 'POST':
