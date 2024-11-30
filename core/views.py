@@ -27,6 +27,19 @@ from pycparser.ply.yacc import LRTable
 
 from firebase import firestore_db
 
+from django.http import JsonResponse
+from .translation_service import TranslationService
+
+def translate_text(request):
+    text = request.GET.get('text', '')  # Get the text to translate from the query parameter
+    target_language = request.GET.get('target_language', 'en')  # Default to 'en' if no language is provided
+
+    # Use the TranslationService to translate the text
+    translation_service = TranslationService()
+    translated_text = translation_service.translate_text(text, target_language)
+
+    # Return the translated text as a JSON response
+    return JsonResponse({'translated_text': translated_text})
 
 def index(request):
     return render(request, 'core/index.html')

@@ -14,6 +14,8 @@ from pathlib import Path
 
 import os
 from dotenv import load_dotenv
+# settings.py
+GOOGLE_API_KEY = 'AIzaSyAC0XNuBofI9McpCOkOVJ7wP9y-rxzvydE'
 
 load_dotenv()
 
@@ -123,14 +125,22 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Español'),
+    ('fr', 'Français'),
+]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 
 # Static files (CSS, JavaScript, Images)
