@@ -11,6 +11,7 @@ from django.http import JsonResponse
 import requests
 from django.conf import settings
 from urllib.parse import urlencode
+from firebase_admin.auth import InvalidIdTokenError
 
 from firebase_admin.auth import InvalidIdTokenError
 from huggingface_hub import InferenceClient
@@ -56,17 +57,24 @@ def password_reset_view(request):
     return render(request, "core/index.html")
 
 def my_wraps_view(request):
+    user_id = request.session.get('userID', None)
     wraps_ref = firestore_db.collection('wraps')
-    docs = wraps_ref.get()
+    query = wraps_ref.where('user_id', '==', str(user_id))
+
+    results = query.stream()
+
+    items = []
+    for doc in results:
+        items.append(doc.to_dict())
 
     images_to_push = []
     wrap_ids = []
-
     combined = []
-    for doc in docs:
-        images_to_push.append(doc.get("top_song_image"))
-        wrap_ids.append(doc.get("id"))
-        combined.append((doc.get("top_song_image"), doc.get("id")))
+
+    for doc in items:
+        images_to_push.append(doc["top_song_image"])
+        wrap_ids.append(doc["id"])
+        combined.append((doc["top_song_image"], doc["id"], doc["published"]))
 
     return render(request, "core/my_wraps.html", {"combined": combined})
 
@@ -537,3 +545,53 @@ def logout_function(request):
     request.session['userID'] = None
     return redirect('index')
 
+def public_wraps(request):
+    wraps_ref = firestore_db.collection('wraps')
+    query = wraps_ref.where('published', '==', True)
+
+    results = query.stream()
+
+    items = []
+    for doc in results:
+        items.append(doc.to_dict())
+
+    images_to_push = []
+    wrap_ids = []
+    combined = []
+
+    for doc in items:
+        images_to_push.append(doc["top_song_image"])
+        wrap_ids.append(doc["id"])
+        combined.append((doc["top_song_image"], doc["id"]))
+
+    return render(request, "core/public_wraps.html", {"combined": combined})
+
+def wrapped_page_delete(request, wrap_id):
+    try:
+        docs = firestore_db.collection("wraps").where("id", "==", str(wrap_id)).stream()
+
+        for doc in docs:
+            doc.reference.delete()
+            print(f"Deleted document with ID: {doc.id}")
+
+    except Exception as e:
+        print(f"Error deleting documents: {e}")
+
+    return render(request, "core/my_wraps.html")
+
+def wrapped_page_publish(request, wrap_id):
+    try:
+        docs = firestore_db.collection("wraps").where("id", "==", str(wrap_id)).stream()
+
+        for doc in docs:
+            published = doc.to_dict()["published"]
+            change = {"published": not published}
+
+            doc.reference.update(change)
+            print(f"Updated document ID: {doc.id}")
+
+        print("Update operation completed.")
+    except Exception as e:
+        print(f"Error updating document(s): {e}")
+
+    return my_wraps_view(request)

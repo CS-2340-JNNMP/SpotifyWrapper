@@ -5,28 +5,46 @@
 
     <div class="wrap-grid">
 
-    {% for image, id in combined %}
-        <div class="wrap-itewm">
+    {% for image, id, published in combined %}
+        <div class="wrap-item">
             <a href="{% url 'wrapped_page' wrap_id=id %}" class="wrap-link">
                 <div class="wrap-thumbnail">
-                    <img src="{{ image }}" alt="Wrap {{ image.id }}" style="width: 100%">
+                    <img src="{{ image }}" alt="Wrap {{ forloop.counter }}" style="width: 100%">
                     <div class="wrap-info">
                         <div>Wrap {{ forloop.counter }}</div>
+                        {% if published %}
+                            <div>Published</div>
+                        {% else %}
+                            <div>Private</div>
+                        {% endif %}
                         <div class="wrap-actions">
-                            <button class="share-btn">
+                            <!-- Share button with data-url and data-title attributes for JavaScript -->
+                            <button class="share-btn"
+                                    data-url="{% url 'wrapped_page' wrap_id=id %}"
+                                    data-title="Check out my Wrapped!">
                                 <i class="fas fa-share-alt"></i>
                                 <span>Share</span>
                             </button>
-                            <button class="delete-btn">
-                                <i class="fas fa-trash"></i>
-                                <span>Delete</span>
+                            <a style="background-color: whitesmoke" href="{% url 'wrapped_page_delete' wrap_id=id %}" class="delete-btn"><i class="fas fa-trash"></i><span>Delete</span></a>
+{#                            <button class="delete-btn">#}
+{#                                <i class="fas fa-trash"></i>#}
+{#                                <span>Delete</span>#}
+{#                            </button>#}
+                            <a style="background-color: whitesmoke" href="{% url 'wrapped_page_publish' wrap_id=id %}"><span>Publish</span></a>
+                            <!-- Copy to Clipboard button with data-url -->
+                            <button class="copy-btn"
+                                    data-url="{% url 'wrapped_page' wrap_id=id %}">
+                                <i class="fas fa-copy"></i>
+                                <span>Copy Link</span>
                             </button>
                         </div>
-                   </div>
-               </div>
-           </a>
-       </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     {% endfor %}
+
+    <!-- Button to generate new wrap items -->
     <a href="{% url 'generate' %}" class="add-wrap">
         <div class="add-button">
             <svg width="24" height="24" viewBox="0 0 24 24">
@@ -34,33 +52,92 @@
             </svg>
         </div>
     </a>
-    </div>
+</div>
 
-{#<div class="wrap-grid">#}
-{#    {% for wrap in wraps %}#}
-{#    <div class="wrap-item">#}
-{#        <a href="{% url 'view_wrap' wrap.id %}" class="wrap-link">#}
-{#            <div class="wrap-thumbnail">#}
-{#                <img src="{% static 'core/images/wrap-placeholder.png' %}" alt="Wrap {{ wrap.id }}">#}
-{#                <div class="wrap-info">#}
-{#                    <span>Wrap {{ wrap.id }}</span>#}
-{#                    <div class="wrap-actions">#}
-{#                        <button class="share-btn">Share</button>#}
-{#                        <button class="delete-btn">Delete</button>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </a>#}
-{#    </div>#}
-{#    {% endfor %}#}
-{##}
-{#    <a href="{% url 'index' %}" class="add-wrap">#}
-{#        <div class="add-button">#}
-{#            <svg width="24" height="24" viewBox="0 0 24 24">#}
-{#                <path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2"/>#}
-{#            </svg>#}
-{#        </div>#}
-{#    </a>#}
-{#</div>#}
+<!-- Include JavaScript for sharing and Copy to Clipboard functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shareButtons = document.querySelectorAll('.share-btn');
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    const linkDisplayArea = document.getElementById('link-display-area');
+
+    // Function to get the current domain
+    function getFullyQualifiedUrl(relativeUrl) {
+        const domain = window.location.origin; // e.g., https://yourdomain.com
+        return `${domain}${relativeUrl}`;
+    }
+
+    // Handle share button click event
+    shareButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const relativeUrl = this.dataset.url;
+            const fullUrl = getFullyQualifiedUrl(relativeUrl);
+            const title = this.dataset.title;
+            openSocialMediaDialog(fullUrl, title);
+        });
+    });
+
+    // Function to open social media share dialogs
+    function openSocialMediaDialog(url, title) {
+        const encodedUrl = encodeURIComponent(url);
+        const encodedTitle = encodeURIComponent(title);
+
+        const options = [
+            {
+                name: "Instagram",
+                url: `https://www.instagram.com/`,
+            },
+            {
+                name: "Twitter",
+                url: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`
+            },
+            {
+                name: "LinkedIn",
+                url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`
+            },
+        ];
+
+        let menu = "Choose where to share:\n\n";
+        options.forEach((opt, index) => {
+            menu += `${index + 1}. ${opt.name}\n`;
+        });
+
+        const choice = prompt(menu);
+        const chosenOption = options[parseInt(choice) - 1];
+
+        if (chosenOption && chosenOption.url) {
+            window.open(chosenOption.url, "_blank", "width=600,height=400");
+
+            if (chosenOption.name === "LinkedIn" && linkDisplayArea) {
+                linkDisplayArea.textContent = `Share this LinkedIn link: ${url}`;
+                linkDisplayArea.style.display = 'block';
+            }
+        }
+    }
+
+    // Handle copy to clipboard button click event
+    copyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const relativeUrl = this.dataset.url; // Get the relative URL from data-url
+            const fullUrl = getFullyQualifiedUrl(relativeUrl); // Make it fully qualified
+            copyToClipboard(fullUrl); // Copy to clipboard
+        });
+    });
+
+    // Function to copy text to clipboard and redirect to 'my_wraps'
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Link copied to clipboard!');
+            // Redirect to 'my_wraps' page after copying
+            window.location.href = "{% url 'my_wraps' %}"; // Replace 'my_wraps' with your actual URL name if different
+        }).catch(err => {
+            alert('Failed to copy the link.');
+            console.error('Clipboard error:', err);
+        });
+    }
+});
+</script>
+
+
 
 {% endblock %}
