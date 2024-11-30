@@ -3,14 +3,20 @@
 
 {% block content %}
 
-<div class="wrap-grid">
-    {% for image, id in combined %}
+    <div class="wrap-grid">
+
+    {% for image, id, published in combined %}
         <div class="wrap-item">
             <a href="{% url 'wrapped_page' wrap_id=id %}" class="wrap-link">
                 <div class="wrap-thumbnail">
                     <img src="{{ image }}" alt="Wrap {{ forloop.counter }}" style="width: 100%">
                     <div class="wrap-info">
                         <div>Wrap {{ forloop.counter }}</div>
+                        {% if published %}
+                            <div>Published</div>
+                        {% else %}
+                            <div>Private</div>
+                        {% endif %}
                         <div class="wrap-actions">
                             <!-- Share button with data-url and data-title attributes for JavaScript -->
                             <button class="share-btn"
@@ -19,17 +25,17 @@
                                 <i class="fas fa-share-alt"></i>
                                 <span>Share</span>
                             </button>
-
+                            <a style="background-color: whitesmoke" href="{% url 'wrapped_page_delete' wrap_id=id %}" class="delete-btn"><i class="fas fa-trash"></i><span>Delete</span></a>
+{#                            <button class="delete-btn">#}
+{#                                <i class="fas fa-trash"></i>#}
+{#                                <span>Delete</span>#}
+{#                            </button>#}
+                            <a style="background-color: whitesmoke" href="{% url 'wrapped_page_publish' wrap_id=id %}"><span>Publish</span></a>
                             <!-- Copy to Clipboard button with data-url -->
                             <button class="copy-btn"
                                     data-url="{% url 'wrapped_page' wrap_id=id %}">
                                 <i class="fas fa-copy"></i>
                                 <span>Copy Link</span>
-                            </button>
-
-                            <button class="delete-btn">
-                                <i class="fas fa-trash"></i>
-                                <span>Delete</span>
                             </button>
                         </div>
                     </div>
