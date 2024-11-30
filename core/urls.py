@@ -5,6 +5,7 @@ from .views import spotify_login, spotify_callback
 from .views import GenreAnalysisView
 from accounts.views import callback, wrapped_page
 urlpatterns = [
+path('translate/', views.translate_text, name='translate_text'),
     # path('login/', views.login, name='login'),  # Reference your login_user function here
     path('register_user/', views.register_user, name='register_user'),
     # path('profile/', views.profile, name='profile'),

@@ -14,7 +14,7 @@ from pathlib import Path
 
 import os
 from dotenv import load_dotenv
-
+GOOGLE_API_KEY = 'AIzaSyAC0XNuBofI9McpCOkOVJ7wP9y-rxzvydE'
 load_dotenv()
 
 CLIENT_ID = os.getenv('CLIENT_ID')

@@ -1,55 +1,28 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Contact Us{% endblock %}
+{% block title %}<p data-translatable>Contact Us</p>{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        <div style="display: flex; flex: 1; flex-direction: column; align-items: center">
-            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 5vh">
-                <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" style="width: 19%">
-                <img src="/../../../static/core/images/pooja.jpg" style="width: 19%">
-                <img src="/../../../static/core/images/nitya.webp" style="width: 19%">
-                <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" style="width: 19%">
-                <img src="/../../../static/core/images/IMG_9416.jpg" style="width: 19%">
-            </div>
-            <label for="extra" style="font-size: xx-large">Contact Us</label>
-            <textarea id="extra" name="message" rows="7" cols="70" placeholder="Share your thoughts with us..." style="width: 86%; margin: auto; display: flex; flex-direction: column; align-items: center;"></textarea>
-            <div id="sub_btn" style="margin-top: 20px; margin-bottom: 50px; width: 200px; padding: 20px 5px; border-radius: 5px; text-align: center; font-family: Helvetica; font-size: 32px; color: mintcream">
-                <button id="review" type="submit" style="margin-top: 20px; margin-bottom: 50px; width: 150px; padding: 20px 5px; border-radius: 5px; background-color: rgb(0, 0, 0); text-align: center; font-family: Helvetica; font-size: 16px; color: mintcream;">Share thoughts</button>
-            </div>
+<form method="POST">
+    {% csrf_token %}
+    <div style="display: flex; flex: 1; flex-direction: column; align-items: center">
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 5vh">
+            <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" style="width: 19%">
+            <img src="/../../../static/core/images/pooja.jpg" style="width: 19%">
+            <img src="/../../../static/core/images/nitya.webp" style="width: 19%">
+            <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" style="width: 19%">
+            <img src="/../../../static/core/images/IMG_9416.jpg" style="width: 19%">
         </div>
-    </form>
+        <label for="extra" style="font-size: xx-large" data-translatable>Contact Us</label>
+        <textarea id="extra" name="message" rows="7" cols="70"
+            placeholder="Share your thoughts with us..."
+            data-translatable style="width: 86%; margin: auto; display: flex; flex-direction: column; align-items: center;">
+        </textarea>
+        <div id="sub_btn" style="margin-top: 20px; margin-bottom: 50px; width: 200px; padding: 20px 5px; border-radius: 5px; text-align: center; font-family: Helvetica; font-size: 32px; color: mintcream">
+            <button id="review" type="submit"
+                style="margin-top: 20px; margin-bottom: 50px; width: 150px; padding: 20px 5px; border-radius: 5px; background-color: rgb(0, 0, 0); text-align: center; font-family: Helvetica; font-size: 16px; color: mintcream;"
+                data-translatable>Share thoughts</button>
+        </div>
+    </div>
+</form>
 {% endblock %}
-
-
-
-
-
-
-
-{#{% extends 'core/base.html' %}#}
-{##}
-{#{% block title %}Contact Us{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#    <div style="display: flex; flex: 1; flex-direction: column; align-items: center">#}
-{#        <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 5vh">#}
-{#            <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/pooja.jpg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/nitya.webp" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/IMG_9416.jpg" style="width: 19%">#}
-{#        </div>#}
-{#        <h2 style="font-size: xx-large">Contact Us</h2>#}
-{##}
-{#        <!-- Render the form -->#}
-{#        <form method="post">#}
-{#            {% csrf_token %}#}
-{#            {{ form.as_p }} <!-- Render the form fields -->#}
-{#            <button type="submit" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; border-radius: 5px; background-color: #4CAF50; color: white; border: none;">#}
-{#                Submit#}
-{#            </button>#}
-{#        </form>#}
-{#    </div>#}
-{#{% endblock %}#}
