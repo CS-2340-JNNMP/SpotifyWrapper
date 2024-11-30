@@ -295,7 +295,6 @@ def home(request):
 
 
 
-
 def game(request):
     """Homepage to display 5 random songs from the top 100 tracks."""
     access_token = request.session.get('access_token')
@@ -305,6 +304,11 @@ def game(request):
     headers = {
         'Authorization': f'Bearer {access_token}',
     }
+
+    # If the reload button is pressed, clear selected tracks from the session
+    if request.method == 'GET' and request.GET.get('reload', '') == 'true':
+        if 'selected_tracks' in request.session:
+            del request.session['selected_tracks']
 
     # Get the user's top 100 tracks (limit to 15 for simplicity)
     response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=15', headers=headers)
@@ -319,61 +323,55 @@ def game(request):
         if not top_tracks:
             return JsonResponse({'error': 'No top tracks found for the user'}, status=400)
 
-        # Randomly select 5 tracks from the top tracks
-        selected_tracks = random.sample(top_tracks, 5)
+        # If selected tracks are not in the session, fetch 5 random tracks
+        if 'selected_tracks' not in request.session:
+            selected_tracks = random.sample(top_tracks, 5)
 
-        # Prepare track data for rendering
-        track_data = []
-        for track in selected_tracks:
-            track_name = track['name']
-            track_artists = ', '.join([artist['name'] for artist in track['artists']])
-            #preview_url = track.get('preview_url', None)
-            top_song_image = track["album"]["images"][0]["url"] if track["album"]["images"] else None
-            if not top_song_image:
-                top_song_image = 'https://via.placeholder.com/100x100.png?text=No+Cover'
-            # top_song_image = Image.open(top_song_image)
-            # top_song_image.filter(ImageFilter.GaussianBlur(20))
-            response = requests.get(top_song_image)
-            if response.status_code == 200:
-                # Open the image content
-                img = Image.open(BytesIO(response.content))
-               #blur
-                img = img.filter(ImageFilter.GaussianBlur(40))
-                fs = FileSystemStorage(location=settings.MEDIA_ROOT)
-                image_name = f"blurred_image_{track['id']}.jpg"
+            # Prepare track data for rendering
+            track_data = []
+            for track in selected_tracks:
+                track_name = track['name']
+                track_artists = ', '.join([artist['name'] for artist in track['artists']])
+                top_song_image = track["album"]["images"][0]["url"] if track["album"]["images"] else None
+                if not top_song_image:
+                    top_song_image = 'https://via.placeholder.com/100x100.png?text=No+Cover'
+                response = requests.get(top_song_image)
+                if response.status_code == 200:
+                    img = Image.open(BytesIO(response.content))
+                    img = img.filter(ImageFilter.GaussianBlur(40))
+                    fs = FileSystemStorage(location=settings.MEDIA_ROOT)
+                    image_name = f"blurred_image_{track['id']}.jpg"
+                    img_bytes = BytesIO()
+                    img.save(img_bytes, format='JPEG')
+                    img_bytes.seek(0)
 
-                # Convert to file-like object because Django doesn't expect a pillow image
-                img_bytes = BytesIO()
-                img.save(img_bytes, format='JPEG')
-                img_bytes.seek(0)
+                    img_path = fs.save(image_name, img_bytes)
+                    img_url = fs.url(img_path)
 
-                img_path = fs.save(image_name, img_bytes)
+                    track_data.append({
+                        'name': track_name,
+                        'artists': track_artists,
+                        'id': track['id'],
+                        'top_song_image': img_url,
+                    })
 
-                # Generate the URL for the image
-                img_url = fs.url(img_path)
-
-                track_data.append({
-                    'name': track_name,
-                    'artists': track_artists,
-                    'id': track['id'],
-                    'top_song_image': img_url,  # Use the URL for rendering
-                })
-            # Only include tracks with a preview URL
-            # if preview_url:
-            #     track_data.append({
-            #         'name': track_name,
-            #         'artists': track_artists,
-            #         #'preview_url': preview_url,
-            #         'id': track['id'],  # Pass the track ID for checking guesses
-            #         'top_song_image': top_song_image,
-            #     })
+            # Save selected tracks (full data) in the session
+            request.session['selected_tracks'] = track_data
+        else:
+            track_data = request.session['selected_tracks']
 
         correct_guesses = 0
         if request.method == 'POST':
-            for track in selected_tracks:
-                guess = request.POST.get(f'guess_{track["id"]}')
-                correct_answer = track['name']
+            # Retrieve the selected tracks from the session
+            selected_tracks_from_session = request.session.get('selected_tracks', [])
 
+            # Loop through each selected track
+            for track in selected_tracks_from_session:
+                guess = request.POST.get(f'guess_{track["id"]}')
+                print(guess)
+                correct_answer = track['name']
+                print(correct_answer)
+                # Only count as correct if a guess was provided and it's correct
                 if guess and guess.strip().lower() == correct_answer.lower():
                     correct_guesses += 1
 
@@ -387,11 +385,6 @@ def game(request):
 
     except KeyError as e:
         return JsonResponse({'error': 'Unexpected response structure from Spotify API', 'details': str(e)}, status=500)
-
-
-
-
-
 
 # from django.shortcuts import render, redirect
 # from .forms import RegisterForm
