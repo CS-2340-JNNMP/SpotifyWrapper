@@ -37,5 +37,8 @@ urlpatterns = [
     # path('contact/', views.contact_us, name='contact'),
     path('contact/', views.contact_us, name='contact'),
     path('logout/', views.logout_function, name='logout'),
+    path('public_wraps/', views.public_wraps, name='public_wraps'),
+    path('wrapped-page-delete/<uuid:wrap_id>/', views.wrapped_page_delete, name='wrapped_page_delete'),
+    path('wrapped-page-publish/<uuid:wrap_id>/', views.wrapped_page_publish, name='wrapped_page_publish'),
 ]
 
