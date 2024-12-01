@@ -1,49 +1,84 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <form method="POST" class="auth-form">
-        {% csrf_token %}
-        <h1>Sign in</h1>
-        <br>
+<form method="POST" class="auth-form">
+    {% csrf_token %}
+    <h1 data-translatable>Sign in</h1>
+    <br>
 
-        <!-- Email input -->
-        <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="email" name="email" class="form-control" required />
-            <label class="form-label" for="email">Email address</label>
-        </div>
+    <!-- Email input -->
+    <div data-mdb-input-init class="form-outline mb-4">
+        <input type="email" id="email" name="email" class="form-control" required />
+        <label class="form-label" for="email" data-translatable>Email address</label>
+    </div>
 
-        <!-- Password input -->
-        <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="password" name="password" class="form-control" required />
-            <label class="form-label" for="password">Password</label>
-        </div>
+    <!-- Password input -->
+    <div data-mdb-input-init class="form-outline mb-4">
+        <input type="password" id="password" name="password" class="form-control" required />
+        <label class="form-label" for="password" data-translatable>Password</label>
+    </div>
 
-        <!-- Remember me checkbox -->
-        <div class="row mb-4">
-            <div class="col d-flex justify-content-center">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="remember" />
-                    <label class="form-check-label" for="remember"> Remember me </label>
-                </div>
-            </div>
-
-            <div class="col">
-                <a href="#!">Forgot password?</a>
+    <!-- Remember me checkbox -->
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-center">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="remember" />
+                <label class="form-check-label" for="remember" data-translatable>Remember me</label>
             </div>
         </div>
 
-        {% if error %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-        {% endif %}
-
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Sign In</button>
-
-        <!-- Register button -->
-        <div class="text-center">
-            <p>Not a member? <a href="{% url 'register' %}">Register</a></p>
+        <div class="col">
+            <a href="#!" data-translatable>Forgot password?</a>
         </div>
-    </form>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4" data-translatable>Sign In</button>
+
+    <!-- Register button -->
+    <div class="text-center">
+        <p data-translatable>Not a member? <a href="{% url 'register' %}" data-translatable>Register</a></p>
+    </div>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
+
+        if (languageDropdown) {
+            // Listen for language changes
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                // Fetch all translatable elements
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            element.textContent = data.translated_text;
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
