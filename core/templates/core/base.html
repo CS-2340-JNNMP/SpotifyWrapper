@@ -15,25 +15,21 @@
         <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
         <nav class="header">
-{#            <a href="/" class="header-button" id="main-button">ATLFoodFinder</a>#}
-{#            <a href="/contact" id="contact-us">Contact Us</a>#}
-{#            <a href="/home" id="home">Home</a>#}
             <div id="side-buttons">
 
-    <style>
-
-        body {
-            background-image: url("{% static 'core/images/background.png' %}");
-        }
-        .my-wraps-page {
-            background-image: url("{% static 'core/images/my-wraps-background.png' %}");
-        }
-    </style>
+            <style>
+                body {
+                    background-image: url("{% static 'core/images/background.png' %}");
+                }
+                .my-wraps-page {
+                    background-image: url("{% static 'core/images/my-wraps-background.png' %}");
+                }
+            </style>
 
     </head>
-          
+
     <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
-      
+
     <div class="main">
         {% block content %}{% endblock %}
     </div>
@@ -47,8 +43,9 @@
                         English
                     </button>
                     <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <a class="dropdown-item" href="#">Espagnol</a>
-                        <a class="dropdown-item" href="#">Française</a>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('es')">Español</a>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('fr')">Français</a>
                     </div>
                 </div>
 
@@ -85,16 +82,45 @@
     <!-- Footer -->
     <footer>
         Brought to you by
-        <a href="/contact" id="contact-us">TeamAwesomeSauce</a>
+        <a href="/contact" id="contact-us">Brought to you by TeamAwesomeSauce</a>
     </footer>
+
     <!-- Optional JavaScript -->
     <script src="{% static 'core/scripts/profile-icon.js' %}"></script>
     <script src="{% static 'core/scripts/wrapped-slides.js' %}"></script>
-    <script src="{% static 'core/scripts/language-selection.js' %}"></script>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- JavaScript to handle language change -->
+    <script>
+        function changeLanguage(language) {
+            // Assuming your translation API route is /translate/
+            const textElements = document.querySelectorAll('[data-translatable]');
+            const textsToTranslate = [];
+
+            textElements.forEach(element => {
+                textsToTranslate.push({
+                    element: element,
+                    text: element.innerText || element.textContent  // Use innerText to fetch text content
+                });
+            });
+
+            textsToTranslate.forEach(item => {
+                fetch(`/translate/?text=${encodeURIComponent(item.text)}&target_language=${language}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        item.element.innerHTML = data.translated_text;  // Update the element with the translated text
+                    });
+            });
+
+            // Optionally, change the button text to reflect the selected language
+            const langButton = document.getElementById('languageDropdown');
+            langButton.textContent = language === 'en' ? 'English' : (language === 'es' ? 'Español' : 'Français');
+        }
+    </script>
+
     </body>
 </html>
