@@ -5,23 +5,44 @@
     <div class="carousel-container">
         <h2 class="carousel-title">Your Wrapped</h2>
         <div class="carousel">
-            <!-- Songs Slide -->
+            <!-- Welcome Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h3 class="welcome-text">Welcome to Your {{ data.duration }} Spotify Wrapped!!</h3>
+                </div>
+            </div>
+
+            <!-- Songs Heading Slide -->
             <div class="carousel-slide">
                 <div class="content-block">
                     <h2>Top 3 Songs</h2>
+                </div>
+            </div>
+
+            <!-- Songs List Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
                     <ol>
                         {% for song in data.songs %}
-                            <li class="song-name" onclick="playSong('{{ song.preview_url }}')">🔊{{ song.name }} </li>
+                            <li class="song-name" onclick="playSong('{{ song.preview_url }}')">
+                                🔊{{ song.name }}
+                            </li>
                             <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
                         {% endfor %}
                     </ol>
                 </div>
             </div>
 
-            <!-- Artists Slide -->
+            <!-- Artists Heading Slide -->
             <div class="carousel-slide">
                 <div class="content-block">
                     <h2>Top 3 Artists</h2>
+                </div>
+            </div>
+
+            <!-- Artists List Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
                     <ol>
                         {% for artist in data.artists %}
                             <li>{{ artist }}</li>
@@ -30,15 +51,36 @@
                 </div>
             </div>
 
-            <!-- Genres Slide -->
+            <!-- Genres Heading Slide -->
             <div class="carousel-slide">
                 <div class="content-block">
                     <h2>Top 3 Genres</h2>
+                </div>
+            </div>
+
+            <!-- Genres List Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
                     <ol>
                         {% for genre in data.genres %}
                             <li>{{ genre }}</li>
                         {% endfor %}
                     </ol>
+                </div>
+            </div>
+
+            <!-- Random Pun Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2 id="randomPun" class="pun-text"></h2>
+                </div>
+            </div>
+
+            <!-- Farewell Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h1 class="farewell-text">That's All Folks! 🎉</h1>
+                    <p>Thanks for listening with us this year!</p>
                 </div>
             </div>
         </div>
@@ -50,13 +92,69 @@
             <div class="dot" onclick="goToSlide(0)"></div>
             <div class="dot" onclick="goToSlide(1)"></div>
             <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
+            <div class="dot" onclick="goToSlide(4)"></div>
+            <div class="dot" onclick="goToSlide(5)"></div>
+            <div class="dot" onclick="goToSlide(6)"></div>
+            <div class="dot" onclick="goToSlide(7)"></div>
+            <div class="dot" onclick="goToSlide(8)"></div>
         </div>
     </div>
+
+    <div class="game-navigation">
+        <a href="{% url 'game' %}" class="btn btn-primary">Play a Fun Game!</a>
+    </div>
+
+    <div class="game-navigation">
+        <a href="{% url 'game' %}" class="btn btn-primary">What Your Music Taste Says About You</a>
+    </div>
+
+
+    <style>
+        .welcome-text, .farewell-text {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .pun-text {
+            font-size: 1.8em;
+            padding: 20px;
+        }
+        .game-navigation {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 15px;
+    }
+        .btn-primary {
+        background-color: #503658;; /* Purple background color */
+        color: white; /* White text color */
+        font-size: 1.5em; /* Slightly larger text */
+        padding: 10px 20px; /* Padding for a larger button */
+        border-radius: 5px; /* Rounded corners */
+        text-decoration: none; /* Remove underline */
+        display: inline-block; /* To respect the width and padding */
+        transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    }
+    </style>
+
     <script>
-        function playSong(previewUrl) {
-            if (!previewUrl) return;
-            const audioPlayer = new Audio(previewUrl);
-            audioPlayer.play();
-       }
+        const musicPuns = [
+            "Why did the musician bring a ladder to the concert? To reach the high notes! 🎵",
+            "What kind of music do planets listen to? Nep-tunes! 🌍",
+            "What did the guitar say to the musician? Pick me! 🎸",
+            "Why don't classical musicians like their fans? Because they only know how to Bach! 🎼",
+            "What do you call a bear with no teeth? A gummy bear singing the blues! 🐻"
+        ];
+
+        function setRandomPun() {
+            const randomIndex = Math.floor(Math.random() * musicPuns.length);
+            document.getElementById('randomPun').textContent = musicPuns[randomIndex];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setRandomPun();
+        });
     </script>
 {% endblock %}
