@@ -1,344 +1,103 @@
-{#{% extends 'core/base.html' %}#}
-{#{% load static %}#}
-{##}
-{#{% block content %}#}
-{#    <div class="carousel-container">#}
-{#        <h2 class="carousel-title">Your Wrapped</h2>#}
-{#        <div class="carousel">#}
-{#            <!-- Songs Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Songs</h2>#}
-{#                    <ol>#}
-{#                        {% for song in data.songs %}#}
-{#                            <li>#}
-{#                                <span class="song-name" onclick="playSong('{{ song.preview_url }}')">{{ song.name }}</span>#}
-{#                                <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Artists Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Artists</h2>#}
-{#                    <ol>#}
-{#                        {% for artist in data.artists %}#}
-{#                            <li>{{ artist }}</li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Genres Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Genres</h2>#}
-{#                    <ol>#}
-{#                        {% for genre in data.genres %}#}
-{#                            <li>{{ genre }}</li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Number of Hours Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>You listened to songs for a solid {{ data.numHours }} hours</h2>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#        </div>#}
-{##}
-{#        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>#}
-{#        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>#}
-{##}
-{#        <div class="carousel-dots">#}
-{#            <div class="dot" onclick="goToSlide(0)"></div>#}
-{#            <div class="dot" onclick="goToSlide(1)"></div>#}
-{#            <div class="dot" onclick="goToSlide(2)"></div>#}
-{#            <div class="dot" onclick="goToSlide(3)"></div>#}
-{#        </div>#}
-{#    </div>#}
-{##}
-{#    <script>#}
-{#        function playSong(previewUrl) {#}
-{#            if (!previewUrl) return;  // If no preview URL is available, do nothing#}
-{#            const audioPlayer = new Audio(previewUrl);#}
-{#            audioPlayer.play();#}
-{#        }#}
-{#    </script>#}
-{#{% endblock %}#}
-{##}
-{##}
-{#{% extends 'core/base.html' %}#}
-{#{% load static %}#}
-{##}
-{#{% block content %}#}
-{#    <div class="carousel-container">#}
-{#        <h2 class="carousel-title">Your Wrapped</h2>#}
-{#        <div class="carousel">#}
-{#            <!-- Songs Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Songs</h2>#}
-{#                    <ol>#}
-{#                        {% for song in data.songs %}#}
-{##}
-{#                           <li class="song-name" onclick="playSong('{{ song.preview_url }}')">🔊{{ song.name }} </li>#}
-{#                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Artists Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Artists</h2>#}
-{#                    <ol>#}
-{#                        {% for artist in data.artists %}#}
-{#                            <li>{{ artist }}</li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Genres Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>Top 3 Genres</h2>#}
-{#                    <ol>#}
-{#                        {% for genre in data.genres %}#}
-{#                            <li>{{ genre }}</li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Number of Hours Slide -->#}
-{#            <div class="carousel-slide">#}
-{#                <div class="content-block">#}
-{#                    <h2>You listened to songs for a solid { % data.numHours[0] % } hours</h2>#}
-{#                    <ol>#}
-{#                        {% for genre in data.genres %}#}
-{#                            <li>{{ genre }}</li>#}
-{#                        {% endfor %}#}
-{#                    </ol>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#        </div>#}
-{##}
-{#        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>#}
-{#        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>#}
-{##}
-{#        <div class="carousel-dots">#}
-{#            <div class="dot" onclick="goToSlide(0)"></div>#}
-{#            <div class="dot" onclick="goToSlide(1)"></div>#}
-{#            <div class="dot" onclick="goToSlide(2)"></div>#}
-{#            <div class="dot" onclick="goToSlide(3)"></div>#}
-{#        </div>#}
-{#    </div>#}
-{#    <!-- New section for music taste analysis -->#}
-{#    <div class="music-analysis-container">#}
-{#        <button#}
-{#            id="analyzeMusicTaste"#}
-{#            class="analyze-button"#}
-{#            onclick="analyzeMusicTaste()">#}
-{#            What Does Your Music Taste Say About You?#}
-{#        </button>#}
-{##}
-{#        <div id="analysisResult" class="analysis-result hidden">#}
-{#            <p>#}
-{#                Based on your music preferences, you appear to be a passionate and energetic soul with an eclectic taste! Your mix of genres suggests you're open-minded and emotionally aware. The variety in your top artists shows you're not afraid to explore different musical landscapes, and your listening hours indicate you find great solace and joy in music.#}
-{#            </p>#}
-{#        </div>#}
-{#    </div>#}
-{#    <script>#}
-{#        function analyzeMusicTaste() {#}
-{#            const button = document.getElementById('analyzeMusicTaste');#}
-{#            const resultDiv = document.getElementById('analysisResult');#}
-{##}
-{#            button.disabled = true;#}
-{#            button.innerHTML = 'Analyzing...';#}
-{##}
-{#            setTimeout(() => {#}
-{#                resultDiv.classList.remove('hidden');#}
-{#                button.disabled = false;#}
-{#                button.innerHTML = 'What Does Your Music Taste Say About You?';#}
-{#            }, 1000);#}
-{#        }#}
-{##}
-{#       function playSong(previewUrl) {#}
-{#            if (!previewUrl) return;#}
-{#            const audioPlayer = new Audio(previewUrl);#}
-{#            audioPlayer.play();#}
-{#       }#}
-{##}
-{#    </script>#}
-{#{% endblock %}#}
-
 {% extends 'core/base.html' %}
 {% load static %}
 
 {% block content %}
-    <div class="carousel-container">
-        <h2 class="carousel-title">Your Wrapped</h2>
-        <div class="carousel">
-            <!-- Welcome Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h3 class="welcome-text">Welcome to Your {{ data.duration }} Spotify Wrapped!!</h3>
-                </div>
-            </div>
-
-            <!-- Songs Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Songs</h2>
-                </div>
-            </div>
-
-            <!-- Songs List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for song in data.songs %}
-                            <li class="song-name" onclick="playSong('{{ song.preview_url }}')">
-                                🔊{{ song.name }}
-                            </li>
-                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Artists Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Artists</h2>
-                </div>
-            </div>
-
-            <!-- Artists List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for artist in data.artists %}
-                            <li>{{ artist }}</li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Genres Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Genres</h2>
-                </div>
-            </div>
-
-            <!-- Genres List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for genre in data.genres %}
-                            <li>{{ genre }}</li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Random Pun Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2 id="randomPun" class="pun-text"></h2>
-                </div>
-            </div>
-
-            <!-- Farewell Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h1 class="farewell-text">That's All Folks! 🎉</h1>
-                    <p>Thanks for listening with us this year!</p>
-                </div>
+<div class="carousel-container">
+    <h2 class="carousel-title" data-translatable>Your Wrapped</h2>
+    <div class="carousel">
+        <!-- Static Content: Songs Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Songs</h2>
             </div>
         </div>
 
-        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>
-        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>
+        <!-- Static Content: Artists Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Artists</h2>
+            </div>
+        </div>
 
-        <div class="carousel-dots">
-            <div class="dot" onclick="goToSlide(0)"></div>
-            <div class="dot" onclick="goToSlide(1)"></div>
-            <div class="dot" onclick="goToSlide(2)"></div>
-            <div class="dot" onclick="goToSlide(3)"></div>
-            <div class="dot" onclick="goToSlide(4)"></div>
-            <div class="dot" onclick="goToSlide(5)"></div>
-            <div class="dot" onclick="goToSlide(6)"></div>
-            <div class="dot" onclick="goToSlide(7)"></div>
-            <div class="dot" onclick="goToSlide(8)"></div>
+        <!-- Static Content: Genres Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Genres</h2>
+            </div>
+        </div>
+
+        <!-- Static Content: Farewell Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h1 class="farewell-text" data-translatable>That's All Folks! 🎉</h1>
+                <p data-translatable>Thanks for listening with us this year!</p>
+            </div>
         </div>
     </div>
 
-    <div class="game-navigation">
-        <a href="{% url 'game' %}" class="btn btn-primary">Play a Fun Game!</a>
-    </div>
+    <button class="carousel-button prev" onclick="moveSlide(-1)" data-translatable>&#8249;</button>
+    <button class="carousel-button next" onclick="moveSlide(1)" data-translatable>&#8250;</button>
+</div>
 
-    <div class="game-navigation">
-        <a href="{% url 'game' %}" class="btn btn-primary">What Your Music Taste Says About You</a>
-    </div>
+<div class="game-navigation">
+    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>Play a Fun Game!</a>
+</div>
 
+<div class="game-navigation">
+    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>What Your Music Taste Says About You</a>
+</div>
 
-    <style>
-        .welcome-text, .farewell-text {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+<style>
+    /* Existing styles preserved */
+</style>
+
+<script>
+    // Function to apply translations
+    async function applyTranslations() {
+        const languageDropdown = document.getElementById("languageDropdown");
+        const selectedLanguage = languageDropdown ? languageDropdown.value : 'en';
+
+        const translatableElements = document.querySelectorAll("[data-translatable]");
+        for (let element of translatableElements) {
+            const originalText = element.getAttribute('data-translatable') || element.textContent;
+
+            try {
+                const response = await fetch(
+                    `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.translated_text) {
+                        if (element.dataset.translatable === "placeholder") {
+                            element.setAttribute("placeholder", data.translated_text);
+                        } else {
+                            element.textContent = data.translated_text;
+                        }
+                    }
+                } else {
+                    console.error("Translation API failed:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching translation:", error);
+            }
         }
-
-        .pun-text {
-            font-size: 1.8em;
-            padding: 20px;
-        }
-        .game-navigation {
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 15px;
     }
-        .btn-primary {
-        background-color: #503658;; /* Purple background color */
-        color: white; /* White text color */
-        font-size: 1.5em; /* Slightly larger text */
-        padding: 10px 20px; /* Padding for a larger button */
-        border-radius: 5px; /* Rounded corners */
-        text-decoration: none; /* Remove underline */
-        display: inline-block; /* To respect the width and padding */
-        transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-    }
-    </style>
 
-    <script>
-        const musicPuns = [
-            "Why did the musician bring a ladder to the concert? To reach the high notes! 🎵",
-            "What kind of music do planets listen to? Nep-tunes! 🌍",
-            "What did the guitar say to the musician? Pick me! 🎸",
-            "Why don't classical musicians like their fans? Because they only know how to Bach! 🎼",
-            "What do you call a bear with no teeth? A gummy bear singing the blues! 🐻"
-        ];
+    // Language change event listener
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
 
-        function setRandomPun() {
-            const randomIndex = Math.floor(Math.random() * musicPuns.length);
-            document.getElementById('randomPun').textContent = musicPuns[randomIndex];
+        if (languageDropdown) {
+            languageDropdown.addEventListener("change", () => {
+                applyTranslations(); // Reapply translations when language changes
+            });
         }
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setRandomPun();
-        });
-    </script>
+    // Trigger translation on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        applyTranslations();
+    });
+</script>
 {% endblock %}

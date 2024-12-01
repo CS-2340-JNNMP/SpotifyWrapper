@@ -3,39 +3,24 @@
 
 {% block content %}
     <form id="generate-form">
-{#        <h2>Let's Un-Wrap your Music Taste </h2>#}
-        <h4>Choose Wrapped Duration:</h4>
+        <h4 data-translatable="true">Choose Wrapped Duration:</h4>
         <div class="form-radio duration">
             <div class="form-check form-check-inline">
                 <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="long_term" value="long_term">
-                <label class="form-check-label" for="long_term">Long Term</label>
+                <label class="form-check-label" for="long_term" data-translatable="true">Long Term</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="mid_term" value="mid_term">
-                <label class="form-check-label" for="mid_term">Mid Term</label>
+                <label class="form-check-label" for="mid_term" data-translatable="true">Mid Term</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input duration-radio" type="radio" name="durationOptions" id="short_term" value="short_term">
-                <label class="form-check-label" for="short_term">Short Term</label>
+                <label class="form-check-label" for="short_term" data-translatable="true">Short Term</label>
             </div>
         </div>
 
-{#        <h4>Holiday Special:</h4>#}
-{#        <div class="form-radio holiday">#}
-{#            <div class="form-check form-check-inline">#}
-{#                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="christmas" value="christmas">#}
-{#                <label class="form-check-label" for="christmas">Christmas</label>#}
-{#            </div>#}
-{#            <div class="form-check form-check-inline">#}
-{#                <input class="form-check-input holiday-radio" type="radio" name="holidayOptions" id="diwali" value="diwali">#}
-{#                <label class="form-check-label" for="diwali">Diwali</label>#}
-{#            </div>#}
-{#        </div>#}
-
-        <button type="submit" class="btn btn-primary mt-3">Generate</button>
+        <button type="submit" class="btn btn-primary mt-3" data-translatable="true">Generate</button>
     </form>
-{#    <a href="{% url 'spotify_login' %}"><button>Connect your Account</button></a>#}
-{#    <a href="{% url 'index' %}"><button>Generate</button></a>#}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -77,26 +62,48 @@
                     return;
                 }
 
-
-
                 // Get the selected value
-
                 selectedValue = selectedDuration ? selectedDuration.value : selectedHoliday.value;
 
                 alert(selectedValue)
 
-                {#selectedValue = "mid-term"#}
-
-                {#alert(selectedValue)#}
-
-
                 // Add the selected value as a query parameter
-
-                {#const wrappedURL = `/wrapped-page?type=${selectedValue}`;#}
-                // Redirect to the wrapped page
                 window.location.href = `/accounts/login/?duration=${selectedValue}`;
-                {#window.location.href = `/wrapped-page`;#}
             });
         });
+
+        // Language change listener
+        const languageSwitcher = document.querySelector('#language-switcher');
+        if (languageSwitcher) {
+            languageSwitcher.addEventListener('change', function() {
+                const selectedLang = languageSwitcher.value;
+                document.querySelectorAll('[data-translatable="true"]').forEach(function(element) {
+                    const translationKey = element.getAttribute('data-translatable');
+                    // Assuming you have a translation function or service
+                    element.innerText = translateText(translationKey, selectedLang);
+                });
+            });
+        }
+
+        function translateText(key, lang) {
+            // Mock translation function - replace this with actual translation logic or service
+            const translations = {
+                en: {
+                    "Choose Wrapped Duration": "Choose Wrapped Duration",
+                    "Long Term": "Long Term",
+                    "Mid Term": "Mid Term",
+                    "Short Term": "Short Term",
+                    "Generate": "Generate"
+                },
+                es: {
+                    "Choose Wrapped Duration": "Elige la duración del Wrapped",
+                    "Long Term": "Largo plazo",
+                    "Mid Term": "Mediano plazo",
+                    "Short Term": "Corto plazo",
+                    "Generate": "Generar"
+                }
+            };
+            return translations[lang][key] || key;
+        }
     </script>
 {% endblock %}

@@ -1,14 +1,57 @@
 {% extends 'core/base.html' %}
 {% block content %}
 
-    <div class ="home-main">
-        <h1>SpotiFye</h1>
-        <h3>Un-Wrap your Music Taste </h3>
-{#       <a href="{% url 'accounts:login' %}">Log in with Spotify</a>#}
-        <a href="{% url 'login' %}"><button>Get Started</button></a>
-        <a href="{% url 'public_wraps' %}"><button>Explore Wraps</button></a>
-        {% if response %}
-        {{ response.display_name }}
-        {% endif %}
-    </div>
+
+<div class="home-main">
+    <h1 data-translatable>SpotiFye</h1>
+    <h3 data-translatable>Un-Wrap your Music Taste</h3>
+    <a href="{% url 'login' %}">
+        <button data-translatable>Get Started</button>
+    </a>
+<a href="{% url 'public_wraps' %}"><button  data-translatable>Explore Wraps</button></a>
+
+    {% if response %}
+    <p>{{ response.display_name }}</p>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Dropdown element in base.html
+        const languageDropdown = document.getElementById("languageDropdown");
+
+        if (languageDropdown) {
+            // Listen for language changes
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                // Fetch all translatable elements in this file
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        // Make API call for translation
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            element.textContent = data.translated_text; // Update the text
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
 {% endblock %}
+

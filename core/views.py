@@ -34,6 +34,18 @@ import os
 from PIL import Image, ImageFilter
 from io import BytesIO
 import random
+from django.http import JsonResponse
+from .translation_service import TranslationService
+
+def translate_text(request):
+    text = request.GET.get('text', '')  # Get the text from the request
+    target_language = request.GET.get('target_language', 'en')  # Default to English
+
+    # Instantiate the translation service and get the translated text
+    translation_service = TranslationService()
+    translated_text = translation_service.translate_text(text, target_language)
+
+    return JsonResponse({'translated_text': translated_text})
 
 
 def index(request):
@@ -633,3 +645,14 @@ def wrapped_page_publish(request, wrap_id):
         print(f"Error updating document(s): {e}")
 
     return my_wraps_view(request)
+
+def delete_account(request):
+    user_id = request.session.get('userID', None)
+    try:
+        auth.delete_user(user_id)
+        print(f"Successfully deleted user: {user_id}")
+        request.session['userID'] = None
+        request.session['logged_in'] = False
+        return redirect('index')
+    except Exception as e:
+        print(f"Error deleting user: {e}")
