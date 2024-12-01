@@ -1,98 +1,108 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <title>{% block title %}{% endblock %}SpotiFye</title>
+    <title>{% block title %}SpotiFye{% endblock %}</title>
 
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'core/styleguide.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
-        <nav class="header">
-{#            <a href="/" class="header-button" id="main-button">ATLFoodFinder</a>#}
-{#            <a href="/contact" id="contact-us">Contact Us</a>#}
-{#            <a href="/home" id="home">Home</a>#}
-            <div id="side-buttons">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/styleguide.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
 
     <style>
-
+        /* Default styles for desktop */
         body {
             background-image: url("{% static 'core/images/background.png' %}");
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            max-width: 100%;
         }
+
         .my-wraps-page {
             background-image: url("{% static 'core/images/my-wraps-background.png' %}");
         }
-    </style>
 
-    </head>
-          
-    <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
-      
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            body {
+                background-image: none;
+                background-color: #E5AB8A;
+                 overflow-x: hidden;/* Fallback background color for small screens */
+            }
+            nav .navbar-nav .nav-link {
+                font-size: 14px; /* Smaller font for links */
+                padding: 8px 10px;
+                color: #503658;
+            }
+
+            .main {
+                padding: 10px; /* Add padding for smaller screens */
+            }
+
+
+        }
+    </style>
+</head>
+
+<body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a style="color: #503658" class="navbar-brand" href="/">SpotiFye</a>
+        <button style="color: #503658" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a style="color: #503658" class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Language
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a style="color: #503658" class="dropdown-item" href="#">Español</a>
+                        <a style="color: #503658" class="dropdown-item" href="#">Française</a>
+                    </div>
+                </li>
+                {% if logged_in %}
+                <li class="nav-item">
+                    <a style="color: #503658" class="nav-link" href="/my-wraps">My Wraps</a>
+                </li>
+                <li class="nav-item">
+                    <a style="color: #503658" class="nav-link" href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a style="color: #503658" class="nav-link" href="/login">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
     <div class="main">
         {% block content %}{% endblock %}
     </div>
-    <nav class="navbar fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">SpotiFye</a>
-            <div class="nav-buttons">
-                <!-- Language Dropdown -->
-                <div class="dropdown mr-3" id="lang-dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        English
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <a class="dropdown-item" href="#">Espagnol</a>
-                        <a class="dropdown-item" href="#">Française</a>
-                    </div>
-                </div>
 
-                <!-- Profile Icon -->
-                {% if logged_in %}
-                <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedIn() {
-                    const dropdown = document.getElementById('profileDropdown');
-                    dropdown.classList.toggle('show');
-
-                    // Close dropdown when clicking outside
-                    document.addEventListener('click', function closeDropdown(e) {
-                        if (!e.target.closest('.nav-buttons')) {
-                            dropdown.classList.remove('show');
-                            document.removeEventListener('click', closeDropdown);
-                        }
-                    });
-                }
-                handleProfileClickLoggedIn()"></i>
-                {% else %}
-                <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedOut() {
-                    window.location.href = '/login';
-                }
-                handleProfileClickLoggedOut()"></i>
-                {% endif %}
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <a href="/my-wraps">View My Wraps</a>
-                        <a href="/logout">Logout</a>
-                        <a href="#" class="delete-account" onclick="handleDeleteAccount()">Delete Account</a>
-                    </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Footer -->
     <footer>
-        Brought to you by
         <a href="/contact" id="contact-us">Brought to you by TeamAwesomeSauce</a>
     </footer>
-    <!-- Optional JavaScript -->
+
+    <!-- JavaScript -->
     <script src="{% static 'core/scripts/profile-icon.js' %}"></script>
     <script src="{% static 'core/scripts/wrapped-slides.js' %}"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
 </html>

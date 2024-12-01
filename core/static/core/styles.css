@@ -2,6 +2,36 @@
     font-family: "Inter", Helvetica, sans-serif;
 }
 
+@media (max-width: 768px) {
+    .header {
+        padding: 10px;
+    }
+
+    .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-button {
+        margin: 10px 0;
+    }
+
+    .footer {
+        font-size: 0.9rem;
+    }
+
+    body {
+        background-color: #E5AB8A;
+        background-size: cover;
+        background-position: center;
+        background-image: none;
+    }
+
+    .my-wraps-page {
+        background-color: #E5AB8A;
+    }
+}
+
 body {
     margin: 0;
     padding-bottom: 5rem; /* slightly larger than footer's margin-bottom */

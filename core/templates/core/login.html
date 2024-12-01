@@ -1,6 +1,16 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+    <style>
+    @media (max-width: 768px) {
+        h1 {
+            font-size: medium;
+        }
+        .row mb-4 {
+            flex-direction: column;
+        }
+    }
+    </style>
     <form method="POST" class="auth-form">
         {% csrf_token %}
         <h1>Sign in</h1>

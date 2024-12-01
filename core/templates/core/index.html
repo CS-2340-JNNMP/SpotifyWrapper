@@ -1,12 +1,19 @@
 {% extends 'core/base.html' %}
 {% block content %}
-
+    <style>
+     @media (max-width: 768px) {
+         .nav {
+             margin-left: 0;
+             margin-right: 20%
+         }
+     }
+    </style>
     <div class ="home-main">
         <h1>SpotiFye</h1>
-        <h3>Un-Wrap your Music Taste </h3>
+        <h3 class="d-none d-sm-block">Un-Wrap your Music Taste </h3>
 {#        <a href="{% url 'accounts:login' %}">Log in with Spotify</a>#}
-        <a href="{% url 'login' %}"><button>Get Started</button></a>
-        <a href="{% url 'my_wraps' %}"><button>Explore Wraps</button></a>
+        <a class="nav" href="{% url 'login' %}"><button>Get Started</button></a>
+        <a class="nav" href="{% url 'my_wraps' %}"><button>Explore Wraps</button></a>
         {% if response %}
         {{ response.display_name }}
         {% endif %}

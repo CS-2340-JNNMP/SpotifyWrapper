@@ -53,6 +53,15 @@
 {#    </form>#}
 
     <form method="POST" class="auth-form">
+    <style>
+    @media (max-width: 768px) {
+        h1 {
+            font-size: x-large;
+            margin-left: 0px;
+            margin-right: 5%;
+        }
+    }
+    </style>
         {% csrf_token %}
         <h1>Register</h1>
         <br>
