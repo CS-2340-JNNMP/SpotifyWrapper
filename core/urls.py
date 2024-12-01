@@ -41,5 +41,6 @@ path('translate/', views.translate_text, name='translate_text'),
     path('public_wraps/', views.public_wraps, name='public_wraps'),
     path('wrapped-page-delete/<uuid:wrap_id>/', views.wrapped_page_delete, name='wrapped_page_delete'),
     path('wrapped-page-publish/<uuid:wrap_id>/', views.wrapped_page_publish, name='wrapped_page_publish'),
+    path('delete_account/', views.delete_account, name='delete_account'),
 ]
 

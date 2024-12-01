@@ -624,3 +624,14 @@ def wrapped_page_publish(request, wrap_id):
         print(f"Error updating document(s): {e}")
 
     return my_wraps_view(request)
+
+def delete_account(request):
+    user_id = request.session.get('userID', None)
+    try:
+        auth.delete_user(user_id)
+        print(f"Successfully deleted user: {user_id}")
+        request.session['userID'] = None
+        request.session['logged_in'] = False
+        return redirect('index')
+    except Exception as e:
+        print(f"Error deleting user: {e}")
