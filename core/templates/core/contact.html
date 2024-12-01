@@ -14,7 +14,7 @@
             <img src="/../../../static/core/images/IMG_9416.jpg" alt="Team member 5" class="team-image">
         </div>
 
-        <h2 class="contact-title">Contact Us</h2>
+        <h2 class="contact-title" data-translatable>Contact Us</h2>
 
         <textarea
             id="extra"
@@ -22,16 +22,57 @@
             rows="7"
             placeholder="Share your thoughts with us..."
             class="contact-textarea"
+            data-translatable="placeholder"
         ></textarea>
 
         <div class="button-container">
-            <button type="submit" class="submit-button">
+            <button type="submit" class="submit-button data-translatable">
                 Share your thoughts
             </button>
         </div>
     </form>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
+
+        if (languageDropdown) {
+            // Listen for language changes
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                // Fetch all translatable elements
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            // For placeholder translation
+                            if (element.hasAttribute("data-translatable") && element.dataset.translatable === "placeholder") {
+                                element.setAttribute("placeholder", data.translated_text);
+                            } else {
+                                element.textContent = data.translated_text;
+                            }
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
 <style>
     .contact-container {
         max-width: 1200px;

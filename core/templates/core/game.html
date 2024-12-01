@@ -1,35 +1,78 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Top Song Snippet{% endblock %}
+{% block title %}Guess the Song from Its Blurred Album Cover!{% endblock %}
 
 {% block content %}
-    <h1>Top Song: {{ track_name }} by {{ track_artists }}</h1>
+<h1 data-translatable="true">Guess the Song!</h1>
 
-    {% if preview_url %}
-        <!-- Button to play the 2-second snippet -->
-        <button id="play-snippet">Play 2-second snippet</button>
+<form method="post" id="guess-form">
+    {% csrf_token %}
+    <ul>
+        {% for track in top_tracks %}
+            <li>
+                <img src="{{ track.top_song_image }}" alt="Album cover for {{ track.name }}" class="album-cover" style="width: 100px; height: 100px; object-fit: cover;">
+                <input type="text" name="guess_{{ track.id }}" placeholder="Guess the song..." class="guess-input" data-translatable="placeholder" />
+                <input type="hidden" name="track_id_{{ track.id }}" value="{{ track.id }}">
+            </li>
+        {% empty %}
+            <li data-translatable="true">No top tracks available</li>
+        {% endfor %}
+    </ul>
 
-        <!-- Audio element (hidden until triggered) -->
-        <audio id="audio-player" controls style="display:none;">
-            <source src="{{ preview_url }}" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
-    {% else %}
-        <p>No preview available for your top track.</p>
-    {% endif %}
+    <button type="submit" id="submit-guess" data-translatable="true">Submit Guess</button>
+</form>
 
-    <script>
-        // JavaScript to handle the 2-second playback
-        document.getElementById('play-snippet').addEventListener('click', function() {
-            var audio = document.getElementById('audio-player');
-            audio.style.display = 'block';  // Make the audio player visible
-            audio.play();  // Start playing the audio
+{% if correct_guesses is not none %}
+    <p data-translatable="true">You guessed {{ correct_guesses }} tracks correctly!</p>
+{% endif %}
 
-            // Stop the audio after 2 seconds
-            setTimeout(function() {
-                audio.pause();  // Pause the audio
-                audio.currentTime = 0;  // Reset to the beginning
-            }, 2000);  // 2 seconds
-        });
-    </script>
+<!-- Button to reload tracks -->
+<form method="get" action="{% url 'game' %}">
+    <input type="hidden" name="reload" value="true">
+    <button type="submit" id="reload-button" data-translatable="true">Reload Images</button>
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
+
+        if (languageDropdown) {
+            // Listen for language changes
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                // Fetch all translatable elements
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            // For placeholder translation
+                            if (element.hasAttribute("data-translatable") && element.dataset.translatable === "placeholder") {
+                                element.setAttribute("placeholder", data.translated_text);
+                            } else {
+                                element.textContent = data.translated_text;
+                            }
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
