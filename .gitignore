@@ -330,10 +330,10 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/**
 # !tools/packages.config
-db.sqlite3
+*.sqlite3
 # Tabs Studio
 *.tss
-.env
+*.env
 # Telerik's JustMock configuration file
 *.jmconfig
 
