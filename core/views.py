@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.views import View
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
@@ -17,7 +18,6 @@ from huggingface_hub import InferenceClient
 import json
 # Create your views here.
 from django.contrib.auth.models import User
-import requests
 from django.views import View
 from django import forms
 
@@ -27,6 +27,13 @@ from firebase_admin import auth
 from pycparser.ply.yacc import LRTable
 
 from firebase import firestore_db
+#game view
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+import os
+from PIL import Image, ImageFilter
+from io import BytesIO
+import random
 
 
 def index(request):
@@ -220,20 +227,53 @@ def contact(request):
 class GenreForm(forms.Form):
     genre = forms.CharField(label='Favorite Music Genre', max_length=100)
 
+
+
+
+
 class GenreAnalysisView(View):
     def get(self, request):
-        form = GenreForm()
-        return render(request, 'core/music_analysis.html', {'form': form})
+        try:
+            user_id = request.session.get('userID', None)  # Assuming user_id is stored in session
 
-    def post(self, request):
-        form = GenreForm(request.POST)
-        if form.is_valid():
-            genre = form.cleaned_data['genre']
-            result = self.call_hugging_face(genre)
-            return render(request, 'core/music_analysis.html', {'form': form, 'result': result})
-        return render(request, 'core/music_analysis.html', {'form': form})
+            if not user_id:
+                print("no user_id :(")
+                return JsonResponse({'error': 'user ID is missing or invalid'}, status=400)
+
+            # Query Firestore
+            collection_ref = firestore_db.collection('wraps')
+            query = collection_ref.where('user_id', '==', user_id).limit(1)
+            query_snapshot = query.get()
+
+            if not query_snapshot:
+                print("no user data found in firestore")
+                return JsonResponse({'error': 'User data not found in Firestore'}, status=404)
+
+            # Assuming that only one document should match the user_id, get the first document
+            user_data = query_snapshot[0].to_dict()
+
+            # Extract the genres data (assuming it's in the 'genres' field of the document)
+            genres_data = user_data.get('genres', [])
+            if not genres_data:
+                return JsonResponse({'error': 'No genre data found for this user'}, status=404)
+
+            # Get the most frequent genre from the user's genres list
+            top_genre = genres_data[0]
+
+            # Fetch insights about the top genre from Hugging Face API (if needed)
+            result = None
+            if top_genre:
+                result = self.call_hugging_face(top_genre)
+
+        except Exception as e:
+            return JsonResponse({'error': f'Error occurred: {str(e)}'}, status=500)
+
+        # Render the results in the template
+        return render(request, 'core/music_analysis.html',
+                      {'result': result})
 
     def call_hugging_face(self, genre):
+        # Call Hugging Face API for insights on the top genre
         llm_client = InferenceClient(
             model="microsoft/Phi-3-mini-4k-instruct",
             timeout=120,
@@ -245,19 +285,20 @@ class GenreAnalysisView(View):
                 "task": "text-generation",
             },
         )
-        response_text = json.loads(response.decode())[0]["generated_text"]
+
+        try:
+            response_text = json.loads(response.decode())[0]["generated_text"]
+        except json.JSONDecodeError:
+            response_text = "Error decoding response from Hugging Face API"
 
         # Initialize response dictionary
         response_dict = {"feel": "", "think": "", "dress": ""}
-
-        # Define keywords to identify sections
         feel_keywords = ["feel", "emotion", "emotionally"]
         think_keywords = ["think", "thoughts"]
         dress_keywords = ["dress", "fashion", "wear"]
 
         # Split the response into sentences
         sentences = response_text.split('. ')
-
         for sentence in sentences:
             sentence_lower = sentence.lower()
             if any(keyword in sentence_lower for keyword in feel_keywords):
@@ -273,85 +314,102 @@ class GenreAnalysisView(View):
 
         return response_dict
 
-        # headers = {
-        #     'Authorization': f'Bearer {"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"}',
-        #     'Content-Type': 'application/json'
-        # }
-        # model = "gpt2"  # or any other model from Hugging Face
-        # url = f"https://api.huggingface.co/gpt2"
-        #
-        # data = {
-        #     "inputs": f"What do people usually feel, think, and dress like if they listen to {genre} music?"
-        # }
-        #
-        # response = requests.post(url, headers=headers, json=data)
-        # if response.status_code == 200:
-        #     return response.json()[0]['generated_text']  # Adjust based on the response structure
-        # else:
-        #     print(response.status_code, response.text)  # Log the error response
-        # return "Error: Could not retrieve data."
 
 def home(request):
     return render(request, "core/home.html")
 
-@login_required
+
+
 def game(request):
-    """Homepage to display the top track and preview button."""
+    """Homepage to display 5 random songs from the top 100 tracks."""
     access_token = request.session.get('access_token')
     if not access_token:
         return JsonResponse({'error': 'Access token is missing or invalid'}, status=400)
+
     headers = {
         'Authorization': f'Bearer {access_token}',
     }
 
-    # Get the user's top track (limit to 1 track)
-    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=1', headers=headers)
+    # If the reload button is pressed, clear selected tracks from the session
+    if request.method == 'GET' and request.GET.get('reload', '') == 'true':
+        if 'selected_tracks' in request.session:
+            del request.session['selected_tracks']
 
-
+    # Get the user's top 100 tracks (limit to 15 for simplicity)
+    response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=15', headers=headers)
 
     if response.status_code != 200:
         error_message = response.json() if response.text else "No response content"
-        return JsonResponse({'error': 'Failed to fetch top tracks'}, status=400)
+        return JsonResponse({'error': 'Failed to fetch top tracks', 'details': error_message}, status=400)
 
     try:
-        top_track = response.json()['items'][0]
-        track_name = top_track['name']
-        track_artists = ', '.join([artist['name'] for artist in top_track['artists']])
-        preview_url = top_track.get('preview_url', None)
+        top_tracks = response.json().get('items', [])
 
-        if not preview_url:
-            return JsonResponse({'error': 'No preview available for the top track'}, status=400)
+        if not top_tracks:
+            return JsonResponse({'error': 'No top tracks found for the user'}, status=400)
 
-        return render(request, 'core/home.html', {
-            'track_name': track_name,
-            'track_artists': track_artists,
-            'preview_url': preview_url
-        })
+        # If selected tracks are not in the session, fetch 5 random tracks
+        if 'selected_tracks' not in request.session:
+            selected_tracks = random.sample(top_tracks, 5)
 
-    except KeyError:
-        return JsonResponse({'error': 'Unexpected response structure from Spotify API'}, status=500)
+            # Prepare track data for rendering
+            track_data = []
+            for track in selected_tracks:
+                track_name = track['name']
+                track_artists = ', '.join([artist['name'] for artist in track['artists']])
+                top_song_image = track["album"]["images"][0]["url"] if track["album"]["images"] else None
+                if not top_song_image:
+                    top_song_image = 'https://via.placeholder.com/100x100.png?text=No+Cover'
+                response = requests.get(top_song_image)
+                if response.status_code == 200:
+                    img = Image.open(BytesIO(response.content))
+                    img = img.filter(ImageFilter.GaussianBlur(40))
+                    fs = FileSystemStorage(location=settings.MEDIA_ROOT)
+                    image_name = f"blurred_image_{track['id']}.jpg"
+                    img_bytes = BytesIO()
+                    img.save(img_bytes, format='JPEG')
+                    img_bytes.seek(0)
 
-@login_required
-def play_snippet(request):
-    """Handle playing the 2-second snippet (frontend will handle actual playback)."""
-    preview_url = request.GET.get('preview_url', None)
+                    img_path = fs.save(image_name, img_bytes)
+                    img_url = fs.url(img_path)
 
-    if not preview_url:
-        return JsonResponse({'error': 'No preview URL provided'}, status=400)
+                    track_data.append({
+                        'name': track_name,
+                        'artists': track_artists,
+                        'id': track['id'],
+                        'top_song_image': img_url,
+                    })
 
-    # Return the preview URL to the frontend for playback
-    return JsonResponse({'preview_url': preview_url})
+            # Save selected tracks (full data) in the session
+            request.session['selected_tracks'] = track_data
+        else:
+            track_data = request.session['selected_tracks']
 
+        correct_guesses = 0
+        if request.method == 'POST':
+            # Retrieve the selected tracks from the session
+            selected_tracks_from_session = request.session.get('selected_tracks', [])
 
+            # Loop through each selected track
+            for track in selected_tracks_from_session:
+                guess = request.POST.get(f'guess_{track["id"]}')
+                print(guess)
+                correct_answer = track['name']
+                print(correct_answer)
+                # Only count as correct if a guess was provided and it's correct
+                if guess and guess.strip().lower() == correct_answer.lower():
+                    correct_guesses += 1
 
+            if correct_guesses == 5:
+                messages.success(request, 'Congratulations! You guessed all songs correctly and earned extra points!')
+            else:
+                messages.info(request, f'You guessed {correct_guesses} tracks correctly!')
 
+        # Render the page with correct_guesses and track_data in context
+        return render(request, 'core/game.html', {'top_tracks': track_data, 'correct_guesses': correct_guesses})
 
-
-
-
-
-
-
+    except KeyError as e:
+        return JsonResponse({'error': 'Unexpected response structure from Spotify API', 'details': str(e)}, status=500)
 
 # from django.shortcuts import render, redirect
 # from .forms import RegisterForm
@@ -432,11 +490,14 @@ def login_function(request):
 
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
-
+        print(password)
         try:
             user = verify_password(email, password)
+            print(user)
             verified_user = auth.verify_id_token(user["idToken"])
+            print(verified_user)
             id = (verified_user["user_id"])
             request.session['userID'] = id
             request.session["logged_in"] = True
@@ -447,6 +508,7 @@ def login_function(request):
     return render(request, 'core/login.html')
 
 def verify_password(email, password):
+    print(settings.FIREBASE_WEB_API_KEY)
     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={settings.FIREBASE_WEB_API_KEY}"
 
     payload = {
