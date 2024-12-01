@@ -3,7 +3,7 @@
 {% block title %}Guess the Song from Its Blurred Album Cover!{% endblock %}
 
 {% block content %}
-<h1>Guess the Song!</h1>
+<h1 data-translatable="true">Guess the Song!</h1>
 
 <form method="post" id="guess-form">
     {% csrf_token %}
@@ -11,25 +11,68 @@
         {% for track in top_tracks %}
             <li>
                 <img src="{{ track.top_song_image }}" alt="Album cover for {{ track.name }}" class="album-cover" style="width: 100px; height: 100px; object-fit: cover;">
-                <input type="text" name="guess_{{ track.id }}" placeholder="Guess the song..." class="guess-input" />
+                <input type="text" name="guess_{{ track.id }}" placeholder="Guess the song..." class="guess-input" data-translatable="placeholder" />
                 <input type="hidden" name="track_id_{{ track.id }}" value="{{ track.id }}">
             </li>
         {% empty %}
-            <li>No top tracks available</li>
+            <li data-translatable="true">No top tracks available</li>
         {% endfor %}
     </ul>
 
-    <button type="submit" id="submit-guess">Submit Guess</button>
+    <button type="submit" id="submit-guess" data-translatable="true">Submit Guess</button>
 </form>
 
 {% if correct_guesses is not none %}
-    <p>You guessed {{ correct_guesses }} tracks correctly!</p>
+    <p data-translatable="true">You guessed {{ correct_guesses }} tracks correctly!</p>
 {% endif %}
 
 <!-- Button to reload tracks -->
 <form method="get" action="{% url 'game' %}">
     <input type="hidden" name="reload" value="true">
-    <button type="submit" id="reload-button">Reload Images</button>
+    <button type="submit" id="reload-button" data-translatable="true">Reload Images</button>
 </form>
 
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
+
+        if (languageDropdown) {
+            // Listen for language changes
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                // Fetch all translatable elements
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            // For placeholder translation
+                            if (element.hasAttribute("data-translatable") && element.dataset.translatable === "placeholder") {
+                                element.setAttribute("placeholder", data.translated_text);
+                            } else {
+                                element.textContent = data.translated_text;
+                            }
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
