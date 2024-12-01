@@ -1,3 +1,4 @@
+<!-- game.html -->
 {% extends 'core/base.html' %}
 
 {% block title %}Guess the Song from Its Blurred Album Cover!{% endblock %}
@@ -21,15 +22,38 @@
 
     <button type="submit" id="submit-guess">Submit Guess</button>
 </form>
-
-{% if correct_guesses is not none %}
-    <p>You guessed {{ correct_guesses }} tracks correctly!</p>
-{% endif %}
-
-<!-- Button to reload tracks -->
-<form method="get" action="{% url 'game' %}">
+    <form method="get" action="{% url 'game' %}">
     <input type="hidden" name="reload" value="true">
     <button type="submit" id="reload-button">Reload Images</button>
 </form>
+
+{% if correct_guesses is not none %}
+    <div class="score-box">
+        <p>You guessed <strong>{{ correct_guesses }}</strong> tracks correctly!</p>
+    </div>
+{% endif %}
+
+{% if new_score is not none %}
+    <div class="score-box">
+        <p>Your cumulative score is <strong>{{ new_score }}</strong>!</p>
+    </div>
+{% endif %}
+
+<!-- Leaderboard -->
+<h2>Leaderboard</h2>
+<div class="leaderboard">
+    {% for user in top_three_users %}
+        <div class="leaderboard-item">
+            <span class="rank">{{ user.rank }}.</span>
+            <span class="username">{{ user.email }}:</span>
+            <span class="score">{{ user.score }} Points</span>
+        </div>
+    {% empty %}
+        <p>No leaderboard data available.</p>
+    {% endfor %}
+</div>
+
+
+
 
 {% endblock %}
