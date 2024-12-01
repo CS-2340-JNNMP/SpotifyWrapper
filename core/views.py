@@ -227,20 +227,53 @@ def contact(request):
 class GenreForm(forms.Form):
     genre = forms.CharField(label='Favorite Music Genre', max_length=100)
 
+
+
+
+
 class GenreAnalysisView(View):
     def get(self, request):
-        form = GenreForm()
-        return render(request, 'core/music_analysis.html', {'form': form})
+        try:
+            user_id = request.session.get('userID', None)  # Assuming user_id is stored in session
 
-    def post(self, request):
-        form = GenreForm(request.POST)
-        if form.is_valid():
-            genre = form.cleaned_data['genre']
-            result = self.call_hugging_face(genre)
-            return render(request, 'core/music_analysis.html', {'form': form, 'result': result})
-        return render(request, 'core/music_analysis.html', {'form': form})
+            if not user_id:
+                print("no user_id :(")
+                return JsonResponse({'error': 'user ID is missing or invalid'}, status=400)
+
+            # Query Firestore
+            collection_ref = firestore_db.collection('wraps')
+            query = collection_ref.where('user_id', '==', user_id).limit(1)
+            query_snapshot = query.get()
+
+            if not query_snapshot:
+                print("no user data found in firestore")
+                return JsonResponse({'error': 'User data not found in Firestore'}, status=404)
+
+            # Assuming that only one document should match the user_id, get the first document
+            user_data = query_snapshot[0].to_dict()
+
+            # Extract the genres data (assuming it's in the 'genres' field of the document)
+            genres_data = user_data.get('genres', [])
+            if not genres_data:
+                return JsonResponse({'error': 'No genre data found for this user'}, status=404)
+
+            # Get the most frequent genre from the user's genres list
+            top_genre = genres_data[0]
+
+            # Fetch insights about the top genre from Hugging Face API (if needed)
+            result = None
+            if top_genre:
+                result = self.call_hugging_face(top_genre)
+
+        except Exception as e:
+            return JsonResponse({'error': f'Error occurred: {str(e)}'}, status=500)
+
+        # Render the results in the template
+        return render(request, 'core/music_analysis.html',
+                      {'result': result})
 
     def call_hugging_face(self, genre):
+        # Call Hugging Face API for insights on the top genre
         llm_client = InferenceClient(
             model="microsoft/Phi-3-mini-4k-instruct",
             timeout=120,
@@ -252,19 +285,20 @@ class GenreAnalysisView(View):
                 "task": "text-generation",
             },
         )
-        response_text = json.loads(response.decode())[0]["generated_text"]
+
+        try:
+            response_text = json.loads(response.decode())[0]["generated_text"]
+        except json.JSONDecodeError:
+            response_text = "Error decoding response from Hugging Face API"
 
         # Initialize response dictionary
         response_dict = {"feel": "", "think": "", "dress": ""}
-
-        # Define keywords to identify sections
         feel_keywords = ["feel", "emotion", "emotionally"]
         think_keywords = ["think", "thoughts"]
         dress_keywords = ["dress", "fashion", "wear"]
 
         # Split the response into sentences
         sentences = response_text.split('. ')
-
         for sentence in sentences:
             sentence_lower = sentence.lower()
             if any(keyword in sentence_lower for keyword in feel_keywords):
@@ -280,23 +314,6 @@ class GenreAnalysisView(View):
 
         return response_dict
 
-        # headers = {
-        #     'Authorization': f'Bearer {"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"}',
-        #     'Content-Type': 'application/json'
-        # }
-        # model = "gpt2"  # or any other model from Hugging Face
-        # url = f"https://api.huggingface.co/gpt2"
-        #
-        # data = {
-        #     "inputs": f"What do people usually feel, think, and dress like if they listen to {genre} music?"
-        # }
-        #
-        # response = requests.post(url, headers=headers, json=data)
-        # if response.status_code == 200:
-        #     return response.json()[0]['generated_text']  # Adjust based on the response structure
-        # else:
-        #     print(response.status_code, response.text)  # Log the error response
-        # return "Error: Could not retrieve data."
 
 def home(request):
     return render(request, "core/home.html")

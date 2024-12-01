@@ -192,7 +192,7 @@
             <!-- Welcome Slide -->
             <div class="carousel-slide">
                 <div class="content-block">
-                    <h1 class="welcome-text">Welcome to Your Spotify Wrapped!!</h1>
+                    <h3 class="welcome-text">Welcome to Your {{ data.duration }} Spotify Wrapped!!</h3>
                 </div>
             </div>
 
@@ -289,6 +289,10 @@
         <a href="{% url 'game' %}" class="btn btn-primary">Play a Fun Game!</a>
     </div>
 
+    <div class="game-navigation">
+        <a href="{% url 'game' %}" class="btn btn-primary">What Your Music Taste Says About You</a>
+    </div>
+
 
     <style>
         .welcome-text, .farewell-text {
@@ -301,10 +305,11 @@
             padding: 20px;
         }
         .game-navigation {
+
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0;
+        margin: 15px;
     }
         .btn-primary {
         background-color: #503658;; /* Purple background color */
