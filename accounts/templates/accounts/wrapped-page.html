@@ -1,116 +1,118 @@
+
+
+
 {% extends 'core/base.html' %}
 {% load static %}
 
 {% block content %}
-    <div class="carousel-container">
-        <h2 class="carousel-title">Your Wrapped</h2>
-        <div class="carousel">
-            <!-- Welcome Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h3 class="welcome-text">Welcome to Your {{ data.duration }} Spotify Wrapped!!</h3>
-                </div>
-            </div>
-
-            <!-- Songs Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Songs</h2>
-                </div>
-            </div>
-
-            <!-- Songs List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for song in data.songs %}
-                            <li class="song-name" onclick="playSong('{{ song.preview_url }}')">
-                                🔊{{ song.name }}
-                            </li>
-                            <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Artists Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Artists</h2>
-                </div>
-            </div>
-
-            <!-- Artists List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for artist in data.artists %}
-                            <li>{{ artist }}</li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Genres Heading Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2>Top 3 Genres</h2>
-                </div>
-            </div>
-
-            <!-- Genres List Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <ol>
-                        {% for genre in data.genres %}
-                            <li>{{ genre }}</li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Random Pun Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h2 id="randomPun" class="pun-text"></h2>
-                </div>
-            </div>
-
-            <!-- Farewell Slide -->
-            <div class="carousel-slide">
-                <div class="content-block">
-                    <h1 class="farewell-text">That's All Folks! 🎉</h1>
-                    <p>Thanks for listening with us this year!</p>
-                </div>
+<div class="carousel-container">
+    <h2 class="carousel-title" data-translatable>Your Wrapped</h2>
+    <div class="carousel">
+        <!-- Welcome Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h3 class="welcome-text" data-translatable>Welcome to Your {{ data.duration }} Spotify Wrapped!!</h3>
             </div>
         </div>
 
-        <button class="carousel-button prev" onclick="moveSlide(-1)">&#8249;</button>
-        <button class="carousel-button next" onclick="moveSlide(1)">&#8250;</button>
+        <!-- Songs Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Songs</h2>
+            </div>
+        </div>
 
-        <div class="carousel-dots">
-            <div class="dot" onclick="goToSlide(0)"></div>
-            <div class="dot" onclick="goToSlide(1)"></div>
-            <div class="dot" onclick="goToSlide(2)"></div>
-            <div class="dot" onclick="goToSlide(3)"></div>
-            <div class="dot" onclick="goToSlide(4)"></div>
-            <div class="dot" onclick="goToSlide(5)"></div>
-            <div class="dot" onclick="goToSlide(6)"></div>
-            <div class="dot" onclick="goToSlide(7)"></div>
-            <div class="dot" onclick="goToSlide(8)"></div>
+        <!-- Songs List Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <ol>
+                    {% for song in data.songs %}
+                        <li class="song-name" onclick="playSong('{{ song.preview_url }}')" data-translatable>
+                            🔊{{ song.name }}
+                        </li>
+                        <audio id="audio-{{ song.name }}" class="audio-player" src="{{ song.preview_url }}" preload="auto"></audio>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Artists Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Artists</h2>
+            </div>
+        </div>
+
+        <!-- Artists List Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <ol>
+                    {% for artist in data.artists %}
+                        <li data-translatable>{{ artist }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Genres Heading Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 data-translatable>Top 3 Genres</h2>
+            </div>
+        </div>
+
+        <!-- Genres List Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <ol>
+                    {% for genre in data.genres %}
+                        <li data-translatable>{{ genre }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Random Pun Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h2 id="randomPun" class="pun-text" data-translatable></h2>
+            </div>
+        </div>
+
+        <!-- Farewell Slide -->
+        <div class="carousel-slide">
+            <div class="content-block">
+                <h1 class="farewell-text" data-translatable>That's All Folks! 🎉</h1>
+                <p data-translatable>Thanks for listening with us this year!</p>
+            </div>
         </div>
     </div>
 
-    <div class="game-navigation">
-        <a href="{% url 'game' %}" class="btn btn-primary">Play a Fun Game!</a>
+    <button class="carousel-button prev" onclick="moveSlide(-1)" data-translatable>&#8249;</button>
+    <button class="carousel-button next" onclick="moveSlide(1)" data-translatable>&#8250;</button>
+
+    <div class="carousel-dots">
+        <div class="dot" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+        <div class="dot" onclick="goToSlide(3)"></div>
+        <div class="dot" onclick="goToSlide(4)"></div>
+        <div class="dot" onclick="goToSlide(5)"></div>
+        <div class="dot" onclick="goToSlide(6)"></div>
+        <div class="dot" onclick="goToSlide(7)"></div>
+        <div class="dot" onclick="goToSlide(8)"></div>
     </div>
+</div>
 
-    <div class="game-navigation">
-        <a href="{% url 'game' %}" class="btn btn-primary">What Your Music Taste Says About You</a>
-    </div>
+<div class="game-navigation">
+    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>Play a Fun Game!</a>
+</div>
 
+<div class="game-navigation">
+    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>What Your Music Taste Says About You</a>
+</div>
 
-    <style>
+<style>
         .welcome-text, .farewell-text {
             font-size: 2.5em;
             margin-bottom: 20px;
@@ -139,22 +141,54 @@
     }
     </style>
 
-    <script>
-        const musicPuns = [
-            "Why did the musician bring a ladder to the concert? To reach the high notes! 🎵",
-            "What kind of music do planets listen to? Nep-tunes! 🌍",
-            "What did the guitar say to the musician? Pick me! 🎸",
-            "Why don't classical musicians like their fans? Because they only know how to Bach! 🎼",
-            "What do you call a bear with no teeth? A gummy bear singing the blues! 🐻"
-        ];
+<script>
+    const musicPuns = [
+        "Why did the musician bring a ladder to the concert? To reach the high notes! 🎵",
+        "What kind of music do planets listen to? Nep-tunes! 🌍",
+        "What did the guitar say to the musician? Pick me! 🎸",
+        "Why don't classical musicians like their fans? Because they only know how to Bach! 🎼",
+        "What do you call a bear with no teeth? A gummy bear singing the blues! 🐻"
+    ];
 
-        function setRandomPun() {
-            const randomIndex = Math.floor(Math.random() * musicPuns.length);
-            document.getElementById('randomPun').textContent = musicPuns[randomIndex];
+    function setRandomPun() {
+        const randomIndex = Math.floor(Math.random() * musicPuns.length);
+        const punElement = document.getElementById('randomPun');
+        if (punElement) {
+            const randomPun = musicPuns[randomIndex];
+            punElement.textContent = randomPun;
+            punElement.setAttribute('data-translatable', randomPun); // Enable translation for puns
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setRandomPun();
-        });
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setRandomPun();
+
+        const languageDropdown = document.getElementById("languageDropdown");
+        if (languageDropdown) {
+            languageDropdown.addEventListener("change", async (event) => {
+                const selectedLanguage = event.target.value;
+
+                const translatableElements = document.querySelectorAll("[data-translatable]");
+                for (let element of translatableElements) {
+                    const originalText = element.textContent;
+
+                    try {
+                        const response = await fetch(
+                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            element.textContent = data.translated_text;
+                        } else {
+                            console.error("Translation API failed:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching translation:", error);
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

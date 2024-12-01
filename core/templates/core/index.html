@@ -7,9 +7,8 @@
     <a href="{% url 'login' %}">
         <button data-translatable>Get Started</button>
     </a>
-    <a href="{% url 'my_wraps' %}">
-        <button data-translatable>Explore Wraps</button>
-    </a>
+<a href="{% url 'public_wraps' %}"><button  data-translatable>Explore Wraps</button></a>
+
     {% if response %}
     <p>{{ response.display_name }}</p>
     {% endif %}
@@ -53,3 +52,4 @@
 </script>
 
 {% endblock %}
+
