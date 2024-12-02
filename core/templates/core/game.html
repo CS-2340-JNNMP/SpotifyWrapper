@@ -1,10 +1,9 @@
+
 {% extends 'core/base.html' %}
 
 {% block title %}Guess the Song from Its Blurred Album Cover!{% endblock %}
-
 {% block content %}
 <h1 data-translatable="true">Guess the Song!</h1>
-
 <form method="post" id="guess-form">
     {% csrf_token %}
     <ul>
@@ -21,58 +20,40 @@
 
     <button type="submit" id="submit-guess" data-translatable="true">Submit Guess</button>
 </form>
-
-{% if correct_guesses is not none %}
-    <p data-translatable="true">You guessed {{ correct_guesses }} tracks correctly!</p>
-{% endif %}
-
-<!-- Button to reload tracks -->
-<form method="get" action="{% url 'game' %}">
+    <form method="get" action="{% url 'game' %}">
     <input type="hidden" name="reload" value="true">
-    <button type="submit" id="reload-button" data-translatable="true">Reload Images</button>
+    <button type="submit" id="reload-button">Reload Images</button>
 </form>
 
-{% endblock %}
+{% if correct_guesses is not none %}
 
-{% block script %}
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const languageDropdown = document.getElementById("languageDropdown");
+    <div class="score-box">
+        <p>You guessed <strong>{{ correct_guesses }}</strong> tracks correctly!</p>
+    </div>
+{% endif %}
 
-        if (languageDropdown) {
-            // Listen for language changes
-            languageDropdown.addEventListener("change", async (event) => {
-                const selectedLanguage = event.target.value;
+{% if new_score is not none %}
+    <div class="score-box">
+        <p>Your cumulative score is <strong>{{ new_score }}</strong>!</p>
+    </div>
+{% endif %}
 
-                // Fetch all translatable elements
-                const translatableElements = document.querySelectorAll("[data-translatable]");
+<!-- Leaderboard -->
+<h2>Leaderboard</h2>
+<div class="leaderboard">
+    {% for user in top_three_users %}
+        <div class="leaderboard-item">
+            <span class="rank">{{ user.rank }}.</span>
+            <span class="username">{{ user.email }}:</span>
+            <span class="score">{{ user.score }} Points</span>
+        </div>
+    {% empty %}
+        <p>No leaderboard data available.</p>
+    {% endfor %}
+</div>
 
-                for (let element of translatableElements) {
-                    const originalText = element.textContent;
 
-                    try {
-                        const response = await fetch(
-                            `/translate/?text=${encodeURIComponent(originalText)}&target_language=${selectedLanguage}`
-                        );
 
-                        if (response.ok) {
-                            const data = await response.json();
 
-                            // For placeholder translation
-                            if (element.hasAttribute("data-translatable") && element.dataset.translatable === "placeholder") {
-                                element.setAttribute("placeholder", data.translated_text);
-                            } else {
-                                element.textContent = data.translated_text;
-                            }
-                        } else {
-                            console.error("Translation API failed:", response.statusText);
-                        }
-                    } catch (error) {
-                        console.error("Error fetching translation:", error);
-                    }
-                }
-            });
-        }
-    });
-</script>
+
 {% endblock %}

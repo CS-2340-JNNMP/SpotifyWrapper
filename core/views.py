@@ -335,35 +335,29 @@ def home(request):
 def game(request):
     """Homepage to display 5 random songs from the top 100 tracks."""
     access_token = request.session.get('access_token')
+    user_id = request.session.get('userID', None)
     if not access_token:
         return JsonResponse({'error': 'Access token is missing or invalid'}, status=400)
 
     headers = {
         'Authorization': f'Bearer {access_token}',
     }
-
     # If the reload button is pressed, clear selected tracks from the session
     if request.method == 'GET' and request.GET.get('reload', '') == 'true':
         if 'selected_tracks' in request.session:
             del request.session['selected_tracks']
-
     # Get the user's top 100 tracks (limit to 15 for simplicity)
     response = requests.get('https://api.spotify.com/v1/me/top/tracks?limit=15', headers=headers)
-
     if response.status_code != 200:
         error_message = response.json() if response.text else "No response content"
         return JsonResponse({'error': 'Failed to fetch top tracks', 'details': error_message}, status=400)
-
     try:
         top_tracks = response.json().get('items', [])
-
         if not top_tracks:
             return JsonResponse({'error': 'No top tracks found for the user'}, status=400)
-
         # If selected tracks are not in the session, fetch 5 random tracks
         if 'selected_tracks' not in request.session:
             selected_tracks = random.sample(top_tracks, 5)
-
             # Prepare track data for rendering
             track_data = []
             for track in selected_tracks:
@@ -381,27 +375,32 @@ def game(request):
                     img_bytes = BytesIO()
                     img.save(img_bytes, format='JPEG')
                     img_bytes.seek(0)
-
                     img_path = fs.save(image_name, img_bytes)
                     img_url = fs.url(img_path)
-
                     track_data.append({
                         'name': track_name,
                         'artists': track_artists,
                         'id': track['id'],
                         'top_song_image': img_url,
                     })
-
             # Save selected tracks (full data) in the session
             request.session['selected_tracks'] = track_data
         else:
             track_data = request.session['selected_tracks']
 
+
+        game_score_ref = firestore_db.collection('games')
+        user_doc_ref = game_score_ref.document(user_id)
+        doc_snapshot = user_doc_ref.get()
+        if doc_snapshot.exists:
+            user_score = doc_snapshot.to_dict().get('score', 0)
+        else:
+            user_score = 0
+        new_score = user_score
         correct_guesses = 0
         if request.method == 'POST':
             # Retrieve the selected tracks from the session
             selected_tracks_from_session = request.session.get('selected_tracks', [])
-
             # Loop through each selected track
             for track in selected_tracks_from_session:
                 guess = request.POST.get(f'guess_{track["id"]}')
@@ -412,41 +411,52 @@ def game(request):
                 if guess and guess.strip().lower() == correct_answer.lower():
                     correct_guesses += 1
 
+            new_score = user_score + correct_guesses
+            user_doc_ref.set({
+                'score': new_score
+            }, merge=True)
             if correct_guesses == 5:
-                messages.success(request, 'Congratulations! You guessed all songs correctly and earned extra points!')
+                messages.success(request, f'Congratulations! You guessed all songs correctly and earned extra points! Your cumulative score is {new_score}')
             else:
-                messages.info(request, f'You guessed {correct_guesses} tracks correctly!')
+                messages.info(request, f'You guessed {correct_guesses} tracks correctly! Your cumulative score is {new_score}')
 
-        # Render the page with correct_guesses and track_data in context
-        return render(request, 'core/game.html', {'top_tracks': track_data, 'correct_guesses': correct_guesses})
+
+        users_scores = game_score_ref.stream()
+        sorted_users_scores = sorted(users_scores, key=lambda x: x.to_dict().get('score', 0), reverse=True)
+
+        # Fetch leaderboard data (top 3 users)
+
+        users_scores = game_score_ref.stream()
+        sorted_users_scores = sorted(users_scores, key=lambda x: x.to_dict().get('score', 0), reverse=True)
+
+        # Get the top 3 users with their email (from Firebase Authentication)
+        top_three_users = []
+        for idx, user_score in enumerate(sorted_users_scores[:3]):
+            user_data = user_score.to_dict()
+            user_id = user_score.id  # Firebase document ID
+            try:
+                # Fetch the user's email using Firebase Authentication
+                user_record = auth.get_user(user_id)
+                print(user_record)
+                user_email = user_record.email
+                print(user_email)
+
+                score = user_data.get('score', 0)
+                top_three_users.append({'rank': idx + 1, 'email': user_email, 'score': score})
+            except auth.UserNotFoundError:
+                # Handle case where the user is not found in Firebase Authentication
+                top_three_users.append({'rank': idx + 1, 'email': 'Unknown', 'score': 0})
+
+        # Render the page with correct_guesses, track_data, and leaderboard
+        return render(request, 'core/game.html', {
+            'top_tracks': track_data,
+            'correct_guesses': correct_guesses,
+            'new_score': new_score,
+            'top_three_users': top_three_users
+        })
 
     except KeyError as e:
         return JsonResponse({'error': 'Unexpected response structure from Spotify API', 'details': str(e)}, status=500)
-
-# from django.shortcuts import render, redirect
-# from .forms import RegisterForm
-# from django.contrib.auth.models import User
-#
-# def register_member(request):
-#     if request.method == "POST":
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             # Save the member object
-#             member = form.save()
-#             # Redirect to a new page to display member details
-#             return redirect('member_detail', pk=member.pk)
-#     else:
-#         form = RegisterForm()
-#     return render(request, 'core/register.html', {'form': form})
-#
-#
-# from django.shortcuts import get_object_or_404
-#
-# def member_detail(request, pk):
-#     member = get_object_or_404(User, pk=pk)
-#     return render(request, 'core/my_wraps.html', {'member': member})
-
-
 
 
 from django.shortcuts import render, redirect

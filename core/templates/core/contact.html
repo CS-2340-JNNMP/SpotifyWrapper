@@ -1,10 +1,12 @@
 {% extends 'core/base.html' %}
 
 {% block title %}Contact Us{% endblock %}
-
 {% block content %}
+<!-- Add Firebase SDK before your content -->
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+
 <div class="contact-container">
-    <form method="POST" class="contact-form">
         {% csrf_token %}
         <div class="image-grid">
             <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" alt="Team member 1" class="team-image">
@@ -16,25 +18,12 @@
 
         <h2 class="contact-title" data-translatable>Contact Us</h2>
 
-        <textarea
-            id="extra"
-            name="message"
-            rows="7"
-            placeholder="Share your thoughts with us..."
-            class="contact-textarea"
-            data-translatable="placeholder"
-        ></textarea>
-
-        <div class="button-container">
-            <button type="submit" class="submit-button" data-translatable>Share thoughts</button>
-        </div>
-    </form>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdIMKD2ap1Zg9wzvsi9blBNN38b-p8kqEu3J6FzmL36kocQzA/viewform?embedded=true" width="640" height="381" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const languageDropdown = document.getElementById("languageDropdown");
-
         if (languageDropdown) {
             // Listen for language changes
             languageDropdown.addEventListener("change", async (event) => {
@@ -69,10 +58,15 @@
                 }
             });
         }
-    });
+    })
 </script>
+
 <style>
     .contact-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
