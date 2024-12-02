@@ -127,7 +127,7 @@ def wrapped_page(request):
     wraps_ref = firestore_db.collection('wraps')
     wraps_ref.add(data)
 
-    return render(request, "core/wrapped-page.html", {"data": data})
+    return render(request, "accounts/wrapped-page.html", {"data": data})
 # def wrapped_page(request):
 #     access_token = request.session.get("access_token")
 #     duration = request.session.get("duration", "long_term")
