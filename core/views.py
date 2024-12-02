@@ -25,7 +25,6 @@ from django import forms
 import firebase_admin
 from firebase_admin import auth
 from pycparser.ply.yacc import LRTable
-
 from firebase import firestore_db
 #game view
 from django.conf import settings
@@ -572,23 +571,40 @@ def wrapped_page_with_id(request, wrap_id):
     return render(request, "accounts/wrapped-page.html", {"data": final})
 
 
-
 def contact_us(request):
-    if request.method == 'POST':
-        print("WHYYYYY ME")
-        message = request.POST.get('message')
-        print(message)
+    # if request.method == 'POST':
+    #     message = request.POST.get('message')
+    #
+    #     print("here is the message", message)
+    #
+    #     if message is None or message.strip() == "":
+    #         messages.error(request, 'Please enter your message')
+    #         return render(request, 'core/contact.html')
+    #
+    #     try:
+    #         # Add timestamp and status to feedback
+    #         feedback_data = {
+    #             'content': message,
+    #             'timestamp': firestore.SERVER_TIMESTAMP,
+    #             'status': 'new'
+    #         }
+    #
+    #         # Add the feedback to Firestore
+    #         feedback_ref = firestore_db.collection('feedback').add(feedback_data)
+    #
+    #         # Show success message
+    #         messages.success(request, 'Thank you! Your feedback has been submitted.')
+    #
+    #         # Redirect to prevent form resubmission
+    #         return redirect('contact')
+    #
+    #     except Exception as e:
+    #         messages.error(request, 'Sorry, there was an error submitting your feedback. Please try again.')
+    #         print(f"Error saving feedback: {e}")
+    #         return render(request, 'core/contact.html')
 
-        if message is None or message.strip() == "":
-            return render(request, 'core/contact.html', {'error': 'Please enter your message'})
-        # Add the message to Firestore
-        print("WHYYYY")
-        firestore_db.collection('feedback').add({'content': message})
-
-        # Redirect or render a success message
-        return redirect('index')  # Redirect to a success page or show the form again
-
-        # return render(request, 'core/contact.html', {'form': form})
+    # GET request - just show the form
+    return render(request, 'core/contact.html')
 
 def logout_function(request):
     request.session['logged_in'] = False
