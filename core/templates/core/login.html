@@ -1,10 +1,20 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<form method="POST" class="auth-form">
-    {% csrf_token %}
-    <h1 data-translatable>Sign in</h1>
-    <br>
+    <style>
+    @media (max-width: 768px) {
+        h1 {
+            font-size: medium;
+        }
+        .row mb-4 {
+            flex-direction: column;
+        }
+    }
+    </style>
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
+        <h1 data-translatable>Sign in</h1>
+        <br>
 
     <!-- Email input -->
     <div data-mdb-input-init class="form-outline mb-4">

@@ -71,6 +71,9 @@ def wrapped_page(request):
     headers = {"Authorization": f"Bearer {access_token}"}
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
+    recently_played_url = "https://api.spotify.com/v1/me/player/recently-played"
+    total_minutes = 0
+    next_url = recently_played_url  # Start with the base URL
 
     # Fetch top tracks
     tracks_response = requests.get(
@@ -82,15 +85,42 @@ def wrapped_page(request):
         top_artists_url, headers=headers, params={"limit": 5, "time_range": duration}
     )
 
+    recently_played_response = requests.get(
+        recently_played_url, headers=headers, params={"limit": 50}
+    )
+
     print(artists_response)
     print(tracks_response)
 
-    if tracks_response.status_code != 200 or artists_response.status_code != 200:
+    if (
+            tracks_response.status_code != 200
+            or artists_response.status_code != 200
+    ):
         return JsonResponse({"error": "Failed to retrieve Spotify data."}, status=500)
 
     # Parse the responses
     tracks_data = tracks_response.json().get("items", [])
     artists_data = artists_response.json().get("items", [])
+    while next_url:
+        response = requests.get(next_url, headers=headers, params={"limit": 50})
+
+        if response.status_code != 200:
+            raise Exception("Failed to fetch recently played tracks.")
+
+        data = response.json()
+        items = data.get("items", [])
+
+        # Add up the duration of tracks
+        for item in items:
+            track = item.get("track", {})
+            duration_ms = track.get("duration_ms", 0)
+            total_minutes += duration_ms / (1000 * 60)  # Convert ms to minutes
+
+        # Get the next page URL
+        next_url = data.get("next")  # Spotify API provides this for pagination
+
+
+    total_hours = round(total_minutes / 60, 1)
 
     # Extract required fields
     top_songs = [
@@ -123,6 +153,7 @@ def wrapped_page(request):
         "artists": top_artists,
         "top_artist_image": top_artist_image,
         "genres": top_genres,
+        "numHours": total_hours,
     }
 
     wraps_ref = firestore_db.collection('wraps')
