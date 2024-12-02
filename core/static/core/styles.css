@@ -71,6 +71,7 @@ html {
 h1, h2, h3, h4 {
     color: #503658;
     font-family: "Inter", Helvetica, sans-serif;
+
 }
 
 .home-main {
@@ -369,10 +370,12 @@ a:hover {
 
 .carousel-button.prev {
     left: 40px;
+    top: 110px;
 }
 
 .carousel-button.next {
     right: 40px;
+    top: 110px;
 }
 
 .carousel-dots {
