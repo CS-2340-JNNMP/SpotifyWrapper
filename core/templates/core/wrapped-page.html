@@ -10,6 +10,43 @@
             <div class="content-block">
                 <h2 data-translatable>Top 3 Songs</h2>
             </div>
+
+            <!-- Artists Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>Top 3 Artists</h2>
+                    <ol>
+                        {% for artist in data.artists %}
+                            <li>{{ artist }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Genres Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>Top 3 Genres</h2>
+                    <ol>
+                        {% for genre in data.genres %}
+                            <li>{{ genre }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Number of Hours Slide -->
+            <div class="carousel-slide">
+                <div class="content-block">
+                    <h2>You listened to songs for a solid {{ data.numHours }} hours</h2>
+{#                    <ol>#}
+{#                        {% for genre in data.genres %}#}
+{#                            <li>{{ genre }}</li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+                </div>
+            </div>
+
         </div>
 
         <!-- Static Content: Artists Heading Slide -->
