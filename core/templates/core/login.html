@@ -46,7 +46,13 @@
         <p>Not a member? <a href="{% url 'register' %}">Register</a></p>
     </div>
 </form>
-
+<style>
+ @media (max-width: 768px) {
+     h1 {
+         font-size: medium;
+     }
+ }
+</style>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const languageDropdown = document.getElementById("languageDropdown");
