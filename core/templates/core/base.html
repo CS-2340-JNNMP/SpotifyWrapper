@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
     <nav class="header">
         <div id="side-buttons">
-
         <style>
             body {
                 background-image: url("{% static 'core/images/background.png' %}");
@@ -25,7 +24,8 @@
                 background-image: url("{% static 'core/images/my-wraps-background.png' %}");
             }
         </style>
-
+        </div>
+    </nav>
 </head>
 
 <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
