@@ -12,13 +12,13 @@
         <div class="carousel-slide">
             <div class="content-block">
                 {% if data.duration == "long_term" %}
-                <h3 class="welcome-text" data-translatable>Welcome to Your Long Term Spotify Wrapped!!</h3>
+                <h6 class="welcome-text" data-translatable>Welcome to Your Long Term Spotify Wrapped!!</h6>
                 {% elif data.duration == "medium_term" %}
-                <h3 class="welcome-text" data-translatable>Welcome to Your Medium Term Spotify Wrapped!!</h3>
+                <h6 class="welcome-text" data-translatable>Welcome to Your Medium Term Spotify Wrapped!!</h6>
                 {% elif data.duration == "short_term" %}
-                <h3 class="welcome-text" data-translatable>Welcome to Your Short Term Spotify Wrapped!!</h3>
+                <h6 class="welcome-text" data-translatable>Welcome to Your Short Term Spotify Wrapped!!</h6>
                 {% else %}
-                <h3 class="welcome-text" data-translatable>Welcome to Your Spotify Wrapped!!</h3>
+                <h6 class="welcome-text" data-translatable>Welcome to Your Spotify Wrapped!!</h6>
                 {% endif %}
             </div>
         </div>
@@ -112,13 +112,13 @@
     </div>
 </div>
 
-<div class="game-navigation">
-    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>Play a Fun Game!</a>
-</div>
+{#<div class="game-navigation">#}
+{#    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>Play a Fun Game!</a>#}
+{#</div>#}
 
-<div class="game-navigation">
-    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>What Your Music Taste Says About You</a>
-</div>
+{#<div class="game-navigation">#}
+{#    <a href="{% url 'game' %}" class="btn btn-primary" data-translatable>What Your Music Taste Says About You</a>#}
+{#</div>#}
 
 <style>
         .welcome-text, .farewell-text {
@@ -137,6 +137,13 @@
         align-items: center;
         margin: 15px;
     }
+        h6 {
+            color: #503658;
+            font-family: "Inter", Helvetica, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
         .btn-primary {
         background-color: #503658;; /* Purple background color */
         color: white; /* White text color */
