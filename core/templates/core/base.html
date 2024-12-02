@@ -2,34 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <title>{% block title %}{% endblock %}SpotiFye</title>
+    <title>{% block title %}SpotiFye{% endblock %}</title>
 
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'core/styleguide.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
-    <nav class="header">
         <div id="side-buttons">
 
-        <style>
-            body {
-                background-image: url("{% static 'core/images/background.png' %}");
-            }
-            .my-wraps-page {
-                background-image: url("{% static 'core/images/my-wraps-background.png' %}");
-            }
-        </style>
-
-</head>
+            <style>
+                /* Default styles for desktop */
+                body {
+                    background-image: url("{% static 'core/images/background.png' %}");
+                    background-size: cover;
+                    background-position: center;
+                    height: 100%;
+                    max-width: 100%;
+                }
+        
+                .my-wraps-page {
+                    background-image: url("{% static 'core/images/my-wraps-background.png' %}");
+                }
+        
+                /* Mobile styles */
+                @media (max-width: 768px) {
+                    body {
+                        background-image: none;
+                        background-color: #E5AB8A;
+                         overflow-x: hidden;/* Fallback background color for small screens */
+                    }
+                    nav .navbar-nav .nav-link {
+                        font-size: 14px; /* Smaller font for links */
+                        padding: 8px 10px;
+                        color: #503658;
+                    }
+        
+                    .main {
+                        padding: 10px; /* Add padding for smaller screens */
+                    }
+        
+        
+                }
+            </style>
+        </head>
 
 <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
 
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <a style="color: #503658" class="navbar-brand" href="/">SpotiFye</a>
+    <button style="color: #503658" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a style="color: #503658" class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Language
+                </a>
+                <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <a style="color: #503658" class="dropdown-item" href="#">Español</a>
+                    <a style="color: #503658" class="dropdown-item" href="#">Française</a>
+                </div>
+            </li>
+            {% if logged_in %}
+            <li class="nav-item">
+                <a style="color: #503658" class="nav-link" href="/my-wraps">My Wraps</a>
+            </li>
+            <li class="nav-item">
+                <a style="color: #503658" class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a style="color: #503658" class="nav-link" href="/login">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
 <div class="main">
     {% block content %}{% endblock %}
 </div>

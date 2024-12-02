@@ -9,7 +9,10 @@
 *.user
 *.userosscache
 *.sln.docstates
-
+*.env
+*.sql
+*.xml
+*.sqlite3
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -330,10 +333,10 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/**
 # !tools/packages.config
-
+*.sqlite3
 # Tabs Studio
 *.tss
-
+*.env
 # Telerik's JustMock configuration file
 *.jmconfig
 
