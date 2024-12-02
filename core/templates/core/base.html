@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'core/styleguide.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'core/auth-style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'core/styles.css' %}">
-        <div id="side-buttons">
+{#        <div id="side-buttons">#}
 
             <style>
                 /* Default styles for desktop */
@@ -52,7 +52,6 @@
                 }
             </style>
         </head>
-
 <body class="{% if request.path == '/my-wraps' %}my-wraps-page{% endif %}">
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -69,8 +68,9 @@
                     Language
                 </a>
                 <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                    <a style="color: #503658" class="dropdown-item" href="#">Español</a>
-                    <a style="color: #503658" class="dropdown-item" href="#">Française</a>
+                    <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
+                    <a class="dropdown-item" href="#" onclick="changeLanguage('es')">Español</a>
+                    <a class="dropdown-item" href="#" onclick="changeLanguage('fr')">Français</a>
                 </div>
             </li>
             {% if logged_in %}
@@ -91,52 +91,6 @@
 <div class="main">
     {% block content %}{% endblock %}
 </div>
-<nav class="navbar fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">SpotiFye</a>
-        <div class="nav-buttons">
-            <!-- Language Dropdown -->
-            <div class="dropdown mr-3" id="lang-dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    English
-                </button>
-                <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                    <a class="dropdown-item" href="#" onclick="changeLanguage('en')">English</a>
-                    <a class="dropdown-item" href="#" onclick="changeLanguage('es')">Español</a>
-                    <a class="dropdown-item" href="#" onclick="changeLanguage('fr')">Français</a>
-                </div>
-            </div>
-
-            <!-- Profile Icon -->
-            {% if logged_in %}
-            <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedIn() {
-                const dropdown = document.getElementById('profileDropdown');
-                dropdown.classList.toggle('show');
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function closeDropdown(e) {
-                    if (!e.target.closest('.nav-buttons')) {
-                        dropdown.classList.remove('show');
-                        document.removeEventListener('click', closeDropdown);
-                    }
-                });
-            }
-            handleProfileClickLoggedIn()"></i>
-            {% else %}
-            <i class="profile-button fa-regular fa-circle-user" onclick="function handleProfileClickLoggedOut() {
-                window.location.href = '/login';
-            }
-            handleProfileClickLoggedOut()"></i>
-            {% endif %}
-                <div class="dropdown-menu" id="profileDropdown">
-    <a href="/my-wraps" data-translatable="true">View My Wraps</a>
-    <a href="/logout" data-translatable="true">Logout</a>
-    <a href="#" class="delete-account" onclick="handleDeleteAccount()" data-translatable="true">Delete Account</a>
-</div>
-
-        </div>
-    </div>
-</nav>
 
 <!-- Footer -->
 <footer>

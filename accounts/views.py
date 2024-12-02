@@ -9,6 +9,7 @@ import uuid
 
 def login(request):
     # Construct the Spotify authorization URL
+    print("print")
     duration = request.GET.get("duration", "long_term")
     params = {
         "client_id": settings.CLIENT_ID,
@@ -23,7 +24,7 @@ def login(request):
 
 
 def callback(request):
-
+    print("print1")
     code = request.GET.get("code")
     state = request.GET.get("state")
 
@@ -56,14 +57,16 @@ def callback(request):
     # Store the access token securely (e.g., in a session)
     request.session["access_token"] = access_token
     request.session["duration"] = duration
+    print("callback function")
     return HttpResponseRedirect('wrapped-page')
     # return HttpResponseRedirect("/accounts/profile")
 
 def wrapped_page(request):
+    print("wrapped_page")
     access_token = request.session.get("access_token")
     duration = request.session.get("duration", "long_term")
 
-    print(access_token)
+    print("access token", access_token)
 
     if not access_token:
         return JsonResponse({"error": "Access token not found."}, status=401)
@@ -92,6 +95,12 @@ def wrapped_page(request):
     print(artists_response)
     print(tracks_response)
 
+    if tracks_response.status_code != 200:
+        return JsonResponse({"error": "Failed to retrieve top tracks."}, status=tracks_response.status_code)
+
+    if artists_response.status_code != 200:
+        return JsonResponse({"error": "Failed to retrieve top artists."}, status=artists_response.status_code)
+
     if (
             tracks_response.status_code != 200
             or artists_response.status_code != 200
@@ -101,26 +110,27 @@ def wrapped_page(request):
     # Parse the responses
     tracks_data = tracks_response.json().get("items", [])
     artists_data = artists_response.json().get("items", [])
-    while next_url:
-        response = requests.get(next_url, headers=headers, params={"limit": 50})
-
-        if response.status_code != 200:
-            raise Exception("Failed to fetch recently played tracks.")
-
-        data = response.json()
-        items = data.get("items", [])
-
-        # Add up the duration of tracks
-        for item in items:
-            track = item.get("track", {})
-            duration_ms = track.get("duration_ms", 0)
-            total_minutes += duration_ms / (1000 * 60)  # Convert ms to minutes
-
-        # Get the next page URL
-        next_url = data.get("next")  # Spotify API provides this for pagination
-
-
-    total_hours = round(total_minutes / 60, 1)
+    # while next_url:
+    #     response = requests.get(next_url, headers=headers, params={"limit": 50})
+    #
+    #     if response.status_code != 200:
+    #         raise Exception("Failed to fetch recently played tracks.")
+    #
+    #     data = response.json()
+    #     items = data.get("items", [])
+    #
+    #     # Add up the duration of tracks
+    #     for item in items:
+    #         track = item.get("track", {})
+    #         duration_ms = track.get("duration_ms", 0)
+    #         total_minutes += duration_ms / (1000 * 60)  # Convert ms to minutes
+    #
+    #     # Get the next page URL
+    #     next_url = data.get("next")  # Spotify API provides this for pagination
+    #
+    #
+    # total_hours = round(total_minutes / 60, 1)
+    total_hours = 0
 
     # Extract required fields
     top_songs = [
@@ -156,6 +166,9 @@ def wrapped_page(request):
         "numHours": total_hours,
     }
 
+    print("songs", data.songs)
+    print("artists", data.artists)
+    print("genres", data.genres)
     wraps_ref = firestore_db.collection('wraps')
     wraps_ref.add(data)
 

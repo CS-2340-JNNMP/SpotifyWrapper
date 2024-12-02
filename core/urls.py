@@ -42,5 +42,7 @@ path('translate/', views.translate_text, name='translate_text'),
     path('wrapped-page-delete/<uuid:wrap_id>/', views.wrapped_page_delete, name='wrapped_page_delete'),
     path('wrapped-page-publish/<uuid:wrap_id>/', views.wrapped_page_publish, name='wrapped_page_publish'),
     path('delete_account/', views.delete_account, name='delete_account'),
+
+    path('spotify/callback/wrapped_page/', views.wrapped_page_view, name='wrapped_page'),
 ]
 
