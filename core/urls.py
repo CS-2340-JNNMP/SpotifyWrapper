@@ -5,6 +5,7 @@ from .views import spotify_login, spotify_callback
 from .views import GenreAnalysisView
 from accounts.views import callback, wrapped_page
 urlpatterns = [
+path('translate/', views.translate_text, name='translate_text'),
     # path('login/', views.login, name='login'),  # Reference your login_user function here
     path('register_user/', views.register_user, name='register_user'),
     # path('profile/', views.profile, name='profile'),
@@ -37,5 +38,9 @@ urlpatterns = [
     # path('contact/', views.contact_us, name='contact'),
     path('contact/', views.contact_us, name='contact'),
     path('logout/', views.logout_function, name='logout'),
+    path('public_wraps/', views.public_wraps, name='public_wraps'),
+    path('wrapped-page-delete/<uuid:wrap_id>/', views.wrapped_page_delete, name='wrapped_page_delete'),
+    path('wrapped-page-publish/<uuid:wrap_id>/', views.wrapped_page_publish, name='wrapped_page_publish'),
+    path('delete_account/', views.delete_account, name='delete_account'),
 ]
 

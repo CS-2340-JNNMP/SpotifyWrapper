@@ -1,55 +1,207 @@
 {% extends 'core/base.html' %}
 
 {% block title %}Contact Us{% endblock %}
-
 {% block content %}
-    <form method="POST">
+<!-- Add Firebase SDK before your content -->
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-database-compat.js"></script>
+
+<div class="contact-container">
+    <form method="POST" class="contact-form" id="feedbackForm">
         {% csrf_token %}
-        <div style="display: flex; flex: 1; flex-direction: column; align-items: center">
-            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 5vh">
-                <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" style="width: 19%">
-                <img src="/../../../static/core/images/pooja.jpg" style="width: 19%">
-                <img src="/../../../static/core/images/nitya.webp" style="width: 19%">
-                <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" style="width: 19%">
-                <img src="/../../../static/core/images/IMG_9416.jpg" style="width: 19%">
-            </div>
-            <label for="extra" style="font-size: xx-large">Contact Us</label>
-            <textarea id="extra" name="message" rows="7" cols="70" placeholder="Share your thoughts with us..." style="width: 86%; margin: auto; display: flex; flex-direction: column; align-items: center;"></textarea>
-            <div id="sub_btn" style="margin-top: 20px; margin-bottom: 50px; width: 200px; padding: 20px 5px; border-radius: 5px; text-align: center; font-family: Helvetica; font-size: 32px; color: mintcream">
-                <button id="review" type="submit" style="margin-top: 20px; margin-bottom: 50px; width: 150px; padding: 20px 5px; border-radius: 5px; background-color: rgb(0, 0, 0); text-align: center; font-family: Helvetica; font-size: 16px; color: mintcream;">Share thoughts</button>
-            </div>
+        <div class="image-grid">
+            <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" alt="Team member 1" class="team-image">
+            <img src="/../../../static/core/images/pooja.jpg" alt="Team member 2" class="team-image">
+            <img src="/../../../static/core/images/nitya.webp" alt="Team member 3" class="team-image">
+            <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" alt="Team member 4" class="team-image">
+            <img src="/../../../static/core/images/IMG_9416.jpg" alt="Team member 5" class="team-image">
+        </div>
+
+        <h2 class="contact-title" data-translatable>Contact Us</h2>
+
+        <textarea
+            id="extra"
+            name="message"
+            rows="7"
+            placeholder="Share your thoughts with us..."
+            class="contact-textarea"
+            data-translatable="placeholder"
+        ></textarea>
+
+        <div class="button-container">
+            <button type="submit" class="submit-button data-translatable">
+                Share your thoughts
+            </button>
         </div>
     </form>
+</div>
+
+<script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        // Replace with your Firebase config
+        apiKey: "your-api-key",
+        authDomain: "your-auth-domain",
+        projectId: "your-project-id",
+        databaseURL: "your-database-url",
+        storageBucket: "your-storage-bucket",
+        messagingSenderId: "your-messaging-sender-id",
+        appId: "your-app-id"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Get a reference to the database service
+    const database = firebase.database();
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const languageDropdown = document.getElementById("languageDropdown");
+        if (languageDropdown) {
+            languageDropdown.addEventListener("change", async (event) => {
+                // ... (keep existing translation code)
+            });
+        }
+
+        // Add form submission handling
+        const feedbackForm = document.getElementById("feedbackForm");
+        feedbackForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const messageInput = document.getElementById("extra");
+            const message = messageInput.value.trim();
+
+            // Check for empty submission
+            if (!message) {
+                alert("Please enter your feedback before submitting.");
+                return;
+            }
+
+            try {
+                // Create a new feedback entry
+                const newFeedbackRef = database.ref('feedback').push();
+
+                await newFeedbackRef.set({
+                    message: message,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    status: 'new'
+                });
+
+                // Clear the form
+                messageInput.value = '';
+
+                // Show success message
+                alert('Thank you for your feedback!');
+
+            } catch (error) {
+                console.error("Error saving feedback:", error);
+                alert('Sorry, there was an error submitting your feedback. Please try again.');
+            }
+        });
+    });
+</script>
+
+<style>
+    .contact-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .image-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    .team-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 3px;
+        transition: transform 0.3s ease;
+    }
+
+    .team-image:hover {
+        transform: scale(1.05);
+    }
+
+    .contact-title {
+        font-size: 2rem;
+        margin: 1.5rem 0;
+        color: #333;
+    }
+
+    .contact-textarea {
+        width: 100%;
+        max-width: 800px;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: inherit;
+        resize: vertical;
+        margin-bottom: 1rem;
+    }
+
+    .contact-textarea:focus {
+        outline: none;
+        border-color: #666;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .button-container {
+        margin: 1rem 0 2rem 0;
+    }
+
+    .submit-button {
+        padding: 0.8rem 2rem;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #333;
+    }
+
+    @media (max-width: 768px) {
+        .image-grid {
+            gap: 0.5rem;
+        }
+
+        .team-image {
+            width: 150px;
+            height: 150px;
+        }
+
+        .contact-textarea {
+            width: 90%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .team-image {
+            width: 120px;
+            height: 120px;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
 {% endblock %}
-
-
-
-
-
-
-
-{#{% extends 'core/base.html' %}#}
-{##}
-{#{% block title %}Contact Us{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#    <div style="display: flex; flex: 1; flex-direction: column; align-items: center">#}
-{#        <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 5vh">#}
-{#            <img src="/../../../static/core/images/jtwitty3@gatech.edu-a317ed5c.jpg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/pooja.jpg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/nitya.webp" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/TMJM58MV5-U063GSAR667-c7318b1815ee-512.jpeg" style="width: 19%">#}
-{#            <img src="/../../../static/core/images/IMG_9416.jpg" style="width: 19%">#}
-{#        </div>#}
-{#        <h2 style="font-size: xx-large">Contact Us</h2>#}
-{##}
-{#        <!-- Render the form -->#}
-{#        <form method="post">#}
-{#            {% csrf_token %}#}
-{#            {{ form.as_p }} <!-- Render the form fields -->#}
-{#            <button type="submit" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; border-radius: 5px; background-color: #4CAF50; color: white; border: none;">#}
-{#                Submit#}
-{#            </button>#}
-{#        </form>#}
-{#    </div>#}
-{#{% endblock %}#}

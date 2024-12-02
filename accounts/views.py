@@ -144,6 +144,9 @@ def wrapped_page(request):
 
     # Structure data for the template
     data = {
+        "term": duration,
+        "user_id": request.session.get("userID"),
+        "published": False,
         "id": str(uuid.uuid4()),
         "songs": top_songs,
         "top_song_image": top_song_image,
