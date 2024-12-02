@@ -606,7 +606,7 @@ def wrapped_page_delete(request, wrap_id):
     except Exception as e:
         print(f"Error deleting documents: {e}")
 
-    return render(request, "core/my_wraps.html")
+    return redirect("my_wraps")
 
 def wrapped_page_publish(request, wrap_id):
     try:
